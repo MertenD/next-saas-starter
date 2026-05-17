@@ -1,0 +1,40 @@
+# Dependencies
+node_modules
+bun.lock
+
+# Next.js build output
+.next
+out
+
+# Build artifacts
+build
+dist
+
+# Local env files (never bake secrets into the image)
+.env
+.env.local
+.env.*.local
+
+# Dev tooling
+.git
+.gitignore
+.vscode
+.idea
+
+# Docker files themselves
+Dockerfile
+.dockerignore
+docker-compose*.yml
+
+# Prisma artifacts
+prisma/dev.db
+prisma/dev.db-journal
+src/generated
+
+# Logs
+*.log
+mprocs.log
+
+# Misc
+.DS_Store
+*.pem

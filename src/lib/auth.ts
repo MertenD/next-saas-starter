@@ -1,0 +1,109 @@
+import { checkout, polar, portal } from "@polar-sh/better-auth";
+import { betterAuth } from "better-auth";
+import { prismaAdapter } from "better-auth/adapters/prisma";
+import { env } from "@/config/env";
+import prisma from "@/lib/db";
+import {
+  resetPasswordEmailHtml,
+  sendEmail,
+  verifyEmailHtml,
+} from "@/lib/mailer";
+import { isPolarEnabled, polarClient } from "./polar";
+
+export const auth = betterAuth({
+  secret: env.BETTER_AUTH_SECRET,
+  baseURL: env.BETTER_AUTH_URL,
+  database: prismaAdapter(prisma, {
+    provider: "postgresql",
+  }),
+  emailAndPassword: {
+    enabled: true,
+    autoSignIn: true,
+    sendResetPassword: async ({ user, url }) => {
+      void sendEmail({
+        to: user.email,
+        subject: "Reset your password",
+        html: resetPasswordEmailHtml({ url }),
+      });
+    },
+  },
+  emailVerification: {
+    sendOnSignUp: true,
+    sendVerificationEmail: async ({ user, url }) => {
+      void sendEmail({
+        to: user.email,
+        subject: "Verify your email address",
+        html: verifyEmailHtml({ url }),
+      });
+    },
+  },
+  socialProviders: {
+    ...(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET
+      ? {
+          google: {
+            clientId: env.GOOGLE_CLIENT_ID,
+            clientSecret: env.GOOGLE_CLIENT_SECRET,
+          },
+        }
+      : {}),
+    ...(env.GITHUB_CLIENT_ID && env.GITHUB_CLIENT_SECRET
+      ? {
+          github: {
+            clientId: env.GITHUB_CLIENT_ID,
+            clientSecret: env.GITHUB_CLIENT_SECRET,
+          },
+        }
+      : {}),
+  },
+  plugins: [
+    ...(isPolarEnabled && polarClient
+      ? [
+          polar({
+            client: polarClient,
+            createCustomerOnSignUp: false,
+            use: [
+              checkout({
+                // TODO: Replace with your Polar product IDs from polar.sh
+                products: [{ productId: "YOUR_PRODUCT_ID", slug: "pro" }],
+                // biome-ignore lint/style/noNonNullAssertion: guaranteed non-null when isPolarEnabled is true
+                successUrl: env.POLAR_SUCCESS_URL!,
+                authenticatedUsersOnly: true,
+              }),
+              portal(),
+            ],
+          }),
+        ]
+      : []),
+  ],
+  databaseHooks: {
+    user: {
+      create: {
+        after: async (user) => {
+          if (!isPolarEnabled || !polarClient) return;
+
+          let polarCustomer = null;
+          try {
+            polarCustomer = await polarClient.customers.create({
+              externalId: user.id,
+              email: user.email,
+              name: user.name,
+            });
+          } catch (error) {
+            console.error("Error creating Polar customer:", error);
+
+            if (polarCustomer) {
+              try {
+                await polarClient.customers.delete({ id: polarCustomer.id });
+              } catch (polarError) {
+                console.error("Error rolling back Polar customer:", polarError);
+              }
+            }
+
+            await prisma.user.delete({ where: { id: user.id } });
+            throw error;
+          }
+        },
+      },
+    },
+  },
+});

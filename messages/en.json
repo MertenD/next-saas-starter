@@ -1,0 +1,350 @@
+{
+  "common": {
+    "confirmDialog": {
+      "confirmLabel": "Confirm",
+      "cancelLabel": "Cancel"
+    },
+    "criticalConfirmDialog": {
+      "confirmLabel": "Delete",
+      "cancelLabel": "Cancel",
+      "typeToConfirmPrefix": "Type",
+      "typeToConfirmSuffix": "to confirm"
+    },
+    "emailVerificationBanner": {
+      "title": "Please verify your email address",
+      "description": "Check your inbox for a verification link. Some features, like upgrading to Pro, require a verified email.",
+      "resendButton": "Resend verification email"
+    }
+  },
+  "sidebar": {
+    "demoSection": "Demo",
+    "nav": {
+      "dashboard": "Dashboard",
+      "posts": "Posts",
+      "settings": "Settings",
+      "inngest": "Background Jobs",
+      "ai": "AI Chat",
+      "customers": "Customers",
+      "booking": "Booking"
+    }
+  },
+  "auth": {
+    "layout": {
+      "brand": "SaaS Starter"
+    },
+    "login": {
+      "title": "Welcome back",
+      "description": "Sign in to your account to continue",
+      "continueWithGithub": "Continue with GitHub",
+      "continueWithGoogle": "Continue with Google",
+      "redirecting": "Redirecting…",
+      "emailLabel": "Email",
+      "emailPlaceholder": "m@example.com",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "********",
+      "submitButton": "Sign in",
+      "forgotPasswordLink": "Forgot password?",
+      "noAccount": "Don't have an account?",
+      "signUpLink": "Sign up",
+      "validation": {
+        "emailInvalid": "Please enter a valid email address",
+        "passwordRequired": "Password is required"
+      }
+    },
+    "forgotPassword": {
+      "title": "Forgot password?",
+      "description": "Enter your email address and we'll send you a link to reset your password",
+      "emailLabel": "Email",
+      "emailPlaceholder": "m@example.com",
+      "submitButton": "Send reset link",
+      "successTitle": "Check your email",
+      "successDescription": "If an account exists for that email, we've sent a link to reset your password.",
+      "backToLogin": "Back to login",
+      "validation": {
+        "emailInvalid": "Please enter a valid email address"
+      }
+    },
+    "resetPassword": {
+      "title": "Reset password",
+      "description": "Choose a new password for your account",
+      "newPasswordLabel": "New password",
+      "confirmPasswordLabel": "Confirm new password",
+      "submitButton": "Reset password",
+      "success": "Password reset successfully",
+      "invalidTokenTitle": "Invalid or expired link",
+      "invalidTokenDescription": "This password reset link is no longer valid. Request a new one to continue.",
+      "requestNewLink": "Request a new link",
+      "validation": {
+        "passwordRequired": "Password is required",
+        "passwordMinLength": "Password must be at least 8 characters",
+        "passwordMismatch": "Passwords do not match"
+      }
+    },
+    "register": {
+      "title": "Get Started",
+      "description": "Create your account to get started",
+      "continueWithGithub": "Continue with GitHub",
+      "continueWithGoogle": "Continue with Google",
+      "redirecting": "Redirecting…",
+      "nameLabel": "Name",
+      "namePlaceholder": "Your Name",
+      "emailLabel": "Email",
+      "emailPlaceholder": "m@example.com",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "********",
+      "submitButton": "Create account",
+      "alreadyHaveAccount": "Already have an account?",
+      "loginLink": "Sign in",
+      "validation": {
+        "nameRequired": "Name is required",
+        "emailInvalid": "Please enter a valid email address",
+        "passwordRequired": "Password is required",
+        "passwordMinLength": "Password must be at least 8 characters"
+      }
+    },
+    "userInfo": {
+      "upgradeLabel": "Upgrade to Pro",
+      "billingLabel": "Billing",
+      "settingsLabel": "Settings",
+      "logoutLabel": "Sign out",
+      "plan": "Free plan",
+      "verifyDialog": {
+        "title": "Verify your email to upgrade",
+        "description": "You need to verify your email address before you can upgrade to Pro. Resend the verification email if you can't find it.",
+        "resendButton": "Resend verification email",
+        "cancelButton": "Cancel"
+      }
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome back!",
+    "placeholderBody": "Your dashboard content goes here. Add widgets, charts, and stats to give users an overview of their data."
+  },
+  "posts": {
+    "title": "Posts",
+    "description": "A CRUD example backed by Prisma via tRPC - create, edit, delete and bulk-publish, with React Query cache invalidation on every mutation.",
+    "createButton": "New Post",
+    "emptyTitle": "No posts yet",
+    "emptyDescription": "Create your first post to get started.",
+    "deleteSuccess": "Post deleted",
+    "createSuccess": "Post created",
+    "updateSuccess": "Post updated",
+    "loadError": "Failed to load posts. Please try again.",
+    "form": {
+      "titleLabel": "Title",
+      "titlePlaceholder": "My Post Title",
+      "contentLabel": "Content",
+      "contentPlaceholder": "Write your post content here...",
+      "dialogTitle": "Create Post",
+      "dialogDescription": "Add a new post to your collection.",
+      "submitButton": "Create Post",
+      "submitting": "Creating...",
+      "cancelButton": "Cancel",
+      "validation": {
+        "titleRequired": "Title is required",
+        "contentRequired": "Content is required"
+      }
+    },
+    "item": {
+      "publishedBadge": "Published",
+      "deleteConfirmTitle": "Delete post?",
+      "deleteConfirmDescription": "\"{title}\" will be permanently deleted. This can't be undone.",
+      "deleteConfirmLabel": "Delete"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "tabs": {
+      "account": "Account",
+      "general": "General"
+    },
+    "account": {
+      "profile": {
+        "title": "Profile",
+        "nameLabel": "Name",
+        "imageLabel": "Profile picture URL",
+        "imagePlaceholder": "https://example.com/avatar.jpg",
+        "emailLabel": "Email",
+        "emailReadonlyHint": "Your email can't be changed",
+        "saveButton": "Save changes",
+        "updateSuccess": "Profile updated",
+        "validation": {
+          "nameRequired": "Name is required",
+          "imageInvalid": "Please enter a valid URL"
+        }
+      },
+      "verification": {
+        "verifiedBadge": "Verified",
+        "unverifiedBadge": "Not verified",
+        "resendButton": "Resend verification email",
+        "resendSuccess": "Verification email sent"
+      },
+      "changePassword": {
+        "title": "Change password",
+        "currentPasswordLabel": "Current password",
+        "newPasswordLabel": "New password",
+        "confirmPasswordLabel": "Confirm new password",
+        "submitButton": "Update password",
+        "success": "Password updated",
+        "validation": {
+          "currentPasswordRequired": "Current password is required",
+          "passwordRequired": "Password is required",
+          "passwordMinLength": "Password must be at least 8 characters",
+          "passwordMismatch": "Passwords do not match"
+        }
+      },
+      "error": {
+        "title": "Failed to load account settings",
+        "retry": "Try again"
+      }
+    },
+    "general": {
+      "language": {
+        "label": "Interface Language",
+        "en": "English",
+        "de": "German"
+      }
+    },
+    "theme": {
+      "label": "Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    }
+  },
+  "customers": {
+    "title": "Customers",
+    "description": "A searchable, filterable, sortable, paginated table backed by mock data - URL state powered by nuqs.",
+    "searchPlaceholder": "Search by name or email",
+    "status": {
+      "all": "All statuses",
+      "active": "Active",
+      "invited": "Invited",
+      "suspended": "Suspended"
+    },
+    "plan": {
+      "free": "Free",
+      "pro": "Pro",
+      "enterprise": "Enterprise"
+    },
+    "columns": {
+      "name": "Name",
+      "email": "Email",
+      "plan": "Plan",
+      "status": "Status",
+      "totalSpent": "Total spent",
+      "createdAt": "Joined"
+    },
+    "emptyTitle": "No customers found",
+    "emptyDescription": "Try adjusting your search term or status filter.",
+    "errorTitle": "Failed to load customers",
+    "errorDescription": "Something went wrong while loading the customer list.",
+    "retry": "Try again",
+    "previous": "Previous",
+    "next": "Next",
+    "pageOf": "Page {page} of {totalPages}",
+    "resultsCount": "{count} results"
+  },
+  "booking": {
+    "title": "Booking",
+    "description": "A 4-step booking flow - navigation and form data persist across steps in a dedicated Zustand store (with sessionStorage persistence), separate from the global sidebar store.",
+    "steps": {
+      "dates": "Dates",
+      "guests": "Guests",
+      "payment": "Payment",
+      "review": "Review"
+    },
+    "form": {
+      "checkInLabel": "Check-in",
+      "checkOutLabel": "Check-out",
+      "guests": {
+        "adultsLabel": "Adults",
+        "adultsDescription": "Ages 13 or above",
+        "childrenLabel": "Children",
+        "childrenDescription": "Ages 2–12",
+        "infantsLabel": "Infants",
+        "infantsDescription": "Under 2",
+        "increase": "Increase",
+        "decrease": "Decrease"
+      },
+      "payment": {
+        "demoNotice": "Demo only - no real payment is processed.",
+        "cardNameLabel": "Name on card",
+        "cardNamePlaceholder": "Jane Doe",
+        "cardNumberLabel": "Card number",
+        "cardNumberPlaceholder": "4242424242424242",
+        "cardExpiryLabel": "Expiry (MM/YY)",
+        "cardExpiryPlaceholder": "12/28"
+      },
+      "validation": {
+        "checkInRequired": "Check-in date is required",
+        "checkOutRequired": "Check-out date is required",
+        "checkOutAfterCheckIn": "Check-out must be after check-in",
+        "cardNameRequired": "Name on card is required",
+        "cardNumberInvalid": "Enter a 16-digit card number",
+        "cardExpiryInvalid": "Use MM/YY format"
+      }
+    },
+    "summary": {
+      "guests": "{adults} adults, {children} children, {infants} infants"
+    },
+    "actions": {
+      "back": "Back",
+      "next": "Next",
+      "confirm": "Confirm booking",
+      "confirming": "Confirming…",
+      "retry": "Try again",
+      "startOver": "Book another trip"
+    },
+    "errorTitle": "Booking failed",
+    "errorDescription": "Something went wrong while processing your booking. Please try again.",
+    "success": {
+      "title": "Booking confirmed",
+      "description": "Confirmation ID: {confirmationId}"
+    }
+  },
+  "demo": {
+    "ai": {
+      "heading": "AI Chat - Resumable Streams",
+      "intro": "Uses <code1>resumable-stream</code1> to buffer the AI response in Redis. Refreshing mid-stream resumes the response automatically via <code2>GET /api/chat/[id]/stream</code2>.",
+      "apiKeyMissingTitle": "OPENROUTER_API_KEY not set",
+      "apiKeyMissingBody": "Add <code1>OPENROUTER_API_KEY=sk-or-...</code1> to your <code2>.env</code2> file and restart the dev server. Get a key at <link>openrouter.ai/keys</link>.",
+      "streamIdLabel": "Stream ID:",
+      "cachedInRedisBadge": "cached in Redis",
+      "startConversation": "Start a conversation",
+      "startConversationBody": "The stream is buffered in Redis - refreshing mid-response resumes it automatically.",
+      "streamingCaption": "Streaming… try refreshing - Redis will resume the response",
+      "apiKeyMissingChatError": "OPENROUTER_API_KEY is not configured. Add it to your .env file.",
+      "genericError": "Error: {message}",
+      "inputPlaceholder": "Type a message… (Enter to send, Shift+Enter for newline)"
+    },
+    "inngest": {
+      "heading": "Background Jobs - Inngest",
+      "intro": "Inngest runs durable, multi-step background jobs that survive server restarts. Each step is retried independently on failure.",
+      "stepFetchDescription": "Fetch user & revenue data (~600ms)",
+      "stepSleepDescription": "Wait 5 seconds - survives server restarts",
+      "stepReportDescription": "Aggregate data and produce a report",
+      "statusUnknown": "Unknown",
+      "statusQueued": "Queued",
+      "statusCompleted": "Completed",
+      "statusFailed": "Failed",
+      "triggerSuccessTitle": "Job triggered",
+      "triggerSuccessDescription": "Event ID: {eventId}",
+      "triggerErrorTitle": "Failed to trigger job",
+      "triggerErrorDevServer": "Is the Inngest dev server running? Try: bun run inngest:dev",
+      "jobStepsTitle": "Demo Job - Steps",
+      "jobStepsDescription": "Trigger this job and watch it execute step-by-step in the Inngest dashboard.",
+      "triggerButton": "Trigger Job",
+      "triggeringButton": "Triggering…",
+      "dashboardLinkLabel": "Inngest Dashboard",
+      "triggeredRunsTitle": "Triggered Runs",
+      "triggeredRunsDescription": "Jobs triggered this session. Status updates automatically as each run executes.",
+      "noRunsTitle": "No runs yet",
+      "noRunsDescription": "Trigger the demo job to see it appear here with live status.",
+      "triggeredAtLabel": "Triggered at {time}",
+      "howItWorksLabel": "How it works:",
+      "howItWorksBody": "The \"Trigger Job\" button calls a tRPC mutation that sends an Inngest event. The job publishes a status message over <realtimeLink>Inngest Realtime</realtimeLink> as it enters each step (see the <code1>publish()</code1> calls in <code2>src/inngest/functions.ts</code2>). The badge on each run subscribes to that run's channel via <code3>useInngestSubscription</code3> - no polling, updates stream in as they happen. Open <dashboardLink>localhost:8288</dashboardLink> to see the full run trace. The dev server must be running (<code4>bun run inngest:dev</code4> or via <code5>docker compose up -d</code5>)."
+    }
+  }
+}

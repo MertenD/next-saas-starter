@@ -1,0 +1,350 @@
+{
+  "common": {
+    "confirmDialog": {
+      "confirmLabel": "Bestätigen",
+      "cancelLabel": "Abbrechen"
+    },
+    "criticalConfirmDialog": {
+      "confirmLabel": "Löschen",
+      "cancelLabel": "Abbrechen",
+      "typeToConfirmPrefix": "Gib",
+      "typeToConfirmSuffix": "ein, um zu bestätigen"
+    },
+    "emailVerificationBanner": {
+      "title": "Bitte bestätige deine E-Mail-Adresse",
+      "description": "Schau in dein Postfach nach dem Bestätigungslink. Manche Funktionen, wie das Upgrade auf Pro, erfordern eine bestätigte E-Mail-Adresse.",
+      "resendButton": "Bestätigungs-E-Mail erneut senden"
+    }
+  },
+  "sidebar": {
+    "demoSection": "Demo",
+    "nav": {
+      "dashboard": "Dashboard",
+      "posts": "Beiträge",
+      "settings": "Einstellungen",
+      "inngest": "Hintergrundjobs",
+      "ai": "KI-Chat",
+      "customers": "Kunden",
+      "booking": "Buchung"
+    }
+  },
+  "auth": {
+    "layout": {
+      "brand": "SaaS Starter"
+    },
+    "login": {
+      "title": "Willkommen zurück",
+      "description": "Melde dich an, um fortzufahren",
+      "continueWithGithub": "Mit GitHub fortfahren",
+      "continueWithGoogle": "Mit Google fortfahren",
+      "redirecting": "Weiterleitung…",
+      "emailLabel": "E-Mail",
+      "emailPlaceholder": "m@beispiel.de",
+      "passwordLabel": "Passwort",
+      "passwordPlaceholder": "********",
+      "submitButton": "Anmelden",
+      "forgotPasswordLink": "Passwort vergessen?",
+      "noAccount": "Noch kein Konto?",
+      "signUpLink": "Registrieren",
+      "validation": {
+        "emailInvalid": "Bitte gib eine gültige E-Mail-Adresse ein",
+        "passwordRequired": "Passwort ist erforderlich"
+      }
+    },
+    "forgotPassword": {
+      "title": "Passwort vergessen?",
+      "description": "Gib deine E-Mail-Adresse ein und wir senden dir einen Link zum Zurücksetzen deines Passworts",
+      "emailLabel": "E-Mail",
+      "emailPlaceholder": "m@beispiel.de",
+      "submitButton": "Link senden",
+      "successTitle": "Überprüfe deine E-Mails",
+      "successDescription": "Falls ein Konto mit dieser E-Mail existiert, haben wir einen Link zum Zurücksetzen des Passworts gesendet.",
+      "backToLogin": "Zurück zur Anmeldung",
+      "validation": {
+        "emailInvalid": "Bitte gib eine gültige E-Mail-Adresse ein"
+      }
+    },
+    "resetPassword": {
+      "title": "Passwort zurücksetzen",
+      "description": "Wähle ein neues Passwort für dein Konto",
+      "newPasswordLabel": "Neues Passwort",
+      "confirmPasswordLabel": "Neues Passwort bestätigen",
+      "submitButton": "Passwort zurücksetzen",
+      "success": "Passwort erfolgreich zurückgesetzt",
+      "invalidTokenTitle": "Ungültiger oder abgelaufener Link",
+      "invalidTokenDescription": "Dieser Link zum Zurücksetzen des Passworts ist nicht mehr gültig. Fordere einen neuen an, um fortzufahren.",
+      "requestNewLink": "Neuen Link anfordern",
+      "validation": {
+        "passwordRequired": "Passwort ist erforderlich",
+        "passwordMinLength": "Das Passwort muss mindestens 8 Zeichen lang sein",
+        "passwordMismatch": "Die Passwörter stimmen nicht überein"
+      }
+    },
+    "register": {
+      "title": "Loslegen",
+      "description": "Erstelle dein Konto um zu beginnen",
+      "continueWithGithub": "Mit GitHub fortfahren",
+      "continueWithGoogle": "Mit Google fortfahren",
+      "redirecting": "Weiterleitung…",
+      "nameLabel": "Name",
+      "namePlaceholder": "Dein Name",
+      "emailLabel": "E-Mail",
+      "emailPlaceholder": "m@beispiel.de",
+      "passwordLabel": "Passwort",
+      "passwordPlaceholder": "********",
+      "submitButton": "Konto erstellen",
+      "alreadyHaveAccount": "Bereits ein Konto?",
+      "loginLink": "Anmelden",
+      "validation": {
+        "nameRequired": "Name ist erforderlich",
+        "emailInvalid": "Bitte gib eine gültige E-Mail-Adresse ein",
+        "passwordRequired": "Passwort ist erforderlich",
+        "passwordMinLength": "Das Passwort muss mindestens 8 Zeichen lang sein"
+      }
+    },
+    "userInfo": {
+      "upgradeLabel": "Auf Pro upgraden",
+      "billingLabel": "Abrechnung",
+      "settingsLabel": "Einstellungen",
+      "logoutLabel": "Abmelden",
+      "plan": "Kostenloser Plan",
+      "verifyDialog": {
+        "title": "Bestätige deine E-Mail für das Upgrade",
+        "description": "Du musst deine E-Mail-Adresse bestätigen, bevor du auf Pro upgraden kannst. Sende die Bestätigungs-E-Mail erneut, falls du sie nicht findest.",
+        "resendButton": "Bestätigungs-E-Mail erneut senden",
+        "cancelButton": "Abbrechen"
+      }
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Willkommen zurück!",
+    "placeholderBody": "Hier kommt der Inhalt deines Dashboards hin. Füge Widgets, Diagramme und Statistiken hinzu, um Nutzern einen Überblick über ihre Daten zu geben."
+  },
+  "posts": {
+    "title": "Beiträge",
+    "description": "Ein CRUD-Beispiel auf Basis von Prisma über tRPC - Erstellen, Bearbeiten, Löschen und Massenveröffentlichung, mit React-Query-Cache-Invalidierung bei jeder Mutation.",
+    "createButton": "Neuer Beitrag",
+    "emptyTitle": "Noch keine Beiträge",
+    "emptyDescription": "Erstelle deinen ersten Beitrag um zu beginnen.",
+    "deleteSuccess": "Beitrag gelöscht",
+    "createSuccess": "Beitrag erstellt",
+    "updateSuccess": "Beitrag aktualisiert",
+    "loadError": "Beiträge konnten nicht geladen werden. Bitte versuche es erneut.",
+    "form": {
+      "titleLabel": "Titel",
+      "titlePlaceholder": "Mein Beitragstitel",
+      "contentLabel": "Inhalt",
+      "contentPlaceholder": "Schreibe hier deinen Beitragsinhalt...",
+      "dialogTitle": "Beitrag erstellen",
+      "dialogDescription": "Füge deiner Sammlung einen neuen Beitrag hinzu.",
+      "submitButton": "Beitrag erstellen",
+      "submitting": "Wird erstellt...",
+      "cancelButton": "Abbrechen",
+      "validation": {
+        "titleRequired": "Titel ist erforderlich",
+        "contentRequired": "Inhalt ist erforderlich"
+      }
+    },
+    "item": {
+      "publishedBadge": "Veröffentlicht",
+      "deleteConfirmTitle": "Beitrag löschen?",
+      "deleteConfirmDescription": "„{title}\" wird endgültig gelöscht. Dies kann nicht rückgängig gemacht werden.",
+      "deleteConfirmLabel": "Löschen"
+    }
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "tabs": {
+      "account": "Konto",
+      "general": "Allgemein"
+    },
+    "account": {
+      "profile": {
+        "title": "Profil",
+        "nameLabel": "Name",
+        "imageLabel": "Profilbild-URL",
+        "imagePlaceholder": "https://beispiel.de/avatar.jpg",
+        "emailLabel": "E-Mail",
+        "emailReadonlyHint": "Deine E-Mail-Adresse kann nicht geändert werden",
+        "saveButton": "Änderungen speichern",
+        "updateSuccess": "Profil aktualisiert",
+        "validation": {
+          "nameRequired": "Name ist erforderlich",
+          "imageInvalid": "Bitte gib eine gültige URL ein"
+        }
+      },
+      "verification": {
+        "verifiedBadge": "Verifiziert",
+        "unverifiedBadge": "Nicht verifiziert",
+        "resendButton": "Verifizierungs-E-Mail erneut senden",
+        "resendSuccess": "Verifizierungs-E-Mail gesendet"
+      },
+      "changePassword": {
+        "title": "Passwort ändern",
+        "currentPasswordLabel": "Aktuelles Passwort",
+        "newPasswordLabel": "Neues Passwort",
+        "confirmPasswordLabel": "Neues Passwort bestätigen",
+        "submitButton": "Passwort aktualisieren",
+        "success": "Passwort aktualisiert",
+        "validation": {
+          "currentPasswordRequired": "Aktuelles Passwort ist erforderlich",
+          "passwordRequired": "Passwort ist erforderlich",
+          "passwordMinLength": "Das Passwort muss mindestens 8 Zeichen lang sein",
+          "passwordMismatch": "Die Passwörter stimmen nicht überein"
+        }
+      },
+      "error": {
+        "title": "Kontoeinstellungen konnten nicht geladen werden",
+        "retry": "Erneut versuchen"
+      }
+    },
+    "general": {
+      "language": {
+        "label": "Sprache der Benutzeroberfläche",
+        "en": "Englisch",
+        "de": "Deutsch"
+      }
+    },
+    "theme": {
+      "label": "Design",
+      "light": "Hell",
+      "dark": "Dunkel",
+      "system": "System"
+    }
+  },
+  "customers": {
+    "title": "Kunden",
+    "description": "Eine durchsuchbare, filterbare, sortierbare Tabelle mit Paginierung auf Basis von Mock-Daten - URL-Status verwaltet mit nuqs.",
+    "searchPlaceholder": "Suche nach Name oder E-Mail",
+    "status": {
+      "all": "Alle Status",
+      "active": "Aktiv",
+      "invited": "Eingeladen",
+      "suspended": "Gesperrt"
+    },
+    "plan": {
+      "free": "Kostenlos",
+      "pro": "Pro",
+      "enterprise": "Enterprise"
+    },
+    "columns": {
+      "name": "Name",
+      "email": "E-Mail",
+      "plan": "Plan",
+      "status": "Status",
+      "totalSpent": "Gesamtumsatz",
+      "createdAt": "Beigetreten"
+    },
+    "emptyTitle": "Keine Kunden gefunden",
+    "emptyDescription": "Passe deinen Suchbegriff oder Statusfilter an.",
+    "errorTitle": "Kunden konnten nicht geladen werden",
+    "errorDescription": "Beim Laden der Kundenliste ist ein Fehler aufgetreten.",
+    "retry": "Erneut versuchen",
+    "previous": "Zurück",
+    "next": "Weiter",
+    "pageOf": "Seite {page} von {totalPages}",
+    "resultsCount": "{count} Ergebnisse"
+  },
+  "booking": {
+    "title": "Buchung",
+    "description": "Ein 4-stufiger Buchungsablauf - Navigation und Formulardaten bleiben über die Schritte hinweg in einem eigenen Zustand-Store erhalten (mit sessionStorage-Persistenz), getrennt vom globalen Sidebar-Store.",
+    "steps": {
+      "dates": "Daten",
+      "guests": "Gäste",
+      "payment": "Zahlung",
+      "review": "Überprüfung"
+    },
+    "form": {
+      "checkInLabel": "Anreise",
+      "checkOutLabel": "Abreise",
+      "guests": {
+        "adultsLabel": "Erwachsene",
+        "adultsDescription": "Ab 13 Jahren",
+        "childrenLabel": "Kinder",
+        "childrenDescription": "2–12 Jahre",
+        "infantsLabel": "Kleinkinder",
+        "infantsDescription": "Unter 2 Jahren",
+        "increase": "Erhöhen",
+        "decrease": "Verringern"
+      },
+      "payment": {
+        "demoNotice": "Nur Demo - es wird keine echte Zahlung verarbeitet.",
+        "cardNameLabel": "Name auf der Karte",
+        "cardNamePlaceholder": "Jane Doe",
+        "cardNumberLabel": "Kartennummer",
+        "cardNumberPlaceholder": "4242424242424242",
+        "cardExpiryLabel": "Ablaufdatum (MM/JJ)",
+        "cardExpiryPlaceholder": "12/28"
+      },
+      "validation": {
+        "checkInRequired": "Anreisedatum ist erforderlich",
+        "checkOutRequired": "Abreisedatum ist erforderlich",
+        "checkOutAfterCheckIn": "Die Abreise muss nach der Anreise liegen",
+        "cardNameRequired": "Name auf der Karte ist erforderlich",
+        "cardNumberInvalid": "Gib eine 16-stellige Kartennummer ein",
+        "cardExpiryInvalid": "Verwende das Format MM/JJ"
+      }
+    },
+    "summary": {
+      "guests": "{adults} Erwachsene, {children} Kinder, {infants} Kleinkinder"
+    },
+    "actions": {
+      "back": "Zurück",
+      "next": "Weiter",
+      "confirm": "Buchung bestätigen",
+      "confirming": "Wird bestätigt…",
+      "retry": "Erneut versuchen",
+      "startOver": "Weitere Reise buchen"
+    },
+    "errorTitle": "Buchung fehlgeschlagen",
+    "errorDescription": "Beim Verarbeiten deiner Buchung ist ein Fehler aufgetreten. Bitte versuche es erneut.",
+    "success": {
+      "title": "Buchung bestätigt",
+      "description": "Bestätigungs-ID: {confirmationId}"
+    }
+  },
+  "demo": {
+    "ai": {
+      "heading": "KI-Chat - Fortsetzbare Streams",
+      "intro": "Verwendet <code1>resumable-stream</code1>, um die KI-Antwort in Redis zu puffern. Ein Neuladen während des Streams setzt die Antwort automatisch über <code2>GET /api/chat/[id]/stream</code2> fort.",
+      "apiKeyMissingTitle": "OPENROUTER_API_KEY nicht gesetzt",
+      "apiKeyMissingBody": "Füge <code1>OPENROUTER_API_KEY=sk-or-...</code1> zu deiner <code2>.env</code2>-Datei hinzu und starte den Dev-Server neu. Hol dir einen Schlüssel unter <link>openrouter.ai/keys</link>.",
+      "streamIdLabel": "Stream-ID:",
+      "cachedInRedisBadge": "in Redis zwischengespeichert",
+      "startConversation": "Starte eine Unterhaltung",
+      "startConversationBody": "Der Stream wird in Redis gepuffert - ein Neuladen während der Antwort setzt sie automatisch fort.",
+      "streamingCaption": "Wird gestreamt … versuch es mit Neuladen - Redis setzt die Antwort fort",
+      "apiKeyMissingChatError": "OPENROUTER_API_KEY ist nicht konfiguriert. Füge sie deiner .env-Datei hinzu.",
+      "genericError": "Fehler: {message}",
+      "inputPlaceholder": "Nachricht eingeben … (Enter zum Senden, Umschalt+Enter für neue Zeile)"
+    },
+    "inngest": {
+      "heading": "Hintergrundjobs - Inngest",
+      "intro": "Inngest führt dauerhafte, mehrstufige Hintergrundjobs aus, die Serverneustarts überstehen. Jeder Schritt wird bei einem Fehler unabhängig wiederholt.",
+      "stepFetchDescription": "Nutzer- & Umsatzdaten abrufen (~600 ms)",
+      "stepSleepDescription": "5 Sekunden warten - übersteht Serverneustarts",
+      "stepReportDescription": "Daten aggregieren und einen Bericht erstellen",
+      "statusUnknown": "Unbekannt",
+      "statusQueued": "Wartend",
+      "statusCompleted": "Abgeschlossen",
+      "statusFailed": "Fehlgeschlagen",
+      "triggerSuccessTitle": "Job ausgelöst",
+      "triggerSuccessDescription": "Event-ID: {eventId}",
+      "triggerErrorTitle": "Job konnte nicht ausgelöst werden",
+      "triggerErrorDevServer": "Läuft der Inngest-Dev-Server? Versuch's mit: bun run inngest:dev",
+      "jobStepsTitle": "Demo-Job - Schritte",
+      "jobStepsDescription": "Löse diesen Job aus und beobachte, wie er Schritt für Schritt im Inngest-Dashboard ausgeführt wird.",
+      "triggerButton": "Job auslösen",
+      "triggeringButton": "Wird ausgelöst…",
+      "dashboardLinkLabel": "Inngest-Dashboard",
+      "triggeredRunsTitle": "Ausgelöste Läufe",
+      "triggeredRunsDescription": "In dieser Sitzung ausgelöste Jobs. Der Status wird automatisch aktualisiert, während jeder Lauf ausgeführt wird.",
+      "noRunsTitle": "Noch keine Läufe",
+      "noRunsDescription": "Löse den Demo-Job aus, um ihn hier mit Live-Status zu sehen.",
+      "triggeredAtLabel": "Ausgelöst um {time}",
+      "howItWorksLabel": "So funktioniert's:",
+      "howItWorksBody": "Der Button „Trigger Job\" ruft eine tRPC-Mutation auf, die ein Inngest-Event sendet. Der Job veröffentlicht bei jedem Schritt eine Statusmeldung über <realtimeLink>Inngest Realtime</realtimeLink> (siehe die <code1>publish()</code1>-Aufrufe in <code2>src/inngest/functions.ts</code2>). Das Badge bei jedem Lauf abonniert den Kanal dieses Laufs über <code3>useInngestSubscription</code3> - kein Polling, Updates kommen live rein. Öffne <dashboardLink>localhost:8288</dashboardLink>, um die vollständige Ausführungs-Trace zu sehen. Der Dev-Server muss laufen (<code4>bun run inngest:dev</code4> oder über <code5>docker compose up -d</code5>)."
+    }
+  }
+}

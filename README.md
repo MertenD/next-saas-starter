@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js SaaS Starter
 
-## Getting Started
+A production-ready Next.js SaaS template with everything you need to build and ship a modern SaaS application.
 
-First, run the development server:
+## Tech Stack
+
+| Category | Technology |
+|---|---|
+| **Framework** | Next.js 16 (App Router, Turbopack) |
+| **Language** | TypeScript (strict mode) |
+| **API Layer** | tRPC v11 + TanStack Query v5 |
+| **Database** | PostgreSQL + Prisma ORM |
+| **Auth** | Better Auth (email/password + Google + GitHub OAuth) |
+| **Payments** | Polar.sh (subscriptions + customer portal) |
+| **Background Jobs** | Inngest |
+| **AI** | Vercel AI SDK + OpenRouter |
+| **Cache** | Redis |
+| **Analytics** | Plausible (self-hosted or cloud, optional) |
+| **UI** | ShadCN UI + Tailwind CSS v4 |
+| **i18n** | next-intl (en + de) |
+| **State** | Zustand (client) + TanStack Query (server) |
+| **Linting** | Biome (not ESLint) |
+
+## Quick Start
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <repo-url> my-app && cd my-app
+bun install
+cp .env.example .env        # fill in DATABASE_URL, BETTER_AUTH_SECRET, etc.
+docker compose up -d        # Postgres, Redis, Inngest dev server
+bun run prisma:migrate && bun run prisma:generate
+bun run dev                 # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+See [**Getting Started**](./docs/getting-started.md) for the full walkthrough, including OAuth and Polar setup.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Documentation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Full docs live in [`docs/`](./docs/README.md) - readable as plain Markdown, or as a searchable site via `bun run docs:dev` (see [Getting Started](./docs/getting-started.md#reading-these-docs-as-a-website)):
 
-## Learn More
+- [Getting Started](./docs/getting-started.md) - local setup
+- [Environment Variables](./docs/environment-variables.md) - every env var explained
+- [Architecture](./docs/architecture.md) - stack, request flow, project structure
+- [Features](./docs/features.md) - existing demo features, adding a new one
+- [Database](./docs/database.md) - Prisma schema and migrations
+- [Auth & Billing](./docs/auth-and-billing.md) - Better Auth, OAuth, Polar, premium gating
+- [Background Jobs](./docs/background-jobs.md) - Inngest
+- [Integrations](./docs/integrations.md) - AI, Redis, analytics
+- [Frontend](./docs/frontend.md) - UI components, design system, i18n, state management
+- [Deployment](./docs/deployment.md) - Docker production setup, pre-deploy checklist
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+For AI coding agent instructions, see [`CLAUDE.md`](./CLAUDE.md), [`AGENTS.md`](./AGENTS.md), and [`DESIGN.md`](./DESIGN.md).

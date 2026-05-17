@@ -1,5 +1,109 @@
 <!-- BEGIN:nextjs-agent-rules -->
 # This is NOT the Next.js you know
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
+This version has breaking changes - APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
 <!-- END:nextjs-agent-rules -->
+
+@DESIGN.md
+
+# AGENTS.md
+
+This file provides guidance to AI coding agents (Claude Code and others) working in this repository. It covers the rules and conventions to follow while writing code. For full human-facing documentation, see [`docs/`](./docs/README.md).
+
+## Documentation
+
+Full docs live in [`docs/`](./docs/README.md) - also servable as a searchable site via `bun run docs:dev`:
+
+- [Getting Started](./docs/getting-started.md) - local setup
+- [Environment Variables](./docs/environment-variables.md) - every env var explained
+- [Architecture](./docs/architecture.md) - stack, request flow, project structure, key files, tRPC procedure types
+- [Features](./docs/features.md) - the feature-module pattern, existing demo features, adding a new one
+- [Database](./docs/database.md) - Prisma schema and migrations
+- [Auth & Billing](./docs/auth-and-billing.md) - Better Auth, OAuth, Polar, premium gating
+- [Background Jobs](./docs/background-jobs.md) - Inngest
+- [Integrations](./docs/integrations.md) - AI, Redis, analytics
+- [Frontend](./docs/frontend.md) - UI components, design system, i18n, state management
+- [Deployment](./docs/deployment.md) - Docker production setup, pre-deploy checklist
+
+Check the relevant page before implementing anything non-trivial - `docs/` is the source of truth, not this file.
+
+## Design System
+
+`DESIGN.md` defines the design system for this app (colors, typography, spacing, radii, elevation, and component specs) and **must be followed for every UI change** - new components, page layouts, and styling edits alike. Use its tokens (e.g. `{colors.primary}`, `{typography.body-md}`, `{rounded.md}`, `{spacing.lg}`) rather than inventing ad hoc colors, font sizes, or spacing values. If a needed pattern isn't covered by `DESIGN.md`, extend it consistently with the existing tokens/components instead of introducing a one-off style, and flag the gap to the user.
+
+## UI States (Loading / Empty / Error / Content)
+
+Every fetch (tRPC query, mutation, server-side data load - anything async) and every component that displays fetched or user-generated content **must implement all four states**. Never ship only the happy path.
+
+1. **Content** - the normal populated state. The default case once data has loaded successfully and isn't empty.
+2. **Loading** - shown while the request is in flight. Pick the treatment based on what's loading and how long it typically takes:
+    - **Skeleton** (`@/components/ui/skeleton`) - default for structured content (lists, cards, tables) that has a known final layout; shape the skeleton to match it.
+    - **Spinner** (`@/components/ui/spinner`) - short or unstructured loads: buttons mid-submit, small inline widgets, anything without a stable layout to skeleton.
+    - **Progress bar** - long-running, determinate operations (uploads, multi-step background jobs) where percentage/step feedback is meaningful. Not installed yet - add with `bunx shadcn@latest add progress` before using.
+3. **Empty** - the request succeeded but returned no data. Use `@/components/ui/empty` (`Empty`, `EmptyHeader`, `EmptyTitle`, `EmptyDescription`, `EmptyContent`) and always include a call to action (e.g. "Create your first project" button) - never render blank space or a bare "No data" string.
+4. **Error** - the request failed (tRPC error, network error, etc.). Explain what went wrong in plain language and give the user something actionable to do - a "Try again" button wired to the query's `refetch()`/mutation retry when retrying is sensible, otherwise a concrete next step (e.g. "Contact support", "Go back").
+
+With TanStack Query hooks (`useQuery`/`useSuspenseQuery` via `useTRPC()`), map states as: `isPending`/`isLoading` → Loading, `isError` → Error (use `refetch` for the retry action), `data` with empty array/null → Empty, otherwise → Content. All state variants must also follow `DESIGN.md`'s tokens (see Design System above) - no unstyled fallback states.
+
+## Delete Confirmation
+
+**Deleting anything must never happen directly off a click** - always confirm through a dialog first. Two reusable components exist for this; never build a one-off confirmation dialog inline:
+
+- **`ConfirmDialog`** (`@/components/confirm-dialog`) - the standard "Are you sure?" dialog with Confirm/Cancel. Use for ordinary, low-stakes deletes (a post, a list item, anything easily recreated or recoverable).
+- **`CriticalConfirmDialog`** (`@/components/critical-confirm-dialog`) - for destructive, hard-to-reverse actions (deleting an account, an organization, a production resource). The user must retype a confirmation string (e.g. the item's name) exactly before the confirm button enables - it's disabled otherwise.
+
+Wire the mutation's `isPending` into the dialog's `isLoading` prop, and close the dialog from the mutation's `onSuccess` (the dialog does not auto-close on confirm). Pick `ConfirmDialog` by default; reach for `CriticalConfirmDialog` only when the action is genuinely hard to undo or affects more than the current record.
+
+## Commands
+
+```bash
+bun run dev           # Start Next.js dev server (Turbopack)
+bun run dev:all       # Start Next.js + Inngest in parallel (via mprocs) - alternative to the Docker Inngest service
+bun run build         # Production build
+bun run lint          # Run Biome linter
+bun run format        # Format code with Biome
+
+bun run prisma:migrate        # Run DB migrations (dev)
+bun run prisma:migrate-deploy # Deploy migrations (prod)
+bun run prisma:generate       # Regenerate Prisma client after schema changes
+bun run prisma:studio         # Open Prisma Studio UI
+
+bun run inngest:dev   # Start Inngest dev server locally (port 8288) - normally started via `docker compose up -d` instead (see docker-compose.yml)
+
+bun run docs:dev      # Serve docs/ as a local VitePress site
+bun run docs:build    # Build the docs site to docs/.vitepress/dist
+```
+
+There are no automated tests in this project.
+
+## Architecture
+
+Full-stack Next.js app (App Router) with tRPC, PostgreSQL/Prisma, Better Auth, Polar (payments), Inngest (background jobs), Redis, Vercel AI SDK, next-intl (i18n), and Plausible (analytics, optional). Full stack table, request flow, project structure, key files, and tRPC procedure types: [`docs/architecture.md`](./docs/architecture.md).
+
+**Linting/formatting:** Biome (NOT ESLint/Prettier). Never reference or create ESLint config files.
+**Path alias:** `@/*` maps to `./src/*`.
+
+## Adding a New Feature
+
+Every domain feature lives under `src/features/<feature>/` with a `schema/`, `server/`, `hooks/`, `components/`, `model/` subset. Full walkthrough with code snippets and a tour of existing features: [`docs/features.md`](./docs/features.md).
+
+## Environment Variables
+
+Copy `.env.example` to `.env`. Full reference for every variable (required vs. optional, defaults, where it's read): [`docs/environment-variables.md`](./docs/environment-variables.md).
+
+## i18n
+
+Supported locales: `en`, `de`. Server: `getTranslations()` from `next-intl/server`. Client: `useTranslations()` from `next-intl`. Details: [`docs/frontend.md`](./docs/frontend.md#internationalization-next-intl).
+
+## Database Migrations
+
+`bun run prisma:migrate` (dev), `bun run prisma:generate`, `bun run prisma:migrate-deploy` (prod, runs automatically in the Docker entrypoint). Schema and models: [`docs/database.md`](./docs/database.md).
+
+## Additional Rules
+
+- Try not to use any.
+- When implementing something new, look in the existing codebase and check if there's already a component, hook, or utility that does what you need. Reuse instead of reinventing.
+- Keep it simple - avoid overengineering. If a feature can be implemented with a simple component and a few hooks, don't introduce unnecessary abstractions or patterns.
+- Use TypeScript types and Zod schemas for validation. Avoid using `any` or untyped data structures.
+- Never use em dashes (—) anywhere, in code, comments, docs, or prose - always use a regular hyphen (-) instead.
+- Don't use semicolons in TypeScript/JavaScript code. I prefer a semicolon-free style. Only use semicolons where required by the language (e.g., for `for` loops).

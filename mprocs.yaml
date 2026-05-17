@@ -1,0 +1,5 @@
+procs:
+  next:
+    shell: "bun run dev"
+  inngest:
+    shell: "bun run inngest:dev"

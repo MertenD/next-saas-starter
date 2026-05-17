@@ -1,1 +1,1 @@
-@AGENTS.md
+Find everything in @AGENTS.md and always keep it up to date when you make changes to the codebase. This is for AI coding agents (not user-facing docs, and not part of this site).

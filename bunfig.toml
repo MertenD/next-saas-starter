@@ -1,0 +1,3 @@
+[install]
+# Only install packages published at least 2 days ago (supply chain protection)
+minAge = 172800
