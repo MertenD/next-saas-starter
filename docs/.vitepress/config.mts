@@ -28,6 +28,7 @@ export default defineConfig({
         text: "Setup",
         items: [
           { text: "Getting Started", link: "/getting-started" },
+          { text: "Quick Reference", link: "/quick-reference" },
           { text: "Environment Variables", link: "/environment-variables" },
         ],
       },
@@ -36,6 +37,7 @@ export default defineConfig({
         items: [
           { text: "Architecture", link: "/architecture" },
           { text: "Features", link: "/features" },
+          { text: "Data Fetching", link: "/data-fetching" },
           { text: "Database", link: "/database" },
           { text: "Auth & Billing", link: "/auth-and-billing" },
           { text: "Background Jobs", link: "/background-jobs" },

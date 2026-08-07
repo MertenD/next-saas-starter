@@ -32,7 +32,7 @@ A fully server-driven data table: pagination, search, filtering and sorting are 
 5. **Server-side resolution.** `customersRouter.getMany` filters, sorts, and paginates `MOCK_CUSTOMERS` entirely in memory - the same shape of work a real `WHERE` / `ORDER BY` / `LIMIT` SQL query would do:
 
    ```ts
-   const SIMULATED_LATENCY_MS = 400;
+   const SIMULATED_LATENCY_MS = 400
    // filter by status, filter by search (name/email substring)
    // sort by the chosen column and direction
    // slice to the requested page

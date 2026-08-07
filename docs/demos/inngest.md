@@ -33,9 +33,9 @@ Triggering a durable, multi-step background job from a UI action, then streaming
 2. **Durable multi-step execution.** `demoJob` runs three steps, each independently checkpointed:
 
    ```ts
-   const stats = await step.run("fetch-stats", async () => { /* simulated ~600ms fetch */ });
-   await step.sleep("processing-delay", "5s"); // survives a server restart mid-job
-   const report = await step.run("generate-report", async () => { /* build summary */ });
+   const stats = await step.run("fetch-stats", async () => { /* simulated ~600ms fetch */ })
+   await step.sleep("processing-delay", "5s") // survives a server restart mid-job
+   const report = await step.run("generate-report", async () => { /* build summary */ })
    ```
 
    `step.sleep` is the notable one: an in-memory `setTimeout` would be lost if the process restarted mid-wait, but Inngest's durable execution model resumes the job from that exact point even across a restart.

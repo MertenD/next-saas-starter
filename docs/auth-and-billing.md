@@ -51,8 +51,8 @@ Then set the corresponding env vars - see [`environment-variables.md`](./environ
 ```typescript
 export const isPolarEnabled = !!(
   env.POLAR_ACCESS_TOKEN && env.POLAR_SERVER && env.POLAR_SUCCESS_URL
-);
-export const polarClient = isPolarEnabled ? new Polar({ ... }) : null;
+)
+export const polarClient = isPolarEnabled ? new Polar({ ... }) : null
 ```
 
 Every place that checks subscription status (`premiumProcedure`, `requireAuthAndPremium`, `useHasActiveSubscription`) checks `isPolarEnabled` first and grants access to everyone when it's `false`. This means the premium-gated demos (e.g. `demo/posts`' `bulkPublish`) work with zero Polar setup - useful for developing without a Polar account, but remember to actually configure Polar before shipping anything that should be paywalled.
@@ -78,19 +78,19 @@ Server-side (tRPC):
 ```typescript
 myPremiumEndpoint: premiumProcedure.mutation(async ({ ctx }) => {
   // ctx.customer is the Polar customer state (or null in mock mode)
-});
+})
 ```
 
 Client-side:
 
 ```typescript
-import { useHasActiveSubscription } from "@/features/subscriptions/hooks/use-subscription";
-const { hasActiveSubscription } = useHasActiveSubscription();
+import { useHasActiveSubscription } from "@/features/subscriptions/hooks/use-subscription"
+const { hasActiveSubscription } = useHasActiveSubscription()
 ```
 
 Trigger checkout:
 
 ```typescript
-import { authClient } from "@/lib/auth-client";
-authClient.checkout({ slug: "pro" });
+import { authClient } from "@/lib/auth-client"
+authClient.checkout({ slug: "pro" })
 ```

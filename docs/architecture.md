@@ -134,6 +134,7 @@ Defined in `src/trpc/init.ts`. `protectedProcedure` throws `UNAUTHORIZED` if the
 ## Where to go next
 
 - [`features.md`](./features.md) - the feature-module pattern and a tour of each existing feature.
+- [`data-fetching.md`](./data-fetching.md) - client-side `useQuery`/`useMutation` vs. server-side `prefetch()` + hydration vs. the direct `caller`, step by step.
 - [`database.md`](./database.md) - Prisma schema and migrations.
 - [`auth-and-billing.md`](./auth-and-billing.md) - Better Auth and Polar in depth.
 - [`background-jobs.md`](./background-jobs.md) - Inngest.

@@ -30,7 +30,7 @@ A multi-step form wizard with client-only state that's fully decoupled from serv
        (set) => ({ step: BOOKING_STEPS[0], data: {}, /* setStepData, next, back, reset */ }),
        { name: "booking-wizard", storage: createJSONStorage(() => sessionStorage) },
      ),
-   );
+   )
    ```
 
    `sessionStorage` is the deliberate choice: an accidental refresh mid-wizard shouldn't lose progress, but a half-finished booking draft also shouldn't survive closing the tab the way a `localStorage`-persisted store would. This is the pattern to reach for any time you build a multi-step flow with the same requirement.
@@ -42,8 +42,8 @@ A multi-step form wizard with client-only state that's fully decoupled from serv
 5. **Deliberately flaky server.** `bookingRouter.submit` isn't a real payment processor - it's built to force real error handling:
 
    ```ts
-   const SIMULATED_LATENCY_MS = 600;
-   const SIMULATED_FAILURE_RATE = 0.2; // fails ~1 in 5 submissions
+   const SIMULATED_LATENCY_MS = 600
+   const SIMULATED_FAILURE_RATE = 0.2 // fails ~1 in 5 submissions
    ```
 
    On success it returns a `confirmationId`; the Review step then calls `reset()` on the store (clearing `sessionStorage`) once the user chooses "Book another trip".

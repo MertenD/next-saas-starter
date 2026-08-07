@@ -4,7 +4,7 @@
 
 ## What this demonstrates
 
-Streaming an LLM response into the UI, and specifically **resumable streams**: if the connection drops or the page gets refreshed mid-response, the client reconnects and picks the exact same stream back up server-side instead of losing the reply or starting over.
+Streaming an LLM response into the UI, and specifically **resumable streams**: if the connection drops mid-response (like when the user uses a phone and the connection is lost for a moment), the client reconnects and picks the exact same stream back up server-side instead of losing the reply or starting over. For this demo this does not mean the user can refresh the page, because every time the page a new `ìd` is generated for the chat, but the same technique can be used to persist a stream across page refreshes if you store the `id` in a database or localStorage.
 
 ## Key files
 
@@ -34,7 +34,7 @@ Streaming an LLM response into the UI, and specifically **resumable streams**: i
        api: "/api/chat",
        prepareReconnectToStreamRequest: ({ id }) => ({ api: `/api/chat/${id}/stream` }),
      }),
-   });
+   })
    ```
 
 2. `useChat({ chat, resume: true })` - the `resume: true` flag is what makes the hook automatically attempt to reconnect to an in-flight stream on mount, instead of only ever starting fresh ones.

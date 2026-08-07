@@ -22,9 +22,9 @@ The canonical full CRUD reference implementation against a real Prisma-backed mo
 1. **Ownership checks, by hand, every time.** `postsRouter` exposes `getMany`, `getOne`, `create`, `update`, `delete` - all `protectedProcedure`. Prisma has no per-request row-level security, so `getOne`, `update`, and `delete` each explicitly check `post.userId === ctx.auth.user.id` before returning or mutating anything, throwing `NOT_FOUND` otherwise:
 
    ```ts
-   const post = await prisma.post.findUnique({ where: { id: input.id } });
+   const post = await prisma.post.findUnique({ where: { id: input.id } })
    if (!post || post.userId !== ctx.auth.user.id) {
-     throw new TRPCError({ code: "NOT_FOUND" });
+     throw new TRPCError({ code: "NOT_FOUND" })
    }
    ```
 
@@ -41,7 +41,7 @@ The canonical full CRUD reference implementation against a real Prisma-backed mo
      return prisma.post.updateMany({
        where: { userId: ctx.auth.user.id, published: false },
        data: { published: true },
-     });
+     })
    }),
    ```
 

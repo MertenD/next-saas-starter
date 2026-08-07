@@ -5,9 +5,11 @@ Full documentation for this Next.js SaaS starter template. Start with [Getting S
 | Page | What's in it |
 |---|---|
 | [Getting Started](./getting-started.md) | Local setup: clone, install, environment variables, Docker services, database migration, first run. |
+| [Quick Reference](./quick-reference.md) | At-a-glance lookup table of the utilities, hooks, and helpers already in the codebase - check here before writing a new one. |
 | [Environment Variables](./environment-variables.md) | Canonical reference for every env var - what it does, whether it's required, and where it's read. |
 | [Architecture](./architecture.md) | Tech stack, request flow, full project structure, key files, tRPC procedure types. |
 | [Features](./features.md) | The feature-module pattern, a tour of every existing demo feature, and how to add a new one. |
+| [Data Fetching](./data-fetching.md) | Step-by-step: client-side `useQuery`/`useMutation`, server-side `prefetch()` + hydration, and the direct `caller`. |
 | [Database](./database.md) | Prisma schema, models, and the migration workflow. |
 | [Auth & Billing](./auth-and-billing.md) | Better Auth configuration, OAuth setup, Polar billing, premium feature gating. |
 | [Background Jobs](./background-jobs.md) | Inngest concepts, existing jobs, adding new jobs, Realtime subscriptions. |
