@@ -6,6 +6,11 @@ export default defineConfig({
   lastUpdated: true,
   cleanUrls: true,
 
+  // Served from https://<user>.github.io/next-saas-starter/ - GitHub Pages
+  // project sites live under a repo-name subpath, so every asset/link needs
+  // this prefix. Switch to "/" if a custom domain is set up instead.
+  base: "/next-saas-starter/",
+
   // The setup/deployment pages intentionally link to http://localhost:*
   // dev-server URLs as instructional examples - not real dead links.
   ignoreDeadLinks: "localhostLinks",

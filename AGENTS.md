@@ -74,6 +74,8 @@ bun run docs:dev      # Serve docs/ as a local VitePress site
 bun run docs:build    # Build the docs site to docs/.vitepress/dist
 ```
 
+Docs auto-deploy to GitHub Pages via `.github/workflows/docs.yml` on every push to `main` that touches `docs/**` (see `docs/.vitepress/config.mts` for the `base` path, which must match the repo name).
+
 There are no automated tests in this project.
 
 ## Architecture
