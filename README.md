@@ -4,22 +4,25 @@ A production-ready Next.js SaaS template with everything you need to build and s
 
 ## Tech Stack
 
-| Category | Technology |
-|---|---|
-| **Framework** | Next.js 16 (App Router, Turbopack) |
-| **Language** | TypeScript (strict mode) |
-| **API Layer** | tRPC v11 + TanStack Query v5 |
-| **Database** | PostgreSQL + Prisma ORM |
-| **Auth** | Better Auth (email/password + Google + GitHub OAuth) |
-| **Payments** | Polar.sh (subscriptions + customer portal) |
-| **Background Jobs** | Inngest |
-| **AI** | Vercel AI SDK + OpenRouter |
-| **Cache** | Redis |
-| **Analytics** | Plausible (self-hosted or cloud, optional) |
-| **UI** | ShadCN UI + Tailwind CSS v4 |
-| **i18n** | next-intl (en + de) |
-| **State** | Zustand (client) + TanStack Query (server) |
-| **Linting** | Biome (not ESLint) |
+| Category                      | Technology |
+|-------------------------------|---|
+| **Framework**                 | Next.js 16 (App Router, Turbopack) |
+| **Language**                  | TypeScript (strict mode) |
+| **API Layer**                 | tRPC v11 + TanStack Query v5 |
+| **Database**                  | PostgreSQL + Prisma ORM |
+| **Auth**                      | Better Auth (email/password + Google + GitHub OAuth) |
+| **Payments**                  | Polar.sh (subscriptions + customer portal) |
+| **Background Jobs**           | Inngest |
+| **AI**                        | Vercel AI SDK + OpenRouter |
+| **Cache**                     | Redis |
+| **Analytics**                 | Plausible (self-hosted or cloud, optional) |
+| **UI**                        | shadcn/ui + Tailwind CSS v4 |
+| **i18n**                      | next-intl (en + de) |
+| **State**                     | Zustand (client) + TanStack Query (server) |
+| **Input Validation**          | Zod |
+| **Forms**                     | React Hook Form + Zod |
+| **Linting/Formatting**        | Biome (not ESLint/Prettier) |
+| **Package manager / runtime** | Bun |
 
 ## Quick Start
 
