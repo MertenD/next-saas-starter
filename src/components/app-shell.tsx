@@ -1,15 +1,15 @@
-"use client";
+"use client"
 
-import type React from "react";
-import AppSidebar from "@/components/app-sidebar";
-import EmailVerificationBanner from "@/components/email-verification-banner";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { useUIStore } from "@/stores/ui-store";
+import type React from "react"
+import AppSidebar from "@/components/app-sidebar"
+import EmailVerificationBanner from "@/components/email-verification-banner"
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+import { useUIStore } from "@/stores/ui-store"
 
 type AppShellProps = {
-  username: string;
-  children: React.ReactNode;
-};
+  username: string
+  children: React.ReactNode
+}
 
 /**
  * Layout shell for every page under `(dashboard)`: renders the collapsible
@@ -18,8 +18,8 @@ type AppShellProps = {
  * can be read/toggled from both this component and the sidebar itself.
  */
 export default function AppShell({ username, children }: AppShellProps) {
-  const sidebarCollapsed = useUIStore((state) => state.sidebarCollapsed);
-  const setSidebarCollapsed = useUIStore((state) => state.setSidebarCollapsed);
+  const sidebarCollapsed = useUIStore((state) => state.sidebarCollapsed)
+  const setSidebarCollapsed = useUIStore((state) => state.setSidebarCollapsed)
 
   return (
     <SidebarProvider
@@ -32,5 +32,5 @@ export default function AppShell({ username, children }: AppShellProps) {
         {children}
       </SidebarInset>
     </SidebarProvider>
-  );
+  )
 }

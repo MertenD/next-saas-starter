@@ -1,22 +1,22 @@
-"use client";
+"use client"
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
-import { usePlausible } from "next-plausible";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
-import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
+import { usePlausible } from "next-plausible"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import { z } from "zod"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/components/ui/card"
 import {
   Form,
   FormControl,
@@ -24,42 +24,42 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import type { PlausibleEvents } from "@/lib/analytics";
-import { authClient } from "@/lib/auth-client";
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import type { PlausibleEvents } from "@/lib/analytics"
+import { authClient } from "@/lib/auth-client"
 
 export default function LoginForm() {
-  const router = useRouter();
-  const plausible = usePlausible<PlausibleEvents>();
+  const router = useRouter()
+  const plausible = usePlausible<PlausibleEvents>()
   const [oauthLoading, setOauthLoading] = useState<"github" | "google" | null>(
     null,
-  );
-  const t = useTranslations("auth.login");
+  )
+  const t = useTranslations("auth.login")
 
   const loginSchema = z.object({
     email: z.email(t("validation.emailInvalid")),
     password: z.string().min(1, t("validation.passwordRequired")),
-  });
-  type LoginFormValues = z.infer<typeof loginSchema>;
+  })
+  type LoginFormValues = z.infer<typeof loginSchema>
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: "", password: "" },
-  });
+  })
 
   async function signInWith(provider: "github" | "google") {
-    setOauthLoading(provider);
-    plausible("Login");
+    setOauthLoading(provider)
+    plausible("Login")
     await authClient.signIn.social(
       { provider, callbackURL: "/" },
       {
         onError: (ctx) => {
-          toast.error(ctx.error.message);
-          setOauthLoading(null);
+          toast.error(ctx.error.message)
+          setOauthLoading(null)
         },
       },
-    );
+    )
   }
 
   async function onSubmit(values: LoginFormValues) {
@@ -67,17 +67,17 @@ export default function LoginForm() {
       { email: values.email, password: values.password, callbackURL: "/" },
       {
         onSuccess: () => {
-          plausible("Login");
-          router.push("/");
+          plausible("Login")
+          router.push("/")
         },
         onError: (context) => {
-          toast.error(context.error.message);
+          toast.error(context.error.message)
         },
       },
-    );
+    )
   }
 
-  const isPending = form.formState.isSubmitting || oauthLoading !== null;
+  const isPending = form.formState.isSubmitting || oauthLoading !== null
 
   return (
     <div className="flex flex-col gap-6">
@@ -173,5 +173,5 @@ export default function LoginForm() {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

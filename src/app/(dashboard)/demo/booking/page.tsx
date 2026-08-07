@@ -1,8 +1,8 @@
-import { getTranslations } from "next-intl/server";
-import { BookingContainer } from "@/features/demo/booking/components/booking-container";
+import { getTranslations } from "next-intl/server"
+import { BookingContainer } from "@/features/demo/booking/components/booking-container"
 
 export default async function BookingPage() {
-  const t = await getTranslations("booking");
+  const t = await getTranslations("booking")
 
   return (
     <main className="flex flex-col gap-6 p-6">
@@ -14,5 +14,5 @@ export default async function BookingPage() {
       </div>
       <BookingContainer />
     </main>
-  );
+  )
 }

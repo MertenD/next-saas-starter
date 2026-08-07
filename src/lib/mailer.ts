@@ -1,11 +1,11 @@
-import { env } from "@/config/env";
-import { isResendEnabled, resendClient } from "@/lib/resend";
+import { env } from "@/config/env"
+import { isResendEnabled, resendClient } from "@/lib/resend"
 
 type SendEmailParams = {
-  to: string;
-  subject: string;
-  html: string;
-};
+  to: string
+  subject: string
+  html: string
+}
 
 /**
  * Sends a transactional email via Resend. If `RESEND_API_KEY`/`EMAIL_FROM`
@@ -21,8 +21,8 @@ export async function sendEmail({ to, subject, html }: SendEmailParams) {
     console.warn(
       `[mailer] RESEND_API_KEY/EMAIL_FROM not set - logging email instead of sending:\n` +
         `  to: ${to}\n  subject: ${subject}\n  html: ${html}`,
-    );
-    return;
+    )
+    return
   }
 
   try {
@@ -32,9 +32,9 @@ export async function sendEmail({ to, subject, html }: SendEmailParams) {
       to,
       subject,
       html,
-    });
+    })
   } catch (error) {
-    console.error("Error sending email via Resend:", error);
+    console.error("Error sending email via Resend:", error)
   }
 }
 
@@ -44,7 +44,7 @@ function emailLayout(content: string) {
     <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; padding: 24px;">
       ${content}
     </div>
-  `;
+  `
 }
 
 export function resetPasswordEmailHtml({ url }: { url: string }) {
@@ -56,7 +56,7 @@ export function resetPasswordEmailHtml({ url }: { url: string }) {
     <a href="${url}" style="display: inline-block; background: #ff385c; color: #ffffff; padding: 12px 20px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 500;">
       Reset password
     </a>
-  `);
+  `)
 }
 
 export function verifyEmailHtml({ url }: { url: string }) {
@@ -68,5 +68,5 @@ export function verifyEmailHtml({ url }: { url: string }) {
     <a href="${url}" style="display: inline-block; background: #ff385c; color: #ffffff; padding: 12px 20px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 500;">
       Verify email
     </a>
-  `);
+  `)
 }

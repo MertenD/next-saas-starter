@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import {
   BotIcon,
@@ -8,10 +8,10 @@ import {
   SettingsIcon,
   TableIcon,
   ZapIcon,
-} from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useTranslations } from "next-intl";
+} from "lucide-react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { useTranslations } from "next-intl"
 import {
   Sidebar,
   SidebarContent,
@@ -25,13 +25,13 @@ import {
   SidebarMenuItem,
   SidebarRail,
   SidebarTrigger,
-} from "@/components/ui/sidebar";
-import UserInfoCard from "@/features/auth/user-info-card";
-import { cn } from "@/lib/utils";
+} from "@/components/ui/sidebar"
+import UserInfoCard from "@/features/auth/user-info-card"
+import { cn } from "@/lib/utils"
 
 type AppSidebarProps = {
-  username: string;
-};
+  username: string
+}
 
 /**
  * Main dashboard navigation sidebar. Nav items are split into core app
@@ -41,14 +41,14 @@ type AppSidebarProps = {
  * discoverable.
  */
 export default function AppSidebar({ username }: AppSidebarProps) {
-  const pathName = usePathname();
-  const t = useTranslations("sidebar");
-  const tBrand = useTranslations("auth.layout");
+  const pathName = usePathname()
+  const t = useTranslations("sidebar")
+  const tBrand = useTranslations("auth.layout")
 
   const mainItems = [
     { title: t("nav.dashboard"), icon: HomeIcon, url: "/dashboard" },
     { title: t("nav.settings"), icon: SettingsIcon, url: "/settings" },
-  ];
+  ]
 
   const demoItems = [
     { title: t("nav.posts"), icon: FileTextIcon, url: "/demo/posts" },
@@ -56,21 +56,21 @@ export default function AppSidebar({ username }: AppSidebarProps) {
     { title: t("nav.ai"), icon: BotIcon, url: "/demo/ai" },
     { title: t("nav.customers"), icon: TableIcon, url: "/demo/customers" },
     { title: t("nav.booking"), icon: CalendarCheckIcon, url: "/demo/booking" },
-  ];
+  ]
 
   const NavLink = ({
     url,
     icon: Icon,
     title,
   }: {
-    url: string;
-    icon: React.ElementType;
-    title: string;
+    url: string
+    icon: React.ElementType
+    title: string
   }) => {
     const isActive =
       url === "/dashboard"
         ? pathName === "/dashboard"
-        : pathName.startsWith(url);
+        : pathName.startsWith(url)
 
     return (
       <SidebarMenuItem>
@@ -89,8 +89,8 @@ export default function AppSidebar({ username }: AppSidebarProps) {
           </Link>
         </SidebarMenuButton>
       </SidebarMenuItem>
-    );
-  };
+    )
+  }
 
   return (
     <Sidebar collapsible="icon">
@@ -136,5 +136,5 @@ export default function AppSidebar({ username }: AppSidebarProps) {
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  );
+  )
 }

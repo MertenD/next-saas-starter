@@ -1,9 +1,9 @@
-import { getTranslations } from "next-intl/server";
-import { requireAuth } from "@/lib/auth-utils";
+import { getTranslations } from "next-intl/server"
+import { requireAuth } from "@/lib/auth-utils"
 
 export default async function DashboardPage() {
-  const session = await requireAuth();
-  const t = await getTranslations("dashboard");
+  const session = await requireAuth()
+  const t = await getTranslations("dashboard")
 
   return (
     <main className="flex flex-col gap-6 p-6">
@@ -17,5 +17,5 @@ export default async function DashboardPage() {
         <p className="text-sm text-muted-foreground">{t("placeholderBody")}</p>
       </div>
     </main>
-  );
+  )
 }

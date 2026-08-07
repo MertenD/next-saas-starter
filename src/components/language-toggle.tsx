@@ -1,11 +1,11 @@
-"use client";
+"use client"
 
-import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
-import { setLocaleAction } from "@/app/actions/set-locale";
-import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
+import { setLocaleAction } from "@/app/actions/set-locale"
+import { Button } from "@/components/ui/button"
 
-const LOCALES = ["en", "de"] as const;
+const LOCALES = ["en", "de"] as const
 
 /**
  * Locale switcher: persists the chosen locale via `setLocaleAction` (a
@@ -15,12 +15,12 @@ const LOCALES = ["en", "de"] as const;
  * language.
  */
 export function LanguageToggle() {
-  const t = useTranslations("settings.general.language");
-  const router = useRouter();
+  const t = useTranslations("settings.general.language")
+  const router = useRouter()
 
   async function handleLocaleChange(locale: string) {
-    await setLocaleAction(locale);
-    router.refresh();
+    await setLocaleAction(locale)
+    router.refresh()
   }
 
   return (
@@ -36,5 +36,5 @@ export function LanguageToggle() {
         </Button>
       ))}
     </div>
-  );
+  )
 }

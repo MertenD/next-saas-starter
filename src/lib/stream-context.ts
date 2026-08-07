@@ -1,9 +1,9 @@
-import { createResumableStreamContext } from "resumable-stream";
+import { createResumableStreamContext } from "resumable-stream"
 
 // Lazily created and cached at module scope so the AI chat streaming routes
 // (`src/app/api/chat/**`) reuse a single context per server instance instead
 // of reconnecting to the resumable-stream backend on every request.
-let streamContext: ReturnType<typeof createResumableStreamContext> | undefined;
+let streamContext: ReturnType<typeof createResumableStreamContext> | undefined
 
 /**
  * Returns the shared resumable-stream context used to make AI chat
@@ -12,7 +12,7 @@ let streamContext: ReturnType<typeof createResumableStreamContext> | undefined;
  */
 export function getStreamContext() {
   if (!streamContext) {
-    streamContext = createResumableStreamContext({ waitUntil: null });
+    streamContext = createResumableStreamContext({ waitUntil: null })
   }
-  return streamContext;
+  return streamContext
 }

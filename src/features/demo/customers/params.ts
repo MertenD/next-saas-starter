@@ -1,10 +1,10 @@
-import { parseAsInteger, parseAsString, parseAsStringEnum } from "nuqs/server";
-import { PAGINATION } from "@/config/constants";
+import { parseAsInteger, parseAsString, parseAsStringEnum } from "nuqs/server"
+import { PAGINATION } from "@/config/constants"
 import {
   CUSTOMER_SORT_BY_OPTIONS,
   CUSTOMER_STATUS_FILTER_OPTIONS,
   SORT_ORDER_OPTIONS,
-} from "@/features/demo/customers/model/customer";
+} from "@/features/demo/customers/model/customer"
 
 /**
  * nuqs parser definitions for the customers table's URL state (pagination,
@@ -31,4 +31,4 @@ export const customersParams = {
   sortOrder: parseAsStringEnum([...SORT_ORDER_OPTIONS])
     .withDefault("desc")
     .withOptions({ clearOnDefault: true }),
-};
+}

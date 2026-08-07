@@ -1,8 +1,8 @@
-import { getTranslations } from "next-intl/server";
-import SettingsTabs from "@/features/settings/components/settings-tabs";
+import { getTranslations } from "next-intl/server"
+import SettingsTabs from "@/features/settings/components/settings-tabs"
 
 export default async function SettingsPage() {
-  const t = await getTranslations("settings");
+  const t = await getTranslations("settings")
 
   return (
     <main className="flex flex-col gap-6 p-6">
@@ -13,5 +13,5 @@ export default async function SettingsPage() {
         <SettingsTabs />
       </div>
     </main>
-  );
+  )
 }

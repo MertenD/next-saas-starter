@@ -1,8 +1,8 @@
-"use client";
+"use client"
 
-import { Chat, useChat } from "@ai-sdk/react";
-import { generateId, TextStreamChatTransport } from "ai";
-import { useRef } from "react";
+import { Chat, useChat } from "@ai-sdk/react"
+import { generateId, TextStreamChatTransport } from "ai"
+import { useRef } from "react"
 
 /**
  * Creates a `Chat` instance whose transport points at `/api/chat` for new
@@ -20,7 +20,7 @@ function createChat() {
         api: `/api/chat/${id}/stream`,
       }),
     }),
-  });
+  })
 }
 
 /**
@@ -29,13 +29,13 @@ function createChat() {
  * survives re-renders without losing its stream connection.
  */
 export function useAiChat() {
-  const chatRef = useRef<InstanceType<typeof Chat> | null>(null);
-  if (!chatRef.current) chatRef.current = createChat();
+  const chatRef = useRef<InstanceType<typeof Chat> | null>(null)
+  if (!chatRef.current) chatRef.current = createChat()
 
   const { messages, sendMessage, status, error } = useChat({
     chat: chatRef.current,
     resume: true,
-  });
+  })
 
   return {
     chatId: chatRef.current.id,
@@ -43,5 +43,5 @@ export function useAiChat() {
     sendMessage,
     isLoading: status === "streaming" || status === "submitted",
     error,
-  };
+  }
 }

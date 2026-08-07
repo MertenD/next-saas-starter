@@ -1,5 +1,5 @@
-import { channel, topic } from "@inngest/realtime";
-import { z } from "zod";
+import { channel, topic } from "@inngest/realtime"
+import { z } from "zod"
 
 // Streamed status updates for a single demoJob run, scoped by event ID so
 // each triggered run gets its own channel. Published from within demoJob
@@ -18,10 +18,10 @@ export const demoJobStatusSchema = z.object({
       completedAt: z.string(),
     })
     .optional(),
-});
+})
 
-export type DemoJobStatus = z.infer<typeof demoJobStatusSchema>;
+export type DemoJobStatus = z.infer<typeof demoJobStatusSchema>
 
 export const demoJobChannel = channel(
   (eventId: string) => `demo-job:${eventId}`,
-).addTopic(topic("status").schema(demoJobStatusSchema));
+).addTopic(topic("status").schema(demoJobStatusSchema))

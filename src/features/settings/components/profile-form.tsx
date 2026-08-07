@@ -1,11 +1,11 @@
-"use client";
+"use client"
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useTranslations } from "next-intl";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useTranslations } from "next-intl"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
@@ -13,40 +13,40 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useUpdateProfile } from "@/features/user/hooks/use-update-profile";
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { useUpdateProfile } from "@/features/user/hooks/use-update-profile"
 
 type User = {
-  name: string;
-  email: string;
-  image: string | null;
-};
+  name: string
+  email: string
+  image: string | null
+}
 
 type ProfileFormProps = {
-  user: User;
-};
+  user: User
+}
 
 export default function ProfileForm({ user }: ProfileFormProps) {
-  const t = useTranslations("settings.account.profile");
-  const { mutate: updateProfile, isPending } = useUpdateProfile();
+  const t = useTranslations("settings.account.profile")
+  const { mutate: updateProfile, isPending } = useUpdateProfile()
 
   const profileSchema = z.object({
     name: z.string().min(1, t("validation.nameRequired")),
     image: z.union([z.url(t("validation.imageInvalid")), z.literal("")]),
-  });
-  type ProfileFormValues = z.infer<typeof profileSchema>;
+  })
+  type ProfileFormValues = z.infer<typeof profileSchema>
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: { name: user.name, image: user.image ?? "" },
-  });
+  })
 
-  const imagePreview = form.watch("image");
+  const imagePreview = form.watch("image")
 
   function onSubmit(values: ProfileFormValues) {
-    updateProfile({ name: values.name, image: values.image || undefined });
+    updateProfile({ name: values.name, image: values.image || undefined })
   }
 
   return (
@@ -98,5 +98,5 @@ export default function ProfileForm({ user }: ProfileFormProps) {
         </Button>
       </form>
     </Form>
-  );
+  )
 }

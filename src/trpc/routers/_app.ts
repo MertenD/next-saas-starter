@@ -1,9 +1,9 @@
-import { bookingRouter } from "@/features/demo/booking/server/router";
-import { customersRouter } from "@/features/demo/customers/server/router";
-import { demoRouter } from "@/features/demo/inngest/server/router";
-import { postsRouter } from "@/features/demo/posts/server/router";
-import { userRouter } from "@/features/user/server/router";
-import { createTRPCRouter } from "../init";
+import { bookingRouter } from "@/features/demo/booking/server/router"
+import { customersRouter } from "@/features/demo/customers/server/router"
+import { demoRouter } from "@/features/demo/inngest/server/router"
+import { postsRouter } from "@/features/demo/posts/server/router"
+import { userRouter } from "@/features/user/server/router"
+import { createTRPCRouter } from "../init"
 
 /**
  * Root tRPC router: merges every feature's router (each defined in that
@@ -17,7 +17,7 @@ export const appRouter = createTRPCRouter({
   demo: demoRouter,
   customers: customersRouter,
   booking: bookingRouter,
-});
+})
 
 /** Type-only export consumed by the client (`src/trpc/client.tsx`) for end-to-end type safety. */
-export type AppRouter = typeof appRouter;
+export type AppRouter = typeof appRouter

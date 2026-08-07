@@ -1,8 +1,8 @@
-"use client";
+"use client"
 
-import { useInngestSubscription } from "@inngest/realtime/hooks";
-import { useQueryClient } from "@tanstack/react-query";
-import { useTRPC } from "@/trpc/client";
+import { useInngestSubscription } from "@inngest/realtime/hooks"
+import { useQueryClient } from "@tanstack/react-query"
+import { useTRPC } from "@/trpc/client"
 
 /**
  * Subscribes to live status updates for a single Inngest job run over
@@ -14,8 +14,8 @@ import { useTRPC } from "@/trpc/client";
  * the client rather than being polled.
  */
 export function useJobStatus(eventId: string) {
-  const trpc = useTRPC();
-  const queryClient = useQueryClient();
+  const trpc = useTRPC()
+  const queryClient = useQueryClient()
 
   return useInngestSubscription({
     refreshToken: () =>
@@ -23,5 +23,5 @@ export function useJobStatus(eventId: string) {
         trpc.demo.getJobSubscriptionToken.queryOptions({ eventId }),
       ),
     bufferInterval: 300,
-  });
+  })
 }

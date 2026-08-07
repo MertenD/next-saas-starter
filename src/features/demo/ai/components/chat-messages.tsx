@@ -1,29 +1,29 @@
-"use client";
+"use client"
 
-import type { UIMessage } from "ai";
-import { BotIcon, UserIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { useEffect, useRef } from "react";
-import { cn } from "@/lib/utils";
+import type { UIMessage } from "ai"
+import { BotIcon, UserIcon } from "lucide-react"
+import { useTranslations } from "next-intl"
+import { useEffect, useRef } from "react"
+import { cn } from "@/lib/utils"
 
 type ChatMessagesProps = {
-  messages: UIMessage[];
-  isLoading: boolean;
-  error: Error | undefined;
-};
+  messages: UIMessage[]
+  isLoading: boolean
+  error: Error | undefined
+}
 
 export function ChatMessages({
   messages,
   isLoading,
   error,
 }: ChatMessagesProps) {
-  const t = useTranslations("demo.ai");
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const t = useTranslations("demo.ai")
+  const bottomRef = useRef<HTMLDivElement>(null)
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: scroll on new message count, not on ref
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages.length]);
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" })
+  }, [messages.length])
 
   return (
     <div className="flex-1 space-y-4 overflow-y-auto p-4">
@@ -109,5 +109,5 @@ export function ChatMessages({
 
       <div ref={bottomRef} />
     </div>
-  );
+  )
 }

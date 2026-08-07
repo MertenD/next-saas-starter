@@ -1,8 +1,8 @@
-"use server";
+"use server"
 
-import { cookies } from "next/headers";
+import { cookies } from "next/headers"
 
-const SUPPORTED = ["en", "de"];
+const SUPPORTED = ["en", "de"]
 
 /**
  * Persists the user's chosen locale in the `ui-locale` cookie, which
@@ -11,17 +11,17 @@ const SUPPORTED = ["en", "de"];
  * Silently ignores unsupported locale values.
  */
 export async function setLocaleAction(locale: string): Promise<void> {
-  if (!SUPPORTED.includes(locale)) return;
-  const cookieStore = await cookies();
+  if (!SUPPORTED.includes(locale)) return
+  const cookieStore = await cookies()
   cookieStore.set("ui-locale", locale, {
     path: "/",
     httpOnly: true,
     sameSite: "lax",
     maxAge: 60 * 60 * 24 * 365,
-  });
+  })
 }
 
 /** Removes the `ui-locale` cookie, falling back to the default locale on the next request. */
 export async function clearLocaleAction(): Promise<void> {
-  (await cookies()).delete("ui-locale");
+  ;(await cookies()).delete("ui-locale")
 }

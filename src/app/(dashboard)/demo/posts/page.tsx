@@ -1,8 +1,8 @@
-import { getTranslations } from "next-intl/server";
-import { PostsContainer } from "@/features/demo/posts/components/posts-container";
+import { getTranslations } from "next-intl/server"
+import { PostsContainer } from "@/features/demo/posts/components/posts-container"
 
 export default async function PostsPage() {
-  const t = await getTranslations("posts");
+  const t = await getTranslations("posts")
 
   return (
     <main className="flex flex-col gap-6 p-6">
@@ -14,5 +14,5 @@ export default async function PostsPage() {
       </div>
       <PostsContainer />
     </main>
-  );
+  )
 }

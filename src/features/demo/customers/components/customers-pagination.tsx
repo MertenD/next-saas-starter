@@ -1,18 +1,18 @@
-"use client";
+"use client"
 
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { Button } from "@/components/ui/button";
-import { useCustomers } from "@/features/demo/customers/hooks/use-customers";
-import { useCustomersParams } from "@/features/demo/customers/hooks/use-customers-params";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
+import { useTranslations } from "next-intl"
+import { Button } from "@/components/ui/button"
+import { useCustomers } from "@/features/demo/customers/hooks/use-customers"
+import { useCustomersParams } from "@/features/demo/customers/hooks/use-customers-params"
 
 export function CustomersPagination() {
-  const t = useTranslations("customers");
-  const { data, isFetching } = useCustomers();
-  const [params, setParams] = useCustomersParams();
+  const t = useTranslations("customers")
+  const { data, isFetching } = useCustomers()
+  const [params, setParams] = useCustomersParams()
 
   if (!data || data.totalCount === 0) {
-    return null;
+    return null
   }
 
   return (
@@ -44,5 +44,5 @@ export function CustomersPagination() {
         </Button>
       </div>
     </div>
-  );
+  )
 }

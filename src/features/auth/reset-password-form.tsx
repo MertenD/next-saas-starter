@@ -1,20 +1,20 @@
-"use client";
+"use client"
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useTranslations } from "next-intl";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
-import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod"
+import Link from "next/link"
+import { useRouter, useSearchParams } from "next/navigation"
+import { useTranslations } from "next-intl"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import { z } from "zod"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/components/ui/card"
 import {
   Form,
   FormControl,
@@ -22,15 +22,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { authClient } from "@/lib/auth-client";
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { authClient } from "@/lib/auth-client"
 
 export default function ResetPasswordForm() {
-  const t = useTranslations("auth.resetPassword");
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const token = searchParams.get("token");
+  const t = useTranslations("auth.resetPassword")
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const token = searchParams.get("token")
 
   const resetPasswordSchema = z
     .object({
@@ -43,31 +43,31 @@ export default function ResetPasswordForm() {
     .refine((data) => data.newPassword === data.confirmPassword, {
       message: t("validation.passwordMismatch"),
       path: ["confirmPassword"],
-    });
-  type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>;
+    })
+  type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>
 
   const form = useForm<ResetPasswordFormValues>({
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: { newPassword: "", confirmPassword: "" },
-  });
+  })
 
   async function onSubmit(values: ResetPasswordFormValues) {
-    if (!token) return;
+    if (!token) return
     await authClient.resetPassword(
       { newPassword: values.newPassword, token },
       {
         onSuccess: () => {
-          toast.success(t("success"));
-          router.push("/login");
+          toast.success(t("success"))
+          router.push("/login")
         },
         onError: (context) => {
-          toast.error(context.error.message);
+          toast.error(context.error.message)
         },
       },
-    );
+    )
   }
 
-  const isPending = form.formState.isSubmitting;
+  const isPending = form.formState.isSubmitting
 
   return (
     <div className="flex flex-col gap-6">
@@ -132,5 +132,5 @@ export default function ResetPasswordForm() {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

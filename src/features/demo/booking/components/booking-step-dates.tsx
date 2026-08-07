@@ -1,10 +1,10 @@
-"use client";
+"use client"
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useTranslations } from "next-intl";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useTranslations } from "next-intl"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
@@ -12,14 +12,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useBookingWizard } from "@/features/demo/booking/hooks/use-booking-wizard";
-import type { TripDatesData } from "@/features/demo/booking/schema/booking-schema";
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { useBookingWizard } from "@/features/demo/booking/hooks/use-booking-wizard"
+import type { TripDatesData } from "@/features/demo/booking/schema/booking-schema"
 
 export function BookingStepDates() {
-  const t = useTranslations("booking");
-  const { data, setStepData, next } = useBookingWizard();
+  const t = useTranslations("booking")
+  const { data, setStepData, next } = useBookingWizard()
 
   const tripDatesFormSchema = z
     .object({
@@ -29,7 +29,7 @@ export function BookingStepDates() {
     .refine((values) => new Date(values.checkOut) > new Date(values.checkIn), {
       message: t("form.validation.checkOutAfterCheckIn"),
       path: ["checkOut"],
-    });
+    })
 
   const form = useForm<TripDatesData>({
     resolver: zodResolver(tripDatesFormSchema),
@@ -37,11 +37,11 @@ export function BookingStepDates() {
       checkIn: data.checkIn ?? "",
       checkOut: data.checkOut ?? "",
     },
-  });
+  })
 
   function onSubmit(values: TripDatesData) {
-    setStepData(values);
-    next();
+    setStepData(values)
+    next()
   }
 
   return (
@@ -80,5 +80,5 @@ export function BookingStepDates() {
         </div>
       </form>
     </Form>
-  );
+  )
 }

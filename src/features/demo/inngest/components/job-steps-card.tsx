@@ -1,24 +1,24 @@
-"use client";
+"use client"
 
-import { ExternalLinkIcon, PlayIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { Button } from "@/components/ui/button";
+import { ExternalLinkIcon, PlayIcon } from "lucide-react"
+import { useTranslations } from "next-intl"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { JOB_STEPS } from "@/features/demo/inngest/model/inngest-demo";
+} from "@/components/ui/card"
+import { JOB_STEPS } from "@/features/demo/inngest/model/inngest-demo"
 
 type JobStepsCardProps = {
-  onTrigger: () => void;
-  isPending: boolean;
-};
+  onTrigger: () => void
+  isPending: boolean
+}
 
 export function JobStepsCard({ onTrigger, isPending }: JobStepsCardProps) {
-  const t = useTranslations("demo.inngest");
+  const t = useTranslations("demo.inngest")
 
   return (
     <Card>
@@ -28,7 +28,7 @@ export function JobStepsCard({ onTrigger, isPending }: JobStepsCardProps) {
       </CardHeader>
       <CardContent className="space-y-3">
         {JOB_STEPS.map((step, i) => {
-          const Icon = step.icon;
+          const Icon = step.icon
           return (
             <div key={step.id} className="flex gap-3">
               <div className="flex flex-col items-center">
@@ -49,7 +49,7 @@ export function JobStepsCard({ onTrigger, isPending }: JobStepsCardProps) {
                 </p>
               </div>
             </div>
-          );
+          )
         })}
 
         <div className="flex gap-2 pt-2">
@@ -70,5 +70,5 @@ export function JobStepsCard({ onTrigger, isPending }: JobStepsCardProps) {
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }

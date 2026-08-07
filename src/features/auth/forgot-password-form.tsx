@@ -1,20 +1,20 @@
-"use client";
+"use client"
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
-import { useTranslations } from "next-intl";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
-import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod"
+import Link from "next/link"
+import { useTranslations } from "next-intl"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import { z } from "zod"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/components/ui/card"
 import {
   Form,
   FormControl,
@@ -22,23 +22,23 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { authClient } from "@/lib/auth-client";
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { authClient } from "@/lib/auth-client"
 
 export default function ForgotPasswordForm() {
-  const t = useTranslations("auth.forgotPassword");
-  const [submitted, setSubmitted] = useState(false);
+  const t = useTranslations("auth.forgotPassword")
+  const [submitted, setSubmitted] = useState(false)
 
   const forgotPasswordSchema = z.object({
     email: z.email(t("validation.emailInvalid")),
-  });
-  type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>;
+  })
+  type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>
 
   const form = useForm<ForgotPasswordFormValues>({
     resolver: zodResolver(forgotPasswordSchema),
     defaultValues: { email: "" },
-  });
+  })
 
   async function onSubmit(values: ForgotPasswordFormValues) {
     await authClient.requestPasswordReset(
@@ -46,13 +46,13 @@ export default function ForgotPasswordForm() {
       {
         onSuccess: () => setSubmitted(true),
         onError: (context) => {
-          toast.error(context.error.message);
+          toast.error(context.error.message)
         },
       },
-    );
+    )
   }
 
-  const isPending = form.formState.isSubmitting;
+  const isPending = form.formState.isSubmitting
 
   return (
     <div className="flex flex-col gap-6">
@@ -116,5 +116,5 @@ export default function ForgotPasswordForm() {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

@@ -1,6 +1,6 @@
-import { serve } from "inngest/next";
-import { inngest } from "@/inngest/client";
-import { demoJob, onUserSignedUp } from "@/inngest/functions";
+import { serve } from "inngest/next"
+import { inngest } from "@/inngest/client"
+import { demoJob, onUserSignedUp } from "@/inngest/functions"
 
 /**
  * Inngest's serve handler: this is the endpoint the Inngest dev
@@ -11,4 +11,4 @@ import { demoJob, onUserSignedUp } from "@/inngest/functions";
 export const { GET, POST, PUT } = serve({
   client: inngest,
   functions: [onUserSignedUp, demoJob],
-});
+})

@@ -1,8 +1,8 @@
-"use client";
+"use client"
 
-import { useTranslations } from "next-intl";
-import type * as React from "react";
-import { useEffect, useId, useState } from "react";
+import { useTranslations } from "next-intl"
+import type * as React from "react"
+import { useEffect, useId, useState } from "react"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,25 +12,25 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { buttonVariants } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from "@/components/ui/alert-dialog"
+import { buttonVariants } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 type CriticalConfirmDialogProps = {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  title: string;
-  description?: React.ReactNode;
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  title: string
+  description?: React.ReactNode
   /** The exact string the user must retype (e.g. the item's name) to enable the confirm button. */
-  confirmationValue: string;
-  confirmLabel?: string;
-  cancelLabel?: string;
+  confirmationValue: string
+  confirmLabel?: string
+  cancelLabel?: string
   /** Pass a mutation's `isPending` - disables both buttons and shows a busy label. */
-  isLoading?: boolean;
+  isLoading?: boolean
   /** The dialog does not auto-close - close it yourself (e.g. in the mutation's onSuccess). */
-  onConfirm: () => void;
-};
+  onConfirm: () => void
+}
 
 /**
  * Destructive, hard-to-reverse confirmation (delete account, delete org, ...).
@@ -47,17 +47,17 @@ export function CriticalConfirmDialog({
   isLoading = false,
   onConfirm,
 }: CriticalConfirmDialogProps) {
-  const t = useTranslations("common.criticalConfirmDialog");
-  const resolvedConfirmLabel = confirmLabel ?? t("confirmLabel");
-  const resolvedCancelLabel = cancelLabel ?? t("cancelLabel");
-  const inputId = useId();
-  const [typedValue, setTypedValue] = useState("");
+  const t = useTranslations("common.criticalConfirmDialog")
+  const resolvedConfirmLabel = confirmLabel ?? t("confirmLabel")
+  const resolvedCancelLabel = cancelLabel ?? t("cancelLabel")
+  const inputId = useId()
+  const [typedValue, setTypedValue] = useState("")
 
   useEffect(() => {
-    if (!open) setTypedValue("");
-  }, [open]);
+    if (!open) setTypedValue("")
+  }, [open])
 
-  const isMatch = typedValue === confirmationValue;
+  const isMatch = typedValue === confirmationValue
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
@@ -90,8 +90,8 @@ export function CriticalConfirmDialog({
           </AlertDialogCancel>
           <AlertDialogAction
             onClick={(e) => {
-              e.preventDefault();
-              onConfirm();
+              e.preventDefault()
+              onConfirm()
             }}
             disabled={!isMatch || isLoading}
             className={buttonVariants({ variant: "destructive" })}
@@ -101,5 +101,5 @@ export function CriticalConfirmDialog({
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  );
+  )
 }

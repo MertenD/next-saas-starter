@@ -1,16 +1,16 @@
-import { createClient } from "redis";
-import { env } from "@/config/env";
+import { createClient } from "redis"
+import { env } from "@/config/env"
 
 // Same global-caching trick as `src/lib/db.ts`: avoids creating a new Redis
 // client (and TCP connection) on every dev hot reload.
 const globalForRedis = global as unknown as {
-  redis: ReturnType<typeof createClient>;
-};
+  redis: ReturnType<typeof createClient>
+}
 
-const redis = globalForRedis.redis || createClient({ url: env.REDIS_URL });
+const redis = globalForRedis.redis || createClient({ url: env.REDIS_URL })
 
 if (process.env.NODE_ENV !== "production") {
-  globalForRedis.redis = redis;
+  globalForRedis.redis = redis
 }
 
 /**
@@ -20,9 +20,9 @@ if (process.env.NODE_ENV !== "production") {
  * `connect()` has been called at least once.
  */
 export async function getRedis() {
-  if (!redis.isOpen) await redis.connect();
-  return redis;
+  if (!redis.isOpen) await redis.connect()
+  return redis
 }
 
 /** The raw (possibly not-yet-connected) Redis client instance. */
-export default redis;
+export default redis

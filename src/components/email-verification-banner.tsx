@@ -1,11 +1,11 @@
-"use client";
+"use client"
 
-import { MailWarningIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { useResendVerificationEmail } from "@/features/user/hooks/use-resend-verification-email";
-import { authClient } from "@/lib/auth-client";
+import { MailWarningIcon } from "lucide-react"
+import { useTranslations } from "next-intl"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Button } from "@/components/ui/button"
+import { useResendVerificationEmail } from "@/features/user/hooks/use-resend-verification-email"
+import { authClient } from "@/lib/auth-client"
 
 /**
  * Dismissible-by-verification banner shown above dashboard content while
@@ -14,13 +14,12 @@ import { authClient } from "@/lib/auth-client";
  * every dashboard page rather than being added per-page.
  */
 export default function EmailVerificationBanner() {
-  const t = useTranslations("common.emailVerificationBanner");
-  const { data: session } = authClient.useSession();
-  const { mutate: resendVerification, isPending } =
-    useResendVerificationEmail();
+  const t = useTranslations("common.emailVerificationBanner")
+  const { data: session } = authClient.useSession()
+  const { mutate: resendVerification, isPending } = useResendVerificationEmail()
 
   if (!session || session.user.emailVerified) {
-    return null;
+    return null
   }
 
   return (
@@ -41,5 +40,5 @@ export default function EmailVerificationBanner() {
         {t("resendButton")}
       </Button>
     </Alert>
-  );
+  )
 }

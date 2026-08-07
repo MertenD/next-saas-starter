@@ -1,14 +1,14 @@
-import { checkout, polar, portal } from "@polar-sh/better-auth";
-import { betterAuth } from "better-auth";
-import { prismaAdapter } from "better-auth/adapters/prisma";
-import { env } from "@/config/env";
-import prisma from "@/lib/db";
+import { checkout, polar, portal } from "@polar-sh/better-auth"
+import { betterAuth } from "better-auth"
+import { prismaAdapter } from "better-auth/adapters/prisma"
+import { env } from "@/config/env"
+import prisma from "@/lib/db"
 import {
   resetPasswordEmailHtml,
   sendEmail,
   verifyEmailHtml,
-} from "@/lib/mailer";
-import { isPolarEnabled, polarClient } from "./polar";
+} from "@/lib/mailer"
+import { isPolarEnabled, polarClient } from "./polar"
 
 /**
  * The server-side Better Auth instance. This is the single source of truth
@@ -35,7 +35,7 @@ export const auth = betterAuth({
         to: user.email,
         subject: "Reset your password",
         html: resetPasswordEmailHtml({ url }),
-      });
+      })
     },
   },
   emailVerification: {
@@ -45,7 +45,7 @@ export const auth = betterAuth({
         to: user.email,
         subject: "Verify your email address",
         html: verifyEmailHtml({ url }),
-      });
+      })
     },
   },
   socialProviders: {
@@ -94,31 +94,31 @@ export const auth = betterAuth({
     user: {
       create: {
         after: async (user) => {
-          if (!isPolarEnabled || !polarClient) return;
+          if (!isPolarEnabled || !polarClient) return
 
-          let polarCustomer = null;
+          let polarCustomer = null
           try {
             polarCustomer = await polarClient.customers.create({
               externalId: user.id,
               email: user.email,
               name: user.name,
-            });
+            })
           } catch (error) {
-            console.error("Error creating Polar customer:", error);
+            console.error("Error creating Polar customer:", error)
 
             if (polarCustomer) {
               try {
-                await polarClient.customers.delete({ id: polarCustomer.id });
+                await polarClient.customers.delete({ id: polarCustomer.id })
               } catch (polarError) {
-                console.error("Error rolling back Polar customer:", polarError);
+                console.error("Error rolling back Polar customer:", polarError)
               }
             }
 
-            await prisma.user.delete({ where: { id: user.id } });
-            throw error;
+            await prisma.user.delete({ where: { id: user.id } })
+            throw error
           }
         },
       },
     },
   },
-});
+})

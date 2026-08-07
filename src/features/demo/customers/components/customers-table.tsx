@@ -1,15 +1,15 @@
-"use client";
+"use client"
 
 import {
   ArrowDownIcon,
   ArrowUpDownIcon,
   ArrowUpIcon,
   UsersIcon,
-} from "lucide-react";
-import { useTranslations } from "next-intl";
-import type * as React from "react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+} from "lucide-react"
+import { useTranslations } from "next-intl"
+import type * as React from "react"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import {
   Empty,
   EmptyContent,
@@ -17,8 +17,8 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@/components/ui/empty";
-import { Skeleton } from "@/components/ui/skeleton";
+} from "@/components/ui/empty"
+import { Skeleton } from "@/components/ui/skeleton"
 import {
   Table,
   TableBody,
@@ -26,14 +26,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { useCustomers } from "@/features/demo/customers/hooks/use-customers";
-import { useCustomersParams } from "@/features/demo/customers/hooks/use-customers-params";
+} from "@/components/ui/table"
+import { useCustomers } from "@/features/demo/customers/hooks/use-customers"
+import { useCustomersParams } from "@/features/demo/customers/hooks/use-customers-params"
 import type {
   CustomerSortBy,
   CustomerStatus,
-} from "@/features/demo/customers/model/customer";
-import { cn } from "@/lib/utils";
+} from "@/features/demo/customers/model/customer"
+import { cn } from "@/lib/utils"
 
 const STATUS_BADGE_VARIANT: Record<
   CustomerStatus,
@@ -42,25 +42,25 @@ const STATUS_BADGE_VARIANT: Record<
   active: "default",
   invited: "secondary",
   suspended: "outline",
-};
+}
 
 const currencyFormatter = new Intl.NumberFormat("en-US", {
   style: "currency",
   currency: "USD",
   maximumFractionDigits: 0,
-});
+})
 
-const dateFormatter = new Intl.DateTimeFormat("en-US", { dateStyle: "medium" });
+const dateFormatter = new Intl.DateTimeFormat("en-US", { dateStyle: "medium" })
 
 function SortableHead({
   field,
   children,
 }: {
-  field: CustomerSortBy;
-  children: React.ReactNode;
+  field: CustomerSortBy
+  children: React.ReactNode
 }) {
-  const [params, setParams] = useCustomersParams();
-  const isActive = params.sortBy === field;
+  const [params, setParams] = useCustomersParams()
+  const isActive = params.sortBy === field
 
   return (
     <TableHead>
@@ -87,12 +87,12 @@ function SortableHead({
         )}
       </button>
     </TableHead>
-  );
+  )
 }
 
 export function CustomersTable() {
-  const t = useTranslations("customers");
-  const { data, isPending, isError, isFetching, refetch } = useCustomers();
+  const t = useTranslations("customers")
+  const { data, isPending, isError, isFetching, refetch } = useCustomers()
 
   if (isPending) {
     return (
@@ -104,7 +104,7 @@ export function CustomersTable() {
           />
         ))}
       </div>
-    );
+    )
   }
 
   if (isError) {
@@ -121,7 +121,7 @@ export function CustomersTable() {
           <Button onClick={() => refetch()}>{t("retry")}</Button>
         </EmptyContent>
       </Empty>
-    );
+    )
   }
 
   if (data.items.length === 0) {
@@ -135,7 +135,7 @@ export function CustomersTable() {
           <EmptyDescription>{t("emptyDescription")}</EmptyDescription>
         </EmptyHeader>
       </Empty>
-    );
+    )
   }
 
   return (
@@ -184,5 +184,5 @@ export function CustomersTable() {
         </TableBody>
       </Table>
     </div>
-  );
+  )
 }

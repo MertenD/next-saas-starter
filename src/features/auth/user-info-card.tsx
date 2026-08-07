@@ -1,17 +1,17 @@
-"use client";
+"use client"
 
 import {
   CreditCardIcon,
   LogOutIcon,
   SettingsIcon,
   StarIcon,
-} from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
-import { usePlausible } from "next-plausible";
-import { useState } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+} from "lucide-react"
+import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
+import { usePlausible } from "next-plausible"
+import { useState } from "react"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -19,23 +19,23 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { useHasActiveSubscription } from "@/features/subscriptions/hooks/use-subscription";
-import { useResendVerificationEmail } from "@/features/user/hooks/use-resend-verification-email";
-import type { PlausibleEvents } from "@/lib/analytics";
-import { authClient } from "@/lib/auth-client";
+} from "@/components/ui/dialog"
+import { useHasActiveSubscription } from "@/features/subscriptions/hooks/use-subscription"
+import { useResendVerificationEmail } from "@/features/user/hooks/use-resend-verification-email"
+import type { PlausibleEvents } from "@/lib/analytics"
+import { authClient } from "@/lib/auth-client"
 
 type UserInfoCardProps = {
-  username: string;
-};
+  username: string
+}
 
 export default function UserInfoCard({ username }: UserInfoCardProps) {
-  const router = useRouter();
-  const { data: session } = authClient.useSession();
-  const t = useTranslations("auth.userInfo");
+  const router = useRouter()
+  const { data: session } = authClient.useSession()
+  const t = useTranslations("auth.userInfo")
 
-  const displayName = session?.user.name?.split("@")[0] ?? username;
-  const avatarImage = session?.user.image ?? undefined;
+  const displayName = session?.user.name?.split("@")[0] ?? username
+  const avatarImage = session?.user.image ?? undefined
 
   return (
     <div className="rounded-lg border bg-linear-to-br from-chart-1/10 to-chart-2/10 p-4">
@@ -89,29 +89,29 @@ export default function UserInfoCard({ username }: UserInfoCardProps) {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 function UpgradeToProButton() {
-  const { hasActiveSubscription, isLoading } = useHasActiveSubscription();
-  const { data: session } = authClient.useSession();
-  const plausible = usePlausible<PlausibleEvents>();
-  const t = useTranslations("auth.userInfo");
-  const [verifyDialogOpen, setVerifyDialogOpen] = useState(false);
+  const { hasActiveSubscription, isLoading } = useHasActiveSubscription()
+  const { data: session } = authClient.useSession()
+  const plausible = usePlausible<PlausibleEvents>()
+  const t = useTranslations("auth.userInfo")
+  const [verifyDialogOpen, setVerifyDialogOpen] = useState(false)
   const { mutate: resendVerification, isPending: isResending } =
-    useResendVerificationEmail();
+    useResendVerificationEmail()
 
   if (isLoading || hasActiveSubscription) {
-    return null;
+    return null
   }
 
   function handleClick() {
     if (session && !session.user.emailVerified) {
-      setVerifyDialogOpen(true);
-      return;
+      setVerifyDialogOpen(true)
+      return
     }
-    plausible("Upgrade Clicked");
-    authClient.checkout({ slug: "pro" });
+    plausible("Upgrade Clicked")
+    authClient.checkout({ slug: "pro" })
   }
 
   return (
@@ -150,5 +150,5 @@ function UpgradeToProButton() {
         </DialogContent>
       </Dialog>
     </>
-  );
+  )
 }

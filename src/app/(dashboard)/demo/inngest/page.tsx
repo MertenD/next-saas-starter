@@ -1,8 +1,8 @@
-import { getTranslations } from "next-intl/server";
-import { InngestDemoContainer } from "@/features/demo/inngest/components/inngest-demo-container";
+import { getTranslations } from "next-intl/server"
+import { InngestDemoContainer } from "@/features/demo/inngest/components/inngest-demo-container"
 
 export default async function InngestDemoPage() {
-  const t = await getTranslations("demo.inngest");
+  const t = await getTranslations("demo.inngest")
 
   return (
     <main className="flex flex-col gap-6 p-6">
@@ -12,5 +12,5 @@ export default async function InngestDemoPage() {
       </div>
       <InngestDemoContainer />
     </main>
-  );
+  )
 }

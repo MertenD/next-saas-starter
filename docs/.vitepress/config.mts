@@ -1,4 +1,4 @@
-import { defineConfig } from "vitepress";
+import { defineConfig } from "vitepress"
 
 export default defineConfig({
   title: "Next.js SaaS Starter",
@@ -63,4 +63,4 @@ export default defineConfig({
       provider: "local",
     },
   },
-});
+})

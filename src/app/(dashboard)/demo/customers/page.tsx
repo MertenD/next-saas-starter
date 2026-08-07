@@ -1,8 +1,8 @@
-import { getTranslations } from "next-intl/server";
-import { CustomersContainer } from "@/features/demo/customers/components/customers-container";
+import { getTranslations } from "next-intl/server"
+import { CustomersContainer } from "@/features/demo/customers/components/customers-container"
 
 export default async function CustomersPage() {
-  const t = await getTranslations("customers");
+  const t = await getTranslations("customers")
 
   return (
     <main className="flex flex-col gap-6 p-6">
@@ -14,5 +14,5 @@ export default async function CustomersPage() {
       </div>
       <CustomersContainer />
     </main>
-  );
+  )
 }

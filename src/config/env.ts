@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "zod"
 
 /**
  * Runtime-validated environment variables. Import `env` from this module
@@ -41,7 +41,7 @@ const envSchema = z.object({
   // Resend (optional - leave unset to log emails to the console instead of sending them)
   RESEND_API_KEY: z.string().optional(),
   EMAIL_FROM: z.string().optional(),
-});
+})
 
 // Set SKIP_ENV_VALIDATION=1 to bypass validation (e.g. during docker build)
 const parsed =
@@ -53,19 +53,19 @@ const parsed =
         INNGEST_APP_ID: "skip",
       })
     : (() => {
-        const result = envSchema.safeParse(process.env);
+        const result = envSchema.safeParse(process.env)
         if (!result.success) {
-          console.error("❌ Invalid environment variables:\n");
+          console.error("❌ Invalid environment variables:\n")
           for (const [key, errors] of Object.entries(
             result.error.flatten().fieldErrors,
           )) {
-            console.error(`  ${key}: ${errors?.join(", ")}`);
+            console.error(`  ${key}: ${errors?.join(", ")}`)
           }
           throw new Error(
             "Invalid environment variables - check the output above.",
-          );
+          )
         }
-        return result.data;
-      })();
+        return result.data
+      })()
 
-export const env = parsed;
+export const env = parsed

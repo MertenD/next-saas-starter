@@ -1,10 +1,10 @@
-import prisma from "@/lib/db";
-import { isPolarEnabled } from "@/lib/polar";
+import prisma from "@/lib/db"
+import { isPolarEnabled } from "@/lib/polar"
 import {
   baseProcedure,
   createTRPCRouter,
   protectedProcedure,
-} from "@/trpc/init";
+} from "@/trpc/init"
 
 /**
  * Core user procedures, mounted at `trpc.user.*`. Kept separate from
@@ -25,9 +25,9 @@ export const userRouter = createTRPCRouter({
         emailVerified: true,
         createdAt: true,
       },
-    });
+    })
   }),
 
   /** Lets client code (e.g. `useHasActiveSubscription`) branch on billing being configured, without leaking server env vars to the client. */
   isPolarEnabled: baseProcedure.query(() => isPolarEnabled),
-});
+})

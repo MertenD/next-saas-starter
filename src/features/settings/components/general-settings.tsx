@@ -1,11 +1,11 @@
-"use client";
+"use client"
 
-import { useTranslations } from "next-intl";
-import { LanguageToggle } from "@/components/language-toggle";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useTranslations } from "next-intl"
+import { LanguageToggle } from "@/components/language-toggle"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 export default function GeneralSettings() {
-  const t = useTranslations("settings.general");
+  const t = useTranslations("settings.general")
 
   return (
     <Card>
@@ -16,5 +16,5 @@ export default function GeneralSettings() {
         <LanguageToggle />
       </CardContent>
     </Card>
-  );
+  )
 }

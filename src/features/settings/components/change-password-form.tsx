@@ -1,10 +1,10 @@
-"use client";
+"use client"
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useTranslations } from "next-intl";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useTranslations } from "next-intl"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
@@ -12,13 +12,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useChangePassword } from "@/features/user/hooks/use-change-password";
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { useChangePassword } from "@/features/user/hooks/use-change-password"
 
 export default function ChangePasswordForm() {
-  const t = useTranslations("settings.account.changePassword");
-  const { mutate: changePassword, isPending } = useChangePassword();
+  const t = useTranslations("settings.account.changePassword")
+  const { mutate: changePassword, isPending } = useChangePassword()
 
   const changePasswordSchema = z
     .object({
@@ -34,8 +34,8 @@ export default function ChangePasswordForm() {
     .refine((data) => data.newPassword === data.confirmNewPassword, {
       message: t("validation.passwordMismatch"),
       path: ["confirmNewPassword"],
-    });
-  type ChangePasswordFormValues = z.infer<typeof changePasswordSchema>;
+    })
+  type ChangePasswordFormValues = z.infer<typeof changePasswordSchema>
 
   const form = useForm<ChangePasswordFormValues>({
     resolver: zodResolver(changePasswordSchema),
@@ -44,7 +44,7 @@ export default function ChangePasswordForm() {
       newPassword: "",
       confirmNewPassword: "",
     },
-  });
+  })
 
   function onSubmit(values: ChangePasswordFormValues) {
     changePassword(
@@ -53,7 +53,7 @@ export default function ChangePasswordForm() {
         newPassword: values.newPassword,
       },
       { onSuccess: () => form.reset() },
-    );
+    )
   }
 
   return (
@@ -106,5 +106,5 @@ export default function ChangePasswordForm() {
         </Button>
       </form>
     </Form>
-  );
+  )
 }

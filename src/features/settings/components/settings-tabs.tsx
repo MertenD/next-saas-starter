@@ -1,22 +1,22 @@
-"use client";
+"use client"
 
-import { useTranslations } from "next-intl";
-import { parseAsStringEnum, useQueryState } from "nuqs";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import AccountSettings from "@/features/settings/components/account-settings";
-import GeneralSettings from "@/features/settings/components/general-settings";
+import { useTranslations } from "next-intl"
+import { parseAsStringEnum, useQueryState } from "nuqs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import AccountSettings from "@/features/settings/components/account-settings"
+import GeneralSettings from "@/features/settings/components/general-settings"
 
-const TAB_OPTIONS = ["account", "general"] as const;
-type SettingsTab = (typeof TAB_OPTIONS)[number];
+const TAB_OPTIONS = ["account", "general"] as const
+type SettingsTab = (typeof TAB_OPTIONS)[number]
 
 export default function SettingsTabs() {
-  const t = useTranslations("settings.tabs");
+  const t = useTranslations("settings.tabs")
   const [tab, setTab] = useQueryState(
     "tab",
     parseAsStringEnum<SettingsTab>([...TAB_OPTIONS])
       .withDefault("account")
       .withOptions({ clearOnDefault: true }),
-  );
+  )
 
   return (
     <Tabs value={tab} onValueChange={(value) => setTab(value as SettingsTab)}>
@@ -31,5 +31,5 @@ export default function SettingsTabs() {
         <GeneralSettings />
       </TabsContent>
     </Tabs>
-  );
+  )
 }

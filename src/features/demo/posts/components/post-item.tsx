@@ -1,30 +1,30 @@
-"use client";
+"use client"
 
 type Post = {
-  id: string;
-  title: string;
-  content: string;
-  published: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-  userId: string;
-};
+  id: string
+  title: string
+  content: string
+  published: boolean
+  createdAt: Date
+  updatedAt: Date
+  userId: string
+}
 
-import { TrashIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { useState } from "react";
-import { ConfirmDialog } from "@/components/confirm-dialog";
-import { Button } from "@/components/ui/button";
-import { useDeletePost } from "@/features/demo/posts/hooks/use-posts";
+import { TrashIcon } from "lucide-react"
+import { useTranslations } from "next-intl"
+import { useState } from "react"
+import { ConfirmDialog } from "@/components/confirm-dialog"
+import { Button } from "@/components/ui/button"
+import { useDeletePost } from "@/features/demo/posts/hooks/use-posts"
 
 type PostItemProps = {
-  post: Post;
-};
+  post: Post
+}
 
 export function PostItem({ post }: PostItemProps) {
-  const [confirmOpen, setConfirmOpen] = useState(false);
-  const { mutate: deletePost, isPending } = useDeletePost();
-  const t = useTranslations("posts.item");
+  const [confirmOpen, setConfirmOpen] = useState(false)
+  const { mutate: deletePost, isPending } = useDeletePost()
+  const t = useTranslations("posts.item")
 
   return (
     <div className="flex items-start justify-between rounded-lg border p-4">
@@ -69,5 +69,5 @@ export function PostItem({ post }: PostItemProps) {
         }
       />
     </div>
-  );
+  )
 }

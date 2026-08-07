@@ -1,10 +1,10 @@
-"use client";
+"use client"
 
-import { useTranslations } from "next-intl";
-import { Card, CardContent } from "@/components/ui/card";
+import { useTranslations } from "next-intl"
+import { Card, CardContent } from "@/components/ui/card"
 
 export function HowItWorksCard() {
-  const t = useTranslations("demo.inngest");
+  const t = useTranslations("demo.inngest")
 
   return (
     <Card className="border-dashed">
@@ -61,5 +61,5 @@ export function HowItWorksCard() {
         </p>
       </CardContent>
     </Card>
-  );
+  )
 }

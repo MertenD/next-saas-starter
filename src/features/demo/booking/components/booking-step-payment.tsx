@@ -1,10 +1,10 @@
-"use client";
+"use client"
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useTranslations } from "next-intl";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useTranslations } from "next-intl"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
@@ -12,14 +12,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useBookingWizard } from "@/features/demo/booking/hooks/use-booking-wizard";
-import type { PaymentData } from "@/features/demo/booking/schema/booking-schema";
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { useBookingWizard } from "@/features/demo/booking/hooks/use-booking-wizard"
+import type { PaymentData } from "@/features/demo/booking/schema/booking-schema"
 
 export function BookingStepPayment() {
-  const t = useTranslations("booking");
-  const { data, setStepData, next, back } = useBookingWizard();
+  const t = useTranslations("booking")
+  const { data, setStepData, next, back } = useBookingWizard()
 
   const paymentFormSchema = z.object({
     cardName: z.string().min(1, t("form.validation.cardNameRequired")),
@@ -32,7 +32,7 @@ export function BookingStepPayment() {
         /^(0[1-9]|1[0-2])\/\d{2}$/,
         t("form.validation.cardExpiryInvalid"),
       ),
-  });
+  })
 
   const form = useForm<PaymentData>({
     resolver: zodResolver(paymentFormSchema),
@@ -41,11 +41,11 @@ export function BookingStepPayment() {
       cardNumber: data.cardNumber ?? "",
       cardExpiry: data.cardExpiry ?? "",
     },
-  });
+  })
 
   function onSubmit(values: PaymentData) {
-    setStepData(values);
-    next();
+    setStepData(values)
+    next()
   }
 
   return (
@@ -113,5 +113,5 @@ export function BookingStepPayment() {
         </div>
       </form>
     </Form>
-  );
+  )
 }

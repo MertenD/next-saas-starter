@@ -1,14 +1,14 @@
-"use client";
+"use client"
 
-import { CheckCircleIcon, HelpCircleIcon, XCircleIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { Badge } from "@/components/ui/badge";
-import { Spinner } from "@/components/ui/spinner";
-import { useJobStatus } from "@/features/demo/inngest/hooks/use-job-status";
+import { CheckCircleIcon, HelpCircleIcon, XCircleIcon } from "lucide-react"
+import { useTranslations } from "next-intl"
+import { Badge } from "@/components/ui/badge"
+import { Spinner } from "@/components/ui/spinner"
+import { useJobStatus } from "@/features/demo/inngest/hooks/use-job-status"
 
 export function RunStatusBadge({ eventId }: { eventId: string }) {
-  const t = useTranslations("demo.inngest");
-  const { latestData, error } = useJobStatus(eventId);
+  const t = useTranslations("demo.inngest")
+  const { latestData, error } = useJobStatus(eventId)
 
   if (error) {
     return (
@@ -16,10 +16,10 @@ export function RunStatusBadge({ eventId }: { eventId: string }) {
         <HelpCircleIcon className="size-3" />
         {t("statusUnknown")}
       </Badge>
-    );
+    )
   }
 
-  const update = latestData?.data;
+  const update = latestData?.data
 
   if (!update || update.status === "running") {
     return (
@@ -27,7 +27,7 @@ export function RunStatusBadge({ eventId }: { eventId: string }) {
         <Spinner className="size-3" />
         {update?.message ?? t("statusQueued")}
       </Badge>
-    );
+    )
   }
 
   if (update.status === "completed") {
@@ -36,7 +36,7 @@ export function RunStatusBadge({ eventId }: { eventId: string }) {
         <CheckCircleIcon className="size-3" />
         {t("statusCompleted")}
       </Badge>
-    );
+    )
   }
 
   return (
@@ -44,5 +44,5 @@ export function RunStatusBadge({ eventId }: { eventId: string }) {
       <XCircleIcon className="size-3" />
       {t("statusFailed")}
     </Badge>
-  );
+  )
 }

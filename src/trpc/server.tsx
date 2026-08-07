@@ -1,17 +1,17 @@
-import "server-only";
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import "server-only"
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query"
 import {
   createTRPCOptionsProxy,
   type TRPCQueryOptions,
-} from "@trpc/tanstack-react-query";
-import type React from "react";
-import { cache } from "react";
-import { createTRPCContext } from "./init";
-import { makeQueryClient } from "./query-client";
-import { appRouter } from "./routers/_app";
+} from "@trpc/tanstack-react-query"
+import type React from "react"
+import { cache } from "react"
+import { createTRPCContext } from "./init"
+import { makeQueryClient } from "./query-client"
+import { appRouter } from "./routers/_app"
 
 /** One QueryClient per request, cached via React's `cache()`. */
-export const getQueryClient = cache(makeQueryClient);
+export const getQueryClient = cache(makeQueryClient)
 
 /**
  * Server-side tRPC "options proxy": lets Server Components build the same
@@ -22,7 +22,7 @@ export const trpc = createTRPCOptionsProxy({
   ctx: createTRPCContext,
   router: appRouter,
   queryClient: getQueryClient,
-});
+})
 
 /**
  * Direct server-side caller for invoking procedures like plain async
@@ -30,7 +30,7 @@ export const trpc = createTRPCOptionsProxy({
  * Actions, or route handlers that just need the data, not React Query
  * caching.
  */
-export const caller = appRouter.createCaller(createTRPCContext);
+export const caller = appRouter.createCaller(createTRPCContext)
 
 /**
  * Prefetches a query (or infinite query) into the request-scoped
@@ -41,11 +41,11 @@ export const caller = appRouter.createCaller(createTRPCContext);
 export function prefetch<T extends ReturnType<TRPCQueryOptions<any>>>(
   queryOptions: T,
 ) {
-  const queryClient = getQueryClient();
+  const queryClient = getQueryClient()
   if (queryOptions.queryKey[1]?.type === "infinite") {
-    return queryClient.prefetchInfiniteQuery(queryOptions as never);
+    return queryClient.prefetchInfiniteQuery(queryOptions as never)
   }
-  return queryClient.prefetchQuery(queryOptions);
+  return queryClient.prefetchQuery(queryOptions)
 }
 
 /**
@@ -55,10 +55,10 @@ export function prefetch<T extends ReturnType<TRPCQueryOptions<any>>>(
  * via `useQuery`/`useSuspenseQuery`.
  */
 export function HydrateClient(props: { children: React.ReactNode }) {
-  const queryClient = getQueryClient();
+  const queryClient = getQueryClient()
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       {props.children}
     </HydrationBoundary>
-  );
+  )
 }

@@ -1,14 +1,14 @@
-"use client";
+"use client"
 
-import { FileTextIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { usePosts } from "@/features/demo/posts/hooks/use-posts";
-import { PostCreateDialog } from "./post-create-dialog";
-import { PostItem } from "./post-item";
+import { FileTextIcon } from "lucide-react"
+import { useTranslations } from "next-intl"
+import { usePosts } from "@/features/demo/posts/hooks/use-posts"
+import { PostCreateDialog } from "./post-create-dialog"
+import { PostItem } from "./post-item"
 
 export function PostsContainer() {
-  const { data: posts, isLoading, isError } = usePosts();
-  const t = useTranslations("posts");
+  const { data: posts, isLoading, isError } = usePosts()
+  const t = useTranslations("posts")
 
   return (
     <div className="space-y-4">
@@ -49,5 +49,5 @@ export function PostsContainer() {
         </div>
       )}
     </div>
-  );
+  )
 }

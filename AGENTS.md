@@ -106,7 +106,7 @@ Supported locales: `en`, `de`. Server: `getTranslations()` from `next-intl/serve
 - Keep it simple - avoid overengineering. If a feature can be implemented with a simple component and a few hooks, don't introduce unnecessary abstractions or patterns.
 - Use TypeScript types and Zod schemas for validation. Avoid using `any` or untyped data structures.
 - Never use em dashes (—) anywhere, in code, comments, docs, or prose - always use a regular hyphen (-) instead.
-- Don't use semicolons in TypeScript/JavaScript code. I prefer a semicolon-free style. Only use semicolons where required by the language (e.g., for `for` loops).
+- Don't use semicolons in TypeScript/JavaScript code, including import lines. I prefer a semicolon-free style. Only use semicolons where required by the language (e.g., for `for` loops). Enforced via Biome's `javascript.formatter.semicolons: "asNeeded"` in `biome.json` - run `bun run format` to apply it (it strips semicolons your editor's auto-import may add).
 
 ## Code Comments
 

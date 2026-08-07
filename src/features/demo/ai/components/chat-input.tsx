@@ -1,33 +1,33 @@
-"use client";
+"use client"
 
-import { SendIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { SendIcon } from "lucide-react"
+import { useTranslations } from "next-intl"
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Textarea } from "@/components/ui/textarea"
 
 type ChatInputProps = {
-  onSend: (text: string) => void;
-  isLoading: boolean;
-};
+  onSend: (text: string) => void
+  isLoading: boolean
+}
 
 export function ChatInput({ onSend, isLoading }: ChatInputProps) {
-  const t = useTranslations("demo.ai");
-  const [input, setInput] = useState("");
+  const t = useTranslations("demo.ai")
+  const [input, setInput] = useState("")
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!input.trim() || isLoading) return;
-    onSend(input);
-    setInput("");
-  };
+    e.preventDefault()
+    if (!input.trim() || isLoading) return
+    onSend(input)
+    setInput("")
+  }
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      handleSubmit(e as unknown as React.FormEvent);
+      e.preventDefault()
+      handleSubmit(e as unknown as React.FormEvent)
     }
-  };
+  }
 
   return (
     <div className="border-t p-4">
@@ -46,5 +46,5 @@ export function ChatInput({ onSend, isLoading }: ChatInputProps) {
         </Button>
       </form>
     </div>
-  );
+  )
 }

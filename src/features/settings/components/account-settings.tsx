@@ -1,18 +1,18 @@
-"use client";
+"use client"
 
-import { useTranslations } from "next-intl";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { Skeleton } from "@/components/ui/skeleton";
-import ChangePasswordForm from "@/features/settings/components/change-password-form";
-import EmailVerificationBadge from "@/features/settings/components/email-verification-badge";
-import ProfileForm from "@/features/settings/components/profile-form";
-import { useCurrentUser } from "@/features/user/hooks/use-user";
+import { useTranslations } from "next-intl"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator"
+import { Skeleton } from "@/components/ui/skeleton"
+import ChangePasswordForm from "@/features/settings/components/change-password-form"
+import EmailVerificationBadge from "@/features/settings/components/email-verification-badge"
+import ProfileForm from "@/features/settings/components/profile-form"
+import { useCurrentUser } from "@/features/user/hooks/use-user"
 
 export default function AccountSettings() {
-  const t = useTranslations("settings.account");
-  const { data: user, isPending, isError, refetch } = useCurrentUser();
+  const t = useTranslations("settings.account")
+  const { data: user, isPending, isError, refetch } = useCurrentUser()
 
   if (isPending) {
     return (
@@ -23,7 +23,7 @@ export default function AccountSettings() {
           <Skeleton className="h-10 w-1/3" />
         </CardContent>
       </Card>
-    );
+    )
   }
 
   if (isError || !user) {
@@ -36,7 +36,7 @@ export default function AccountSettings() {
           </Button>
         </CardContent>
       </Card>
-    );
+    )
   }
 
   return (
@@ -63,5 +63,5 @@ export default function AccountSettings() {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

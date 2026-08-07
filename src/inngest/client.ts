@@ -1,6 +1,6 @@
-import { realtimeMiddleware } from "@inngest/realtime/middleware";
-import { Inngest } from "inngest";
-import { env } from "@/config/env";
+import { realtimeMiddleware } from "@inngest/realtime/middleware"
+import { Inngest } from "inngest"
+import { env } from "@/config/env"
 
 /**
  * Shared Inngest client used to define functions (`src/inngest/functions.ts`)
@@ -18,4 +18,4 @@ export const inngest = new Inngest({
   // an INNGEST_EVENT_KEY. The target host is INNGEST_BASE_URL (see
   // docker-compose.prod.yml) or the default localhost:8288 dev server.
   isDev: true,
-});
+})

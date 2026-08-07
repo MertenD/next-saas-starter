@@ -1,9 +1,9 @@
-import { CheckCircleIcon, ClockIcon, ZapIcon } from "lucide-react";
+import { CheckCircleIcon, ClockIcon, ZapIcon } from "lucide-react"
 
 export type Run = {
-  eventId: string;
-  triggeredAt: string;
-};
+  eventId: string
+  triggeredAt: string
+}
 
 export const JOB_STEPS = [
   {
@@ -24,4 +24,4 @@ export const JOB_STEPS = [
     descriptionKey: "stepReportDescription",
     icon: CheckCircleIcon,
   },
-] as const;
+] as const

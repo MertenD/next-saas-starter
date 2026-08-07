@@ -1,23 +1,23 @@
-"use client";
+"use client"
 
-import { SearchIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { Input } from "@/components/ui/input";
+import { SearchIcon } from "lucide-react"
+import { useTranslations } from "next-intl"
+import { Input } from "@/components/ui/input"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { useCustomersParams } from "@/features/demo/customers/hooks/use-customers-params";
-import { useCustomersSearch } from "@/features/demo/customers/hooks/use-customers-search";
-import { CUSTOMER_STATUS_FILTER_OPTIONS } from "@/features/demo/customers/model/customer";
+} from "@/components/ui/select"
+import { useCustomersParams } from "@/features/demo/customers/hooks/use-customers-params"
+import { useCustomersSearch } from "@/features/demo/customers/hooks/use-customers-search"
+import { CUSTOMER_STATUS_FILTER_OPTIONS } from "@/features/demo/customers/model/customer"
 
 export function CustomersToolbar() {
-  const t = useTranslations("customers");
-  const [params, setParams] = useCustomersParams();
-  const { searchValue, onSearchChange } = useCustomersSearch();
+  const t = useTranslations("customers")
+  const [params, setParams] = useCustomersParams()
+  const { searchValue, onSearchChange } = useCustomersSearch()
 
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -51,5 +51,5 @@ export function CustomersToolbar() {
         </SelectContent>
       </Select>
     </div>
-  );
+  )
 }

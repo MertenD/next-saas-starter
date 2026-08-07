@@ -1,10 +1,10 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
-import { PAGINATION } from "@/config/constants";
-import { useCustomersParams } from "@/features/demo/customers/hooks/use-customers-params";
+import { useEffect, useState } from "react"
+import { PAGINATION } from "@/config/constants"
+import { useCustomersParams } from "@/features/demo/customers/hooks/use-customers-params"
 
-const DEBOUNCE_MS = 400;
+const DEBOUNCE_MS = 400
 
 /**
  * Debounced search input for the customers table. Keeps every keystroke in
@@ -14,27 +14,27 @@ const DEBOUNCE_MS = 400;
  * value changes. Reusable pattern for any debounced-search-plus-URL-state input.
  */
 export const useCustomersSearch = () => {
-  const [params, setParams] = useCustomersParams();
-  const [localSearch, setLocalSearch] = useState(params.search);
+  const [params, setParams] = useCustomersParams()
+  const [localSearch, setLocalSearch] = useState(params.search)
 
   useEffect(() => {
     if (localSearch === "" && params.search !== "") {
-      setParams({ search: "", page: PAGINATION.DEFAULT_PAGE });
-      return;
+      setParams({ search: "", page: PAGINATION.DEFAULT_PAGE })
+      return
     }
 
     const timer = setTimeout(() => {
       if (localSearch !== params.search) {
-        setParams({ search: localSearch, page: PAGINATION.DEFAULT_PAGE });
+        setParams({ search: localSearch, page: PAGINATION.DEFAULT_PAGE })
       }
-    }, DEBOUNCE_MS);
+    }, DEBOUNCE_MS)
 
-    return () => clearTimeout(timer);
-  }, [localSearch, params, setParams]);
+    return () => clearTimeout(timer)
+  }, [localSearch, params, setParams])
 
   useEffect(() => {
-    setLocalSearch(params.search);
-  }, [params.search]);
+    setLocalSearch(params.search)
+  }, [params.search])
 
-  return { searchValue: localSearch, onSearchChange: setLocalSearch };
-};
+  return { searchValue: localSearch, onSearchChange: setLocalSearch }
+}

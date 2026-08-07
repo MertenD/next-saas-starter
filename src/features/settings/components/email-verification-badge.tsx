@@ -1,23 +1,22 @@
-"use client";
+"use client"
 
-import { CheckIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { useResendVerificationEmail } from "@/features/user/hooks/use-resend-verification-email";
+import { CheckIcon } from "lucide-react"
+import { useTranslations } from "next-intl"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { useResendVerificationEmail } from "@/features/user/hooks/use-resend-verification-email"
 
 type EmailVerificationBadgeProps = {
-  email: string;
-  verified: boolean;
-};
+  email: string
+  verified: boolean
+}
 
 export default function EmailVerificationBadge({
   email,
   verified,
 }: EmailVerificationBadgeProps) {
-  const t = useTranslations("settings.account.verification");
-  const { mutate: resendVerification, isPending } =
-    useResendVerificationEmail();
+  const t = useTranslations("settings.account.verification")
+  const { mutate: resendVerification, isPending } = useResendVerificationEmail()
 
   if (verified) {
     return (
@@ -25,7 +24,7 @@ export default function EmailVerificationBadge({
         <CheckIcon />
         {t("verifiedBadge")}
       </Badge>
-    );
+    )
   }
 
   return (
@@ -41,5 +40,5 @@ export default function EmailVerificationBadge({
         {t("resendButton")}
       </Button>
     </div>
-  );
+  )
 }

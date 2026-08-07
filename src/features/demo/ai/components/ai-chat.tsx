@@ -1,14 +1,14 @@
-"use client";
+"use client"
 
-import { useTranslations } from "next-intl";
-import { Badge } from "@/components/ui/badge";
-import { ChatInput } from "@/features/demo/ai/components/chat-input";
-import { ChatMessages } from "@/features/demo/ai/components/chat-messages";
-import { useAiChat } from "@/features/demo/ai/hooks/use-ai-chat";
+import { useTranslations } from "next-intl"
+import { Badge } from "@/components/ui/badge"
+import { ChatInput } from "@/features/demo/ai/components/chat-input"
+import { ChatMessages } from "@/features/demo/ai/components/chat-messages"
+import { useAiChat } from "@/features/demo/ai/hooks/use-ai-chat"
 
 export function AiChat({ model }: { model: string }) {
-  const t = useTranslations("demo.ai");
-  const { chatId, messages, sendMessage, isLoading, error } = useAiChat();
+  const t = useTranslations("demo.ai")
+  const { chatId, messages, sendMessage, isLoading, error } = useAiChat()
 
   return (
     <div className="flex h-full flex-col">
@@ -33,5 +33,5 @@ export function AiChat({ model }: { model: string }) {
         isLoading={isLoading}
       />
     </div>
-  );
+  )
 }

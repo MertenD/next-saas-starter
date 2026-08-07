@@ -1,9 +1,9 @@
-import { initTRPC, TRPCError } from "@trpc/server";
-import { headers } from "next/headers";
-import { cache } from "react";
-import superjson from "superjson";
-import { auth } from "@/lib/auth";
-import { isPolarEnabled, polarClient } from "@/lib/polar";
+import { initTRPC, TRPCError } from "@trpc/server"
+import { headers } from "next/headers"
+import { cache } from "react"
+import superjson from "superjson"
+import { auth } from "@/lib/auth"
+import { isPolarEnabled, polarClient } from "@/lib/polar"
 
 /**
  * Builds the per-request tRPC context. Wrapped in React's `cache()` so it's
@@ -13,18 +13,18 @@ import { isPolarEnabled, polarClient } from "@/lib/polar";
  * it itself via `headers()` so it stays correct even under `cache()`.
  */
 export const createTRPCContext = cache(async () => {
-  return {};
-});
+  return {}
+})
 
 const t = initTRPC.create({
   transformer: superjson,
-});
+})
 
-export const createTRPCRouter = t.router;
-export const createCallerFactory = t.createCallerFactory;
+export const createTRPCRouter = t.router
+export const createCallerFactory = t.createCallerFactory
 
 /** Public procedure builder: no auth required. Base for the procedures below. */
-export const baseProcedure = t.procedure;
+export const baseProcedure = t.procedure
 
 /**
  * Procedure builder that requires a signed-in user. Throws `UNAUTHORIZED`
@@ -34,17 +34,17 @@ export const baseProcedure = t.procedure;
 export const protectedProcedure = baseProcedure.use(async ({ ctx, next }) => {
   const session = await auth.api.getSession({
     headers: await headers(),
-  });
+  })
 
   if (!session) {
     throw new TRPCError({
       code: "UNAUTHORIZED",
       message: "Unauthorized",
-    });
+    })
   }
 
-  return next({ ctx: { ...ctx, auth: session } });
-});
+  return next({ ctx: { ...ctx, auth: session } })
+})
 
 /**
  * Procedure builder that additionally requires an active Polar subscription
@@ -57,20 +57,20 @@ export const premiumProcedure = protectedProcedure.use(
   async ({ ctx, next }) => {
     // When Polar is not configured, grant premium access (local dev / mock mode)
     if (!isPolarEnabled || !polarClient) {
-      return next({ ctx: { ...ctx, customer: null } });
+      return next({ ctx: { ...ctx, customer: null } })
     }
 
     // biome-ignore lint/suspicious/noImplicitAnyLet: typed by Polar SDK after assignment
-    let customer;
+    let customer
     try {
       customer = await polarClient.customers.getStateExternal({
         externalId: ctx.auth.user.id,
-      });
+      })
     } catch {
       throw new TRPCError({
         code: "FORBIDDEN",
         message: "Active Subscription required",
-      });
+      })
     }
 
     if (
@@ -80,9 +80,9 @@ export const premiumProcedure = protectedProcedure.use(
       throw new TRPCError({
         code: "FORBIDDEN",
         message: "Active Subscription required",
-      });
+      })
     }
 
-    return next({ ctx: { ...ctx, customer } });
+    return next({ ctx: { ...ctx, customer } })
   },
-);
+)

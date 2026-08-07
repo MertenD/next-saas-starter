@@ -1,13 +1,13 @@
-"use client";
+"use client"
 
-import { MinusIcon, PlusIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import { useBookingWizard } from "@/features/demo/booking/hooks/use-booking-wizard";
-import type { GuestsData } from "@/features/demo/booking/schema/booking-schema";
+import { MinusIcon, PlusIcon } from "lucide-react"
+import { useTranslations } from "next-intl"
+import { useForm } from "react-hook-form"
+import { Button } from "@/components/ui/button"
+import { useBookingWizard } from "@/features/demo/booking/hooks/use-booking-wizard"
+import type { GuestsData } from "@/features/demo/booking/schema/booking-schema"
 
-const GUEST_FIELDS = ["adults", "children", "infants"] as const;
+const GUEST_FIELDS = ["adults", "children", "infants"] as const
 
 const GUEST_LIMITS: Record<
   (typeof GUEST_FIELDS)[number],
@@ -16,11 +16,11 @@ const GUEST_LIMITS: Record<
   adults: { min: 1, max: 16 },
   children: { min: 0, max: 16 },
   infants: { min: 0, max: 5 },
-};
+}
 
 export function BookingStepGuests() {
-  const t = useTranslations("booking");
-  const { data, setStepData, next, back } = useBookingWizard();
+  const t = useTranslations("booking")
+  const { data, setStepData, next, back } = useBookingWizard()
 
   const form = useForm<GuestsData>({
     defaultValues: {
@@ -28,19 +28,19 @@ export function BookingStepGuests() {
       children: data.children ?? 0,
       infants: data.infants ?? 0,
     },
-  });
+  })
 
-  const values = form.watch();
+  const values = form.watch()
 
   function adjust(field: (typeof GUEST_FIELDS)[number], delta: number) {
-    const { min, max } = GUEST_LIMITS[field];
-    const nextValue = Math.min(max, Math.max(min, values[field] + delta));
-    form.setValue(field, nextValue);
+    const { min, max } = GUEST_LIMITS[field]
+    const nextValue = Math.min(max, Math.max(min, values[field] + delta))
+    form.setValue(field, nextValue)
   }
 
   function onSubmit(formValues: GuestsData) {
-    setStepData(formValues);
-    next();
+    setStepData(formValues)
+    next()
   }
 
   return (
@@ -92,5 +92,5 @@ export function BookingStepGuests() {
         <Button type="submit">{t("actions.next")}</Button>
       </div>
     </form>
-  );
+  )
 }

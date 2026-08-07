@@ -1,15 +1,15 @@
-"use client";
+"use client"
 
-import { PlayIcon, ZapIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { Button } from "@/components/ui/button";
+import { PlayIcon, ZapIcon } from "lucide-react"
+import { useTranslations } from "next-intl"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/components/ui/card"
 import {
   Empty,
   EmptyContent,
@@ -17,22 +17,22 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@/components/ui/empty";
-import { RunStatusBadge } from "@/features/demo/inngest/components/run-status-badge";
-import type { Run } from "@/features/demo/inngest/model/inngest-demo";
+} from "@/components/ui/empty"
+import { RunStatusBadge } from "@/features/demo/inngest/components/run-status-badge"
+import type { Run } from "@/features/demo/inngest/model/inngest-demo"
 
 type RunHistoryCardProps = {
-  runs: Run[];
-  onTrigger: () => void;
-  isPending: boolean;
-};
+  runs: Run[]
+  onTrigger: () => void
+  isPending: boolean
+}
 
 export function RunHistoryCard({
   runs,
   onTrigger,
   isPending,
 }: RunHistoryCardProps) {
-  const t = useTranslations("demo.inngest");
+  const t = useTranslations("demo.inngest")
 
   return (
     <Card>
@@ -79,5 +79,5 @@ export function RunHistoryCard({
         )}
       </CardContent>
     </Card>
-  );
+  )
 }

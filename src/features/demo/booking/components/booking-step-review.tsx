@@ -1,13 +1,13 @@
-"use client";
+"use client"
 
-import { AlertCircleIcon, CheckCircle2Icon } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
-import { useBookingWizard } from "@/features/demo/booking/hooks/use-booking-wizard";
-import { useSubmitBooking } from "@/features/demo/booking/hooks/use-submit-booking";
-import type { BookingFormData } from "@/features/demo/booking/schema/booking-schema";
+import { AlertCircleIcon, CheckCircle2Icon } from "lucide-react"
+import { useTranslations } from "next-intl"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/ui/spinner"
+import { useBookingWizard } from "@/features/demo/booking/hooks/use-booking-wizard"
+import { useSubmitBooking } from "@/features/demo/booking/hooks/use-submit-booking"
+import type { BookingFormData } from "@/features/demo/booking/schema/booking-schema"
 
 function SummaryRow({ label, value }: { label: string; value: string }) {
   return (
@@ -15,12 +15,12 @@ function SummaryRow({ label, value }: { label: string; value: string }) {
       <span className="text-muted-foreground">{label}</span>
       <span className="font-medium">{value}</span>
     </div>
-  );
+  )
 }
 
 export function BookingStepReview() {
-  const t = useTranslations("booking");
-  const { data, back, reset } = useBookingWizard();
+  const t = useTranslations("booking")
+  const { data, back, reset } = useBookingWizard()
   const {
     mutate,
     isPending,
@@ -28,15 +28,15 @@ export function BookingStepReview() {
     isSuccess,
     data: result,
     reset: resetMutation,
-  } = useSubmitBooking();
+  } = useSubmitBooking()
 
   // Every prior step validates its fields before advancing, so `data` is
   // complete by the time this step renders.
-  const bookingData = data as BookingFormData;
+  const bookingData = data as BookingFormData
 
   function handleStartOver() {
-    resetMutation();
-    reset();
+    resetMutation()
+    reset()
   }
 
   if (isSuccess && result) {
@@ -55,7 +55,7 @@ export function BookingStepReview() {
         </div>
         <Button onClick={handleStartOver}>{t("actions.startOver")}</Button>
       </div>
-    );
+    )
   }
 
   return (
@@ -114,5 +114,5 @@ export function BookingStepReview() {
         </Button>
       </div>
     </div>
-  );
+  )
 }

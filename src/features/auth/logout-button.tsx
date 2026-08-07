@@ -1,12 +1,12 @@
-"use client";
+"use client"
 
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation"
+import { Button } from "@/components/ui/button"
+import { authClient } from "@/lib/auth-client"
 
 export default function LogoutButton() {
-  const { data } = authClient.useSession();
-  const router = useRouter();
+  const { data } = authClient.useSession()
+  const router = useRouter()
 
   return (
     <Button
@@ -19,5 +19,5 @@ export default function LogoutButton() {
     >
       Sign Out
     </Button>
-  );
+  )
 }

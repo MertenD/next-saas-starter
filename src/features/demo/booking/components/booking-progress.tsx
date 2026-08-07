@@ -1,21 +1,21 @@
-"use client";
+"use client"
 
-import { CheckIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { useBookingWizard } from "@/features/demo/booking/hooks/use-booking-wizard";
-import { BOOKING_STEPS } from "@/features/demo/booking/model/booking";
-import { cn } from "@/lib/utils";
+import { CheckIcon } from "lucide-react"
+import { useTranslations } from "next-intl"
+import { useBookingWizard } from "@/features/demo/booking/hooks/use-booking-wizard"
+import { BOOKING_STEPS } from "@/features/demo/booking/model/booking"
+import { cn } from "@/lib/utils"
 
 export function BookingProgress() {
-  const t = useTranslations("booking");
-  const { step } = useBookingWizard();
-  const currentIndex = BOOKING_STEPS.indexOf(step);
+  const t = useTranslations("booking")
+  const { step } = useBookingWizard()
+  const currentIndex = BOOKING_STEPS.indexOf(step)
 
   return (
     <ol className="flex items-center">
       {BOOKING_STEPS.map((s, index) => {
-        const isDone = index < currentIndex;
-        const isCurrent = index === currentIndex;
+        const isDone = index < currentIndex
+        const isCurrent = index === currentIndex
 
         return (
           <li key={s} className="flex flex-1 items-center last:flex-initial">
@@ -46,8 +46,8 @@ export function BookingProgress() {
               <span aria-hidden className="mx-3 h-px flex-1 bg-border" />
             )}
           </li>
-        );
+        )
       })}
     </ol>
-  );
+  )
 }

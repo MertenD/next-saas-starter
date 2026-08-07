@@ -1,7 +1,7 @@
-"use client";
+"use client"
 
-import { useTranslations } from "next-intl";
-import type * as React from "react";
+import { useTranslations } from "next-intl"
+import type * as React from "react"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,23 +11,23 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { buttonVariants } from "@/components/ui/button";
+} from "@/components/ui/alert-dialog"
+import { buttonVariants } from "@/components/ui/button"
 
 type ConfirmDialogProps = {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  title: string;
-  description?: React.ReactNode;
-  confirmLabel?: string;
-  cancelLabel?: string;
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  title: string
+  description?: React.ReactNode
+  confirmLabel?: string
+  cancelLabel?: string
   /** Use "destructive" for delete/remove actions. */
-  variant?: "default" | "destructive";
+  variant?: "default" | "destructive"
   /** Pass a mutation's `isPending` - disables both buttons and shows a busy label. */
-  isLoading?: boolean;
+  isLoading?: boolean
   /** The dialog does not auto-close - close it yourself (e.g. in the mutation's onSuccess). */
-  onConfirm: () => void;
-};
+  onConfirm: () => void
+}
 
 /**
  * Standard "Are you sure?" confirmation dialog for ordinary, low-stakes
@@ -47,9 +47,9 @@ export function ConfirmDialog({
   isLoading = false,
   onConfirm,
 }: ConfirmDialogProps) {
-  const t = useTranslations("common.confirmDialog");
-  const resolvedConfirmLabel = confirmLabel ?? t("confirmLabel");
-  const resolvedCancelLabel = cancelLabel ?? t("cancelLabel");
+  const t = useTranslations("common.confirmDialog")
+  const resolvedConfirmLabel = confirmLabel ?? t("confirmLabel")
+  const resolvedCancelLabel = cancelLabel ?? t("cancelLabel")
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
@@ -66,8 +66,8 @@ export function ConfirmDialog({
           </AlertDialogCancel>
           <AlertDialogAction
             onClick={(e) => {
-              e.preventDefault();
-              onConfirm();
+              e.preventDefault()
+              onConfirm()
             }}
             disabled={isLoading}
             className={
@@ -81,5 +81,5 @@ export function ConfirmDialog({
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  );
+  )
 }

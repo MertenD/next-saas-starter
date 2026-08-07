@@ -1,12 +1,12 @@
-"use client";
+"use client"
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { PlusIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { PlusIcon } from "lucide-react"
+import { useTranslations } from "next-intl"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -14,7 +14,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from "@/components/ui/dialog"
 import {
   Form,
   FormControl,
@@ -22,34 +22,34 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { useCreatePost } from "@/features/demo/posts/hooks/use-posts";
-import type { CreatePostInput } from "@/features/demo/posts/schema/post-schema";
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { useCreatePost } from "@/features/demo/posts/hooks/use-posts"
+import type { CreatePostInput } from "@/features/demo/posts/schema/post-schema"
 
 export function PostCreateDialog() {
-  const [open, setOpen] = useState(false);
-  const { mutate: createPost, isPending } = useCreatePost();
-  const t = useTranslations("posts");
+  const [open, setOpen] = useState(false)
+  const { mutate: createPost, isPending } = useCreatePost()
+  const t = useTranslations("posts")
 
   const postFormSchema = z.object({
     title: z.string().min(1, t("form.validation.titleRequired")).max(100),
     content: z.string().min(1, t("form.validation.contentRequired")),
-  });
+  })
 
   const form = useForm<CreatePostInput>({
     resolver: zodResolver(postFormSchema),
     defaultValues: { title: "", content: "" },
-  });
+  })
 
   function onSubmit(values: CreatePostInput) {
     createPost(values, {
       onSuccess: () => {
-        form.reset();
-        setOpen(false);
+        form.reset()
+        setOpen(false)
       },
-    });
+    })
   }
 
   return (
@@ -116,5 +116,5 @@ export function PostCreateDialog() {
         </Form>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

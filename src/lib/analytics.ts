@@ -4,7 +4,7 @@
  * https://plausible.io/docs/custom-event-goals
  */
 export type PlausibleEvents = {
-  "Sign Up": never;
-  Login: never;
-  "Upgrade Clicked": never;
-};
+  "Sign Up": never
+  Login: never
+  "Upgrade Clicked": never
+}

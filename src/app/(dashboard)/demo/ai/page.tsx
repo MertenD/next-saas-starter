@@ -1,17 +1,17 @@
-import { getTranslations } from "next-intl/server";
-import { Badge } from "@/components/ui/badge";
+import { getTranslations } from "next-intl/server"
+import { Badge } from "@/components/ui/badge"
 import {
   Card,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { env } from "@/config/env";
-import { AiChat } from "@/features/demo/ai/components/ai-chat";
-import { AI_MODEL } from "@/lib/ai";
+} from "@/components/ui/card"
+import { env } from "@/config/env"
+import { AiChat } from "@/features/demo/ai/components/ai-chat"
+import { AI_MODEL } from "@/lib/ai"
 
 export default async function AiDemoPage() {
-  const t = await getTranslations("demo.ai");
+  const t = await getTranslations("demo.ai")
 
   return (
     <div className="flex h-[calc(100vh-4rem)] flex-col gap-4 p-6">
@@ -74,5 +74,5 @@ export default async function AiDemoPage() {
         </div>
       )}
     </div>
-  );
+  )
 }
