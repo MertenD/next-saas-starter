@@ -15,14 +15,17 @@ This file provides guidance to AI coding agents (Claude Code and others) working
 Full docs live in [`docs/`](./docs/README.md) - also servable as a searchable site via `bun run docs:dev`:
 
 - [Getting Started](./docs/getting-started.md) - local setup
+- [Quick Reference](./docs/quick-reference.md) - existing utilities/hooks/helpers, check before writing a new one
 - [Environment Variables](./docs/environment-variables.md) - every env var explained
 - [Architecture](./docs/architecture.md) - stack, request flow, project structure, key files, tRPC procedure types
 - [Features](./docs/features.md) - the feature-module pattern, existing demo features, adding a new one
+- [Data Fetching](./docs/data-fetching.md) - client `useQuery`/`useMutation`, server `prefetch()` + hydration, direct `caller`
 - [Database](./docs/database.md) - Prisma schema and migrations
 - [Auth & Billing](./docs/auth-and-billing.md) - Better Auth, OAuth, Polar, premium gating
 - [Background Jobs](./docs/background-jobs.md) - Inngest
 - [Integrations](./docs/integrations.md) - AI, Redis, analytics
 - [Frontend](./docs/frontend.md) - UI components, design system, i18n, state management
+- [Make It Yours](./docs/make-it-yours.md) - checklist for turning this template into a real product, separate from Getting Started
 - [Deployment](./docs/deployment.md) - Docker production setup, pre-deploy checklist
 
 Check the relevant page before implementing anything non-trivial - `docs/` is the source of truth, not this file.

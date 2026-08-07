@@ -61,6 +61,10 @@ export default defineConfig({
         ],
       },
       {
+        text: "Make It Yours",
+        items: [{ text: "Make It Yours", link: "/make-it-yours" }],
+      },
+      {
         text: "Shipping",
         items: [{ text: "Deployment", link: "/deployment" }],
       },

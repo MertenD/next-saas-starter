@@ -29,4 +29,8 @@ Each demo under `/demo/*` exists to show off one specific technique - not just "
 | [Background Jobs](./demos/inngest.md) | Durable multi-step jobs with live status via Inngest Realtime - no polling. |
 | [Posts CRUD](./demos/posts.md) | The canonical reference implementation to copy for a real feature, plus premium-gated procedures. |
 
+## Make It Yours
+
+Once the demos above have shown you what's here, [Make It Yours](./make-it-yours.md) is the separate, one-time checklist for turning the starter into your own product - rebranding, removing demo features, and configuring or removing every optional integration - before you move on to [Deployment](./deployment.md).
+
 For AI coding agent instructions (not user-facing docs, and not part of this site), see `CLAUDE.md`, `AGENTS.md`, and the design token spec in `DESIGN.md` at the repo root.
