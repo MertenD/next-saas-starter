@@ -1,12 +1,11 @@
-import { getStreamContext } from "@/lib/stream-context";
+import { resumeChatStream } from "@/features/demo/ai/server/chat";
 
 export async function GET(
   _req: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const { id: chatId } = await params;
-  const ctx = getStreamContext();
-  const stream = await ctx.resumeExistingStream(chatId);
+  const { id } = await params;
+  const stream = await resumeChatStream(id);
 
   if (stream === null || stream === undefined) {
     return new Response(null, { status: 204 });

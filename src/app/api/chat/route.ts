@@ -1,7 +1,6 @@
-import { convertToModelMessages, streamText } from "ai";
 import { env } from "@/config/env";
-import { AI_MODEL, openrouter } from "@/lib/ai";
-import { getStreamContext } from "@/lib/stream-context";
+import { chatRequestSchema } from "@/features/demo/ai/schema/ai-chat-schema";
+import { startChatStream } from "@/features/demo/ai/server/chat";
 
 export const maxDuration = 30;
 
@@ -13,22 +12,10 @@ export async function POST(req: Request) {
     );
   }
 
-  const { messages, id: chatId } = await req.json();
+  const body = chatRequestSchema.parse(await req.json());
+  const stream = await startChatStream(body);
 
-  const result = streamText({
-    model: openrouter(AI_MODEL),
-    system:
-      "You are a helpful assistant built into a SaaS starter template. Be concise and friendly.",
-    messages: convertToModelMessages(messages),
-  });
-
-  const ctx = getStreamContext();
-  const stream = await ctx.createNewResumableStream(
-    chatId,
-    () => result.textStream,
-  );
-
-  return new Response(stream ?? result.textStream, {
+  return new Response(stream, {
     headers: { "Content-Type": "text/plain; charset=utf-8" },
   });
 }

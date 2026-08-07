@@ -10,11 +10,20 @@ Triggering a durable, multi-step background job from a UI action, then streaming
 
 | File | Role |
 |---|---|
+| `model/inngest-demo.ts` | `Run` type, `JOB_STEPS` step metadata |
+| `schema/inngest-demo-schema.ts` | `getJobSubscriptionTokenSchema` |
 | `server/router.ts` | `triggerDemoJob` (send event), `getJobSubscriptionToken` (Realtime auth) |
+| `hooks/use-demo-job-runs.ts` | Trigger mutation + local run list, toasts |
+| `hooks/use-job-status.ts` | Wraps `useInngestSubscription` for one run |
+| `components/inngest-demo-container.tsx` | Composes the cards below, owns `useDemoJobRuns()` |
+| `components/job-steps-card.tsx` | Step list + trigger button |
+| `components/run-history-card.tsx` | Triggered-run list, empty state |
+| `components/run-status-badge.tsx` | Live status badge for one run |
+| `components/how-it-works-card.tsx` | Static explainer card |
 | `src/inngest/functions.ts` | `demoJob` - the actual multi-step job |
 | `src/inngest/realtime.ts` | `demoJobChannel` - the Realtime channel/topic definition |
 | `src/inngest/client.ts` | Inngest client instance |
-| `src/app/(dashboard)/demo/inngest/page.tsx` | Trigger button + live status UI |
+| `src/app/(dashboard)/demo/inngest/page.tsx` | Page heading, delegates to `InngestDemoContainer` |
 | `src/app/api/inngest/route.ts` | Registers functions with the Inngest dev server |
 
 ## How it works
@@ -33,7 +42,7 @@ Triggering a durable, multi-step background job from a UI action, then streaming
 
 3. **Scoped live progress.** At each step transition, the job publishes a status update to a channel scoped to that one run: `demoJobChannel(event.id)` from `src/inngest/realtime.ts`. Because the channel key is the triggering event's id, status updates from one triggered run never leak into another run's UI, even if you trigger several back to back.
 
-4. **Client subscribes, doesn't poll.** Each triggered run in the UI renders a `RunStatusBadge` using `useInngestSubscription` (`@inngest/realtime/hooks`). Its `refreshToken` callback fetches a short-lived, run-scoped token via the `demo.getJobSubscriptionToken` tRPC query (which wraps `getSubscriptionToken()` from `@inngest/realtime`, itself scoped to that run's channel/topic). The badge then updates as `publish()` calls land server-side - there's no interval or refetch loop anywhere in this flow.
+4. **Client subscribes, doesn't poll.** Each triggered run in the UI renders a `RunStatusBadge` (`components/run-status-badge.tsx`) using `hooks/use-job-status.ts`, which wraps `useInngestSubscription` (`@inngest/realtime/hooks`). Its `refreshToken` callback fetches a short-lived, run-scoped token via the `demo.getJobSubscriptionToken` tRPC query (which wraps `getSubscriptionToken()` from `@inngest/realtime`, itself scoped to that run's channel/topic). The badge then updates as `publish()` calls land server-side - there's no interval or refetch loop anywhere in this flow.
 
 5. **Registration.** Every Inngest function must be added to `serve({ functions: [...] })` in `src/app/api/inngest/route.ts` to be discoverable by the dev server - a function that exists in code but isn't in that array simply never runs.
 

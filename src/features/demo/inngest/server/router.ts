@@ -1,5 +1,5 @@
 import { getSubscriptionToken } from "@inngest/realtime";
-import { z } from "zod";
+import { getJobSubscriptionTokenSchema } from "@/features/demo/inngest/schema/inngest-demo-schema";
 import { inngest } from "@/inngest/client";
 import { InngestEvents } from "@/inngest/functions";
 import { demoJobChannel } from "@/inngest/realtime";
@@ -17,7 +17,7 @@ export const demoRouter = createTRPCRouter({
   // Issues a short-lived Realtime subscription token scoped to one run's
   // channel, so the client can stream status updates instead of polling.
   getJobSubscriptionToken: protectedProcedure
-    .input(z.object({ eventId: z.string() }))
+    .input(getJobSubscriptionTokenSchema)
     .query(async ({ input }) => {
       return getSubscriptionToken(inngest, {
         channel: demoJobChannel(input.eventId),
