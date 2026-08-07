@@ -7,6 +7,15 @@ type SendEmailParams = {
   html: string;
 };
 
+/**
+ * Sends a transactional email via Resend. If `RESEND_API_KEY`/`EMAIL_FROM`
+ * aren't configured (see `isResendEnabled` in `src/lib/resend.ts`), this
+ * falls back to logging the email to the console instead of throwing, so
+ * flows like password reset and email verification keep working (with the
+ * link printed to the server logs) in local/dev setups without Resend.
+ * Errors from the Resend API are caught and logged rather than rethrown, so
+ * callers don't need to handle email delivery failures themselves.
+ */
 export async function sendEmail({ to, subject, html }: SendEmailParams) {
   if (!isResendEnabled || !resendClient) {
     console.warn(
@@ -29,6 +38,7 @@ export async function sendEmail({ to, subject, html }: SendEmailParams) {
   }
 }
 
+/** Wraps inner HTML in the shared inline-styled layout used by every transactional email template below. */
 function emailLayout(content: string) {
   return `
     <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; padding: 24px;">

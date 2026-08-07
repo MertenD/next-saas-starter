@@ -6,8 +6,13 @@ import { useCustomersParams } from "@/features/demo/customers/hooks/use-customer
 
 const DEBOUNCE_MS = 400;
 
-// Keeps every keystroke local (no URL thrash) and commits to the nuqs-backed
-// `search` param after a short debounce, resetting to page 1 on change.
+/**
+ * Debounced search input for the customers table. Keeps every keystroke in
+ * local state (no URL churn / no query refetch per keystroke) and commits
+ * to the nuqs-backed `search` URL param after {@link DEBOUNCE_MS}ms of
+ * inactivity, resetting pagination to page 1 whenever the committed search
+ * value changes. Reusable pattern for any debounced-search-plus-URL-state input.
+ */
 export const useCustomersSearch = () => {
   const [params, setParams] = useCustomersParams();
   const [localSearch, setLocalSearch] = useState(params.search);

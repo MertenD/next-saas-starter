@@ -107,3 +107,7 @@ Supported locales: `en`, `de`. Server: `getTranslations()` from `next-intl/serve
 - Use TypeScript types and Zod schemas for validation. Avoid using `any` or untyped data structures.
 - Never use em dashes (—) anywhere, in code, comments, docs, or prose - always use a regular hyphen (-) instead.
 - Don't use semicolons in TypeScript/JavaScript code. I prefer a semicolon-free style. Only use semicolons where required by the language (e.g., for `for` loops).
+
+## Code Comments
+
+Central, reusable code - `src/lib/*`, `src/trpc/*`, `src/config/*`, `src/inngest/*`, shared hooks/stores (`src/hooks`, `src/stores`), shared non-`ui/` components, and reusable feature-level utils (URL-state param builders, wizard stores, auth/subscription hooks, etc.) - should carry a `/** ... */` doc comment above each exported function/value explaining its purpose, non-obvious behavior, and where it's consumed. Do not add this for shadcn components under `components/ui/`, and don't add per-line or per-demo comments for one-off demo business logic (e.g. the mock CRUD routers under `src/features/demo/*/server`) unless a specific line is genuinely non-obvious. Always in English, no em dashes.

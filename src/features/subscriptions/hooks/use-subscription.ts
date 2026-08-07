@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { authClient } from "@/lib/auth-client";
 import { useTRPC } from "@/trpc/client";
 
+/** Raw Polar customer state (subscriptions, entitlements, ...) for the signed-in user. Prefer {@link useHasActiveSubscription} for simple premium checks. */
 export const useSubscription = () => {
   return useQuery({
     queryKey: ["subscription"],
@@ -14,6 +15,16 @@ export const useSubscription = () => {
   });
 };
 
+/**
+ * The standard client-side premium-gating hook: resolves whether the
+ * signed-in user has an active Polar subscription. When Polar isn't
+ * configured (`trpc.user.isPolarEnabled` is false), every user is treated
+ * as premium so demos/dev environments work without billing set up - mirrors
+ * the server-side fallback in `premiumProcedure` (`src/trpc/init.ts`) and
+ * `requireAuthAndPremium` (`src/lib/auth-utils.ts`). Use this to
+ * conditionally render premium UI; use the server-side guards to actually
+ * enforce access.
+ */
 export const useHasActiveSubscription = () => {
   const trpc = useTRPC();
   const { data: polarEnabled } = useQuery(

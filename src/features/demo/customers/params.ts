@@ -6,8 +6,14 @@ import {
   SORT_ORDER_OPTIONS,
 } from "@/features/demo/customers/model/customer";
 
-// Single source of truth for the customers table's URL state, shared between
-// the client hook (useQueryStates) and the tRPC input schema.
+/**
+ * nuqs parser definitions for the customers table's URL state (pagination,
+ * search, filter, sort). This is the single source of truth for that
+ * shape - consumed client-side via `useQueryStates` in
+ * `useCustomersParams`, and mirrored server-side by the tRPC input schema
+ * in `schema/customer-query-schema.ts` so the URL and the API stay in sync.
+ * This is the general pattern to copy for any other URL-driven table/list.
+ */
 export const customersParams = {
   page: parseAsInteger
     .withDefault(PAGINATION.DEFAULT_PAGE)

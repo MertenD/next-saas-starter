@@ -33,6 +33,13 @@ type AppSidebarProps = {
   username: string;
 };
 
+/**
+ * Main dashboard navigation sidebar. Nav items are split into core app
+ * links and a "demo" section listing every demo feature under
+ * `src/features/demo/*` - when adding a new demo feature, add its entry to
+ * `demoItems` (and the matching `sidebar.nav.*` translation keys) so it's
+ * discoverable.
+ */
 export default function AppSidebar({ username }: AppSidebarProps) {
   const pathName = usePathname();
   const t = useTranslations("sidebar");

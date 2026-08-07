@@ -11,6 +11,12 @@ type AppShellProps = {
   children: React.ReactNode;
 };
 
+/**
+ * Layout shell for every page under `(dashboard)`: renders the collapsible
+ * app sidebar, the email verification banner, and the page content. Sidebar
+ * collapsed state is lifted to `useUIStore` (rather than local state) so it
+ * can be read/toggled from both this component and the sidebar itself.
+ */
 export default function AppShell({ username, children }: AppShellProps) {
   const sidebarCollapsed = useUIStore((state) => state.sidebarCollapsed);
   const setSidebarCollapsed = useUIStore((state) => state.setSidebarCollapsed);

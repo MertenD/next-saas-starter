@@ -1,6 +1,13 @@
 import { inngest } from "./client";
 import { demoJobChannel } from "./realtime";
 
+/**
+ * Every event name the app can send/receive through Inngest. Add new events
+ * here rather than using raw string literals, and register a matching
+ * `inngest.createFunction` below (or in a feature's own server module) to
+ * handle it. Functions defined here must also be registered in
+ * `src/app/api/inngest/route.ts` to be picked up by the Inngest dev server.
+ */
 export enum InngestEvents {
   UserSignedUp = "user/signed.up",
   SendWelcomeEmail = "email/send.welcome",

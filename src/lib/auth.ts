@@ -10,6 +10,17 @@ import {
 } from "@/lib/mailer";
 import { isPolarEnabled, polarClient } from "./polar";
 
+/**
+ * The server-side Better Auth instance. This is the single source of truth
+ * for authentication: it wires up the Prisma adapter, email/password +
+ * OAuth (Google/GitHub, only enabled when their client id/secret are set),
+ * email verification, and the optional Polar billing plugin.
+ *
+ * Consumed by the catch-all route handler (`src/app/api/auth/[...all]/route.ts`),
+ * by `src/lib/auth-utils.ts` for server-side session/premium checks, and by
+ * the tRPC context (`src/trpc/init.ts`). The matching client-side instance
+ * lives in `src/lib/auth-client.ts`.
+ */
 export const auth = betterAuth({
   secret: env.BETTER_AUTH_SECRET,
   baseURL: env.BETTER_AUTH_URL,
@@ -75,6 +86,10 @@ export const auth = betterAuth({
         ]
       : []),
   ],
+  // Keeps the local user and the Polar customer in sync: whenever a user
+  // signs up, mirror them into Polar so subscriptions can be attached later.
+  // If Polar customer creation fails, the local user is rolled back too, so
+  // we never end up with a user that has no corresponding Polar customer.
   databaseHooks: {
     user: {
       create: {

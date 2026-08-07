@@ -1,5 +1,14 @@
 import { z } from "zod";
 
+/**
+ * Runtime-validated environment variables. Import `env` from this module
+ * instead of reading `process.env` directly anywhere else in the codebase -
+ * that gets you parsing (e.g. `AI_MODEL` defaults, `POLAR_SERVER` enum
+ * validation) and a single fail-fast startup error listing every missing/
+ * invalid variable, instead of scattered runtime `undefined` bugs. See
+ * `docs/environment-variables.md` for what each variable does and which
+ * ones are optional.
+ */
 const envSchema = z.object({
   // Database
   DATABASE_URL: z.string().min(1),

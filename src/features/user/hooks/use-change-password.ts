@@ -8,6 +8,7 @@ type ChangePasswordInput = {
   newPassword: string;
 };
 
+/** Changes the signed-in user's password via Better Auth (`authClient.changePassword`), with toast feedback. */
 export const useChangePassword = () => {
   const t = useTranslations("settings.account.changePassword");
 

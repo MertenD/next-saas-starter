@@ -7,6 +7,12 @@ import { Button } from "@/components/ui/button";
 import { useResendVerificationEmail } from "@/features/user/hooks/use-resend-verification-email";
 import { authClient } from "@/lib/auth-client";
 
+/**
+ * Dismissible-by-verification banner shown above dashboard content while
+ * the signed-in user's email is unverified; renders nothing once verified
+ * or when there's no session. Mounted once in `AppShell` so it appears on
+ * every dashboard page rather than being added per-page.
+ */
 export default function EmailVerificationBanner() {
   const t = useTranslations("common.emailVerificationBanner");
   const { data: session } = authClient.useSession();

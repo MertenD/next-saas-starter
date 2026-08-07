@@ -9,6 +9,7 @@ type UpdateProfileInput = {
   image?: string;
 };
 
+/** Updates the signed-in user's name/image via Better Auth, then invalidates `trpc.user.me` so the UI reflects the change. */
 export const useUpdateProfile = () => {
   const trpc = useTRPC();
   const queryClient = useQueryClient();

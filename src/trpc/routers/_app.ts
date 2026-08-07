@@ -5,6 +5,12 @@ import { postsRouter } from "@/features/demo/posts/server/router";
 import { userRouter } from "@/features/user/server/router";
 import { createTRPCRouter } from "../init";
 
+/**
+ * Root tRPC router: merges every feature's router (each defined in that
+ * feature's `server/router.ts`) under its own namespace. Register a new
+ * feature router here to expose it to the client - see
+ * `docs/features.md` for the full feature-module walkthrough.
+ */
 export const appRouter = createTRPCRouter({
   posts: postsRouter,
   user: userRouter,
@@ -13,4 +19,5 @@ export const appRouter = createTRPCRouter({
   booking: bookingRouter,
 });
 
+/** Type-only export consumed by the client (`src/trpc/client.tsx`) for end-to-end type safety. */
 export type AppRouter = typeof appRouter;

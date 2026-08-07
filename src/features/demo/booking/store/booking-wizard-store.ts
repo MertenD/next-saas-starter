@@ -21,10 +21,14 @@ const INITIAL_STATE: Pick<BookingWizardState, "step" | "data"> = {
   data: {},
 };
 
-// Unlike the global `useUIStore`, this store is feature-scoped and uses the
-// `persist` middleware (sessionStorage) so an accidental refresh mid-wizard
-// doesn't lose progress. Session-scoped, not localStorage, since a booking
-// draft shouldn't outlive the tab.
+/**
+ * Feature-scoped Zustand store for the multi-step booking wizard's current
+ * step and accumulated form data. Unlike the global `useUIStore`, this store
+ * uses the `persist` middleware backed by `sessionStorage` (not
+ * `localStorage`) so an accidental refresh mid-wizard doesn't lose progress,
+ * while a booking draft still doesn't outlive the browser tab. Reusable
+ * pattern for any other multi-step wizard that needs refresh-safe state.
+ */
 export const useBookingWizardStore = create<BookingWizardState>()(
   persist(
     (set) => ({

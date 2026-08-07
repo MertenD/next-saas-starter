@@ -10,9 +10,17 @@ import superjson from "superjson";
 import { makeQueryClient } from "./query-client";
 import type { AppRouter } from "./routers/_app";
 
+/**
+ * `useTRPC()` is the hook client components use to get type-safe query/
+ * mutation options for `useQuery`/`useMutation` (TanStack React Query),
+ * e.g. `useQuery(useTRPC().posts.list.queryOptions())`.
+ */
 export const { TRPCProvider, useTRPC } = createTRPCContext<AppRouter>();
 
 let browserQueryClient: QueryClient;
+// On the server we want a fresh QueryClient per request (no shared state
+// between users); in the browser we want exactly one client for the whole
+// session so cached data survives across navigations.
 function getQueryClient() {
   if (typeof window === "undefined") {
     return makeQueryClient();
@@ -30,6 +38,9 @@ function getUrl() {
   return `${base}/api/trpc`;
 }
 
+// IndexedDB-backed persister so React Query's cache survives page reloads
+// (offline-first UX). Falls back to a no-op persister during SSR, where
+// `window`/IndexedDB don't exist.
 const noopPersister = {
   persistClient: async () => {},
   restoreClient: async () => undefined as never,
@@ -58,6 +69,11 @@ const idbPersister =
 
 const PERSIST_MAX_AGE = 7 * 24 * 60 * 60 * 1000;
 
+/**
+ * Root client-side provider wiring up the tRPC client, React Query, and
+ * IndexedDB cache persistence. Mount once near the app root (see
+ * `src/app/layout.tsx`); everything under it can call `useTRPC()`.
+ */
 export function TRPCReactProvider(
   props: Readonly<{
     children: React.ReactNode;

@@ -29,6 +29,13 @@ type ConfirmDialogProps = {
   onConfirm: () => void;
 };
 
+/**
+ * Standard "Are you sure?" confirmation dialog for ordinary, low-stakes
+ * destructive actions (deleting a post, a list item, anything easily
+ * recreated). Per `AGENTS.md`, deletions must never fire directly off a
+ * click - route them through this (or {@link CriticalConfirmDialog} for
+ * harder-to-reverse actions) instead of a one-off dialog.
+ */
 export function ConfirmDialog({
   open,
   onOpenChange,
