@@ -329,7 +329,9 @@
       "streamingCaption": "Streaming… try refreshing - Redis will resume the response",
       "apiKeyMissingChatError": "OPENROUTER_API_KEY is not configured. Add it to your .env file.",
       "genericError": "Error: {message}",
-      "inputPlaceholder": "Type a message… (Enter to send, Shift+Enter for newline)"
+      "inputPlaceholder": "Type a message...",
+      "inputHint": "Enter to send, Shift+Enter for a new line",
+      "sendLabel": "Send message"
     },
     "inngest": {
       "heading": "Background Jobs - Inngest",

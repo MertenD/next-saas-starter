@@ -3,6 +3,7 @@
 import type { UIMessage } from "ai"
 import { BotIcon, UserIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
+import type React from "react"
 import { useEffect, useRef } from "react"
 import { MarkdownContent } from "@/components/markdown-content"
 import { cn } from "@/lib/utils"
@@ -13,94 +14,99 @@ type ChatMessagesProps = {
   error: Error | undefined
 }
 
+function getMessageText(message: UIMessage): string {
+  return message.parts
+    .filter((p) => p.type === "text")
+    .map((p) => p.text)
+    .join("")
+}
+
+/** Avatar bubble shown next to every message (bot on the left, user on the right). */
+function Avatar({ sender }: { sender: "assistant" | "user" }) {
+  const Icon = sender === "user" ? UserIcon : BotIcon
+
+  return (
+    <div
+      className={cn(
+        "flex h-6 w-6 shrink-0 items-center justify-center rounded-full",
+        sender === "user" ? "bg-primary/20" : "bg-primary/10",
+      )}
+    >
+      <Icon className="h-4 w-4 text-primary" />
+    </div>
+  )
+}
+
+/** Assistant row: avatar on the left, muted bubble with a flat bottom-left corner. */
+function AssistantRow({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="mb-4 flex w-full justify-start gap-2">
+      <Avatar sender="assistant" />
+      <div className="max-w-[80%] break-words rounded-lg rounded-bl-none bg-muted px-3 py-2 text-foreground text-sm">
+        {children}
+      </div>
+    </div>
+  )
+}
+
+/** User row: primary bubble with a flat bottom-right corner, avatar on the right. */
+function UserRow({ text }: { text: string }) {
+  return (
+    <div className="mb-4 flex w-full justify-end gap-2">
+      <div className="max-w-[80%] break-words rounded-lg rounded-br-none bg-primary px-3 py-2 text-primary-foreground text-sm">
+        <span className="whitespace-pre-wrap">{text}</span>
+      </div>
+      <Avatar sender="user" />
+    </div>
+  )
+}
+
 export function ChatMessages({
   messages,
   isLoading,
   error,
 }: ChatMessagesProps) {
   const t = useTranslations("demo.ai")
-  const bottomRef = useRef<HTMLDivElement>(null)
+  const scrollRef = useRef<HTMLDivElement>(null)
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: scroll on new message count, not on ref
+  const lastMessage = messages[messages.length - 1]
+  const lastTextLength = lastMessage ? getMessageText(lastMessage).length : 0
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: scroll to the bottom whenever new content arrives, not on ref changes
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" })
-  }, [messages.length])
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+    }
+  }, [messages.length, lastTextLength, isLoading])
 
   return (
-    <div className="flex-1 space-y-4 overflow-y-auto p-4">
-      {messages.length === 0 && (
-        <div className="flex h-full flex-col items-center justify-center gap-2 text-center text-muted-foreground">
-          <BotIcon className="h-10 w-10" />
-          <p className="font-medium">{t("startConversation")}</p>
-          <p className="text-sm">{t("startConversationBody")}</p>
-        </div>
+    <div className="flex-1 overflow-y-auto p-2" ref={scrollRef}>
+      {/* Welcome message, always the first bubble of the conversation */}
+      <AssistantRow>
+        <p className="font-medium">{t("startConversation")}</p>
+        <p className="mt-1">{t("startConversationBody")}</p>
+      </AssistantRow>
+
+      {messages.map((msg) =>
+        msg.role === "user" ? (
+          <UserRow key={msg.id} text={getMessageText(msg)} />
+        ) : (
+          <AssistantRow key={msg.id}>
+            <MarkdownContent content={getMessageText(msg)} />
+          </AssistantRow>
+        ),
       )}
 
-      {messages.map((msg) => (
-        <div
-          key={msg.id}
-          className={cn(
-            "flex gap-3",
-            msg.role === "user" ? "flex-row-reverse" : "flex-row",
-          )}
-        >
-          <div
-            className={cn(
-              "flex h-8 w-8 shrink-0 items-center justify-center rounded-full",
-              msg.role === "user"
-                ? "bg-primary text-primary-foreground"
-                : "bg-muted",
-            )}
-          >
-            {msg.role === "user" ? (
-              <UserIcon className="h-4 w-4" />
-            ) : (
-              <BotIcon className="h-4 w-4" />
-            )}
-          </div>
-          <div
-            className={cn(
-              "max-w-[80%] rounded-xl px-4 py-2.5 text-sm",
-              msg.role === "user"
-                ? "bg-primary text-primary-foreground"
-                : "bg-muted text-foreground",
-            )}
-          >
-            {msg.parts
-              ? msg.parts
-                  .filter((p) => p.type === "text")
-                  .map((p, i) =>
-                    msg.role === "assistant" ? (
-                      <MarkdownContent
-                        key={`${msg.id}-${i}`}
-                        content={p.type === "text" ? p.text : ""}
-                      />
-                    ) : (
-                      <span
-                        key={`${msg.id}-${i}`}
-                        className="whitespace-pre-wrap"
-                      >
-                        {p.type === "text" ? p.text : ""}
-                      </span>
-                    ),
-                  )
-              : null}
-          </div>
-        </div>
-      ))}
-
       {isLoading && (
-        <div className="flex gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted">
-            <BotIcon className="h-4 w-4" />
-          </div>
-          <div className="flex flex-col gap-1.5">
-            <div className="flex items-center gap-1 rounded-xl bg-muted px-4 py-3">
+        <div className="mb-4 flex w-full justify-start gap-2">
+          <Avatar sender="assistant" />
+          <div className="flex max-w-[80%] flex-col gap-1.5">
+            <div className="flex items-center gap-1 py-2">
               <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground [animation-delay:0ms]" />
               <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground [animation-delay:150ms]" />
               <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground [animation-delay:300ms]" />
             </div>
-            <p className="px-1 text-muted-foreground text-xs">
+            <p className="text-muted-foreground text-xs">
               {t("streamingCaption")}
             </p>
           </div>
@@ -108,14 +114,12 @@ export function ChatMessages({
       )}
 
       {error && (
-        <div className="rounded-lg border border-destructive/50 p-3 text-sm text-destructive">
+        <div className="rounded-lg border border-destructive/50 p-3 text-destructive text-sm">
           {error.message.includes("OPENROUTER_API_KEY")
             ? t("apiKeyMissingChatError")
             : t("genericError", { message: error.message })}
         </div>
       )}
-
-      <div ref={bottomRef} />
     </div>
   )
 }

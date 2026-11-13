@@ -15,8 +15,8 @@ Streaming an LLM response into the UI, and specifically **resumable streams**: i
 | `server/chat.ts` | `startChatStream()`, `resumeChatStream()` - plain functions called by the route handlers below (raw streaming responses aren't tRPC-compatible, so this feature uses Route Handlers instead of a `server/router.ts` tRPC router) |
 | `hooks/use-ai-chat.ts` | Creates the `Chat` instance and wraps `useChat` |
 | `components/ai-chat.tsx` | Chat container - header bar, composes the pieces below |
-| `components/chat-messages.tsx` | Message list, empty/loading/error states |
-| `components/chat-input.tsx` | Textarea + send button |
+| `components/chat-messages.tsx` | Chat window: scroll area, avatar bubbles (bot left, user right), welcome bubble, loading/error states |
+| `components/chat-input.tsx` | Auto-growing textarea (max 3 rows) + icon send button; Enter sends on desktop, inserts a newline on mobile |
 | `src/app/api/chat/route.ts` | POST - starts a new streamed response |
 | `src/app/api/chat/[id]/stream/route.ts` | GET - resumes an existing stream by id |
 | `src/lib/ai.ts` | OpenRouter provider client, `AI_MODEL` |

@@ -16,7 +16,7 @@ export function AiChat({ model }: { model: string }) {
   useEffect(() => setMounted(true), [])
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full w-full flex-col bg-popover">
       <div className="flex items-center justify-between border-b px-4 py-2">
         <div className="flex items-center gap-2 text-muted-foreground text-xs">
           <span>{t("streamIdLabel")}</span>
