@@ -26,15 +26,19 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { OAuthButtons } from "@/features/auth/oauth-buttons"
 import type { PlausibleEvents } from "@/lib/analytics"
 import { authClient } from "@/lib/auth-client"
+import type { OAuthProvider } from "@/lib/oauth-providers"
 
-export default function RegisterForm() {
+type RegisterFormProps = {
+  oauthProviders: OAuthProvider[]
+}
+
+export default function RegisterForm({ oauthProviders }: RegisterFormProps) {
   const router = useRouter()
   const plausible = usePlausible<PlausibleEvents>()
-  const [oauthLoading, setOauthLoading] = useState<"github" | "google" | null>(
-    null,
-  )
+  const [oauthLoading, setOauthLoading] = useState<OAuthProvider | null>(null)
   const t = useTranslations("auth.register")
 
   const registerSchema = z.object({
@@ -72,7 +76,7 @@ export default function RegisterForm() {
     )
   }
 
-  async function signInWith(provider: "github" | "google") {
+  async function signInWith(provider: OAuthProvider) {
     setOauthLoading(provider)
     plausible("Sign Up")
     await authClient.signIn.social(
@@ -99,30 +103,13 @@ export default function RegisterForm() {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <div className="grid gap-6">
-                <div className="flex flex-col gap-4">
-                  <Button
-                    variant="outline"
-                    className="w-full"
-                    type="button"
-                    disabled={isPending}
-                    onClick={() => signInWith("github")}
-                  >
-                    {oauthLoading === "github"
-                      ? t("redirecting")
-                      : t("continueWithGithub")}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full"
-                    type="button"
-                    disabled={isPending}
-                    onClick={() => signInWith("google")}
-                  >
-                    {oauthLoading === "google"
-                      ? t("redirecting")
-                      : t("continueWithGoogle")}
-                  </Button>
-                </div>
+                <OAuthButtons
+                  providers={oauthProviders}
+                  loading={oauthLoading}
+                  disabled={isPending}
+                  onSignIn={signInWith}
+                  namespace="auth.register"
+                />
                 <div className="grid gap-6">
                   <FormField
                     control={form.control}

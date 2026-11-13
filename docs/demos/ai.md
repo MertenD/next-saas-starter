@@ -49,6 +49,10 @@ Streaming an LLM response into the UI, and specifically **resumable streams**: i
 
 5. If the client reconnects (page refresh mid-response, dropped connection), `useChat`'s `resume: true` fires a `GET /api/chat/[id]/stream`, which calls `resumeChatStream(id)` (`server/chat.ts`), itself wrapping `ctx.resumeExistingStream(chatId)`. If the stream is still buffered server-side, playback continues from where it left off; if it already finished or never existed, the route returns `204` and the client just shows what it already has.
 
+## Markdown rendering
+
+Assistant messages are rendered with `MarkdownContent` (`src/components/markdown-content.tsx`) so lists, code blocks and tables from the model show up formatted, and `AI_SYSTEM_PROMPT` (`model/ai-chat.ts`) asks the model to use Markdown. User messages stay plain text. Partial Markdown while streaming (for example an unclosed code fence) renders as plain text until the closing token arrives.
+
 ## Try it
 
 Open `/demo/ai`, send a message, and refresh the page while it's still streaming - the response keeps going instead of restarting or disappearing.

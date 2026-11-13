@@ -12,7 +12,7 @@ PostgreSQL via Prisma ORM. Schema lives at `prisma/schema.prisma`; the generated
 
 **Application user** (also managed by Better Auth, via its Prisma adapter):
 
-- **`User`** - `id`, `name`, `email` (unique), `emailVerified`, `image?`, timestamps. Relations: `sessions[]`, `accounts[]`, `posts[]`.
+- **`User`** - `id`, `name`, `email` (unique), `emailVerified`, `image?`, `locale?` (preferred UI language, registered as a Better Auth additional field and synced with the `ui-locale` cookie by `LocaleSync`), timestamps. Relations: `sessions[]`, `accounts[]`, `posts[]`.
 
 **Example domain model** (comment says "replace with your own" - this is the one meant to be deleted/extended):
 
@@ -30,6 +30,16 @@ bun run prisma:studio          # open Prisma Studio, a GUI for browsing/editing 
 Always run `prisma:generate` after `prisma:migrate` (or after pulling schema changes from git) - the generated client is what `src/lib/db.ts` imports, and it goes stale as soon as the schema changes.
 
 In production, `bun run prisma:migrate-deploy` runs automatically on every container start - see `docker-entrypoint.sh` and [`deployment.md`](./deployment.md).
+
+## Seeding
+
+`prisma/seed.ts` fills a fresh database with example posts so the `demo/posts` page isn't empty. It needs an existing user (the seed doesn't create accounts, since passwords are hashed by Better Auth), so sign up in the app first:
+
+```bash
+bun run db:seed
+```
+
+It seeds the user whose email is in `SEED_USER_EMAIL`, or every user when that is unset, and skips users who already have posts, so it is safe to run repeatedly. It also runs automatically after `prisma migrate reset` (configured as `migrations.seed` in `prisma.config.ts`). Replace the demo posts with your own seed data when you replace the `Post` model.
 
 ## The Prisma client singleton
 

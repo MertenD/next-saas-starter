@@ -4,7 +4,7 @@ import {
   CUSTOMER_SORT_BY_OPTIONS,
   CUSTOMER_STATUS_FILTER_OPTIONS,
   SORT_ORDER_OPTIONS,
-} from "@/features/demo/customers/model/customer"
+} from "@/features/demo/pagination/model/customer"
 
 export const customersQuerySchema = z.object({
   page: z.number().min(1).default(PAGINATION.DEFAULT_PAGE),

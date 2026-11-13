@@ -55,8 +55,8 @@ export default defineConfig({
         items: [
           { text: "AI Chat", link: "/demos/ai" },
           { text: "Booking Wizard", link: "/demos/booking" },
-          { text: "Customers Table", link: "/demos/customers" },
           { text: "Background Jobs", link: "/demos/inngest" },
+          { text: "Pagination", link: "/demos/pagination" },
           { text: "Posts CRUD", link: "/demos/posts" },
         ],
       },

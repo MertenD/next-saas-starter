@@ -1,11 +1,11 @@
-import { MOCK_CUSTOMERS } from "@/features/demo/customers/model/customer"
-import { customersQuerySchema } from "@/features/demo/customers/schema/customer-query-schema"
+import { MOCK_CUSTOMERS } from "@/features/demo/pagination/model/customer"
+import { customersQuerySchema } from "@/features/demo/pagination/schema/customer-query-schema"
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init"
 
 // Small artificial delay so the demo's loading skeleton is actually visible.
 const SIMULATED_LATENCY_MS = 400
 
-export const customersRouter = createTRPCRouter({
+export const paginationRouter = createTRPCRouter({
   getMany: protectedProcedure
     .input(customersQuerySchema)
     .query(async ({ input }) => {

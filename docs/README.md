@@ -13,7 +13,7 @@ Full documentation for this Next.js SaaS starter template. Start with [Getting S
 | [Database](./database.md) | Prisma schema, models, and the migration workflow. |
 | [Auth & Billing](./auth-and-billing.md) | Better Auth configuration, OAuth setup, Polar billing, premium feature gating. |
 | [Background Jobs](./background-jobs.md) | Inngest concepts, existing jobs, adding new jobs, Realtime subscriptions. |
-| [Integrations](./integrations.md) | AI (OpenRouter), Redis, and Plausible analytics usage. |
+| [Integrations](./integrations.md) | AI (OpenRouter), Redis, Plausible analytics, Sentry error tracking, and PWA support. |
 | [Frontend](./frontend.md) | UI components, the design system, required UI states, confirm dialogs, state management, i18n. |
 | [Deployment](./deployment.md) | Docker production setup, making Inngest durable, reverse proxy, pre-deploy checklist. |
 
@@ -25,8 +25,8 @@ Each demo under `/demo/*` exists to show off one specific technique - not just "
 |---|---|
 | [AI Chat](./demos/ai.md) | Resumable streaming - a refresh mid-response doesn't lose the reply. |
 | [Booking Wizard](./demos/booking.md) | Multi-step client state (Zustand + sessionStorage) decoupled from the server, plus real error/retry handling. |
-| [Customers Table](./demos/customers.md) | Fully server-driven pagination/filter/sort, with table state synced to the URL via nuqs. |
 | [Background Jobs](./demos/inngest.md) | Durable multi-step jobs with live status via Inngest Realtime - no polling. |
+| [Pagination](./demos/pagination.md) | Fully server-driven pagination/search/filter/sort with URL state via nuqs and server prefetching, built from reusable entity components. |
 | [Posts CRUD](./demos/posts.md) | The canonical reference implementation to copy for a real feature, plus premium-gated procedures. |
 
 ## Make It Yours

@@ -16,6 +16,7 @@ A production-ready Next.js SaaS template with everything you need to build and s
 | **AI**                        | Vercel AI SDK + OpenRouter |
 | **Cache**                     | Redis |
 | **Analytics**                 | Plausible (self-hosted or cloud, optional) |
+| **Error tracking**            | Sentry (optional) |
 | **UI**                        | shadcn/ui + Tailwind CSS v4 |
 | **i18n**                      | next-intl (en + de) |
 | **State**                     | Zustand (client) + TanStack Query (server) |

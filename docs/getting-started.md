@@ -54,6 +54,8 @@ bun run prisma:migrate    # creates DB tables
 bun run prisma:generate   # generates the TypeScript client
 ```
 
+Optional: after signing up in the app, run `bun run db:seed` to fill the posts demo with example data (see [`database.md`](./database.md#seeding)).
+
 See [`database.md`](./database.md) for the schema and migration workflow in more detail.
 
 ## 5. Configure Polar.sh (optional)

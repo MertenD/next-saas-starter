@@ -1,23 +1,10 @@
 "use client"
 
-import {
-  ArrowDownIcon,
-  ArrowUpDownIcon,
-  ArrowUpIcon,
-  UsersIcon,
-} from "lucide-react"
+import { ArrowDownIcon, ArrowUpDownIcon, ArrowUpIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import type * as React from "react"
+import { EmptyView, ErrorView } from "@/components/entity-components"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from "@/components/ui/empty"
 import { Skeleton } from "@/components/ui/skeleton"
 import {
   Table,
@@ -27,12 +14,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { useCustomers } from "@/features/demo/customers/hooks/use-customers"
-import { useCustomersParams } from "@/features/demo/customers/hooks/use-customers-params"
+import { useCustomers } from "@/features/demo/pagination/hooks/use-customers"
+import { useCustomersParams } from "@/features/demo/pagination/hooks/use-customers-params"
 import type {
   CustomerSortBy,
   CustomerStatus,
-} from "@/features/demo/customers/model/customer"
+} from "@/features/demo/pagination/model/customer"
 import { cn } from "@/lib/utils"
 
 const STATUS_BADGE_VARIANT: Record<
@@ -91,8 +78,9 @@ function SortableHead({
 }
 
 export function CustomersTable() {
-  const t = useTranslations("customers")
+  const t = useTranslations("pagination")
   const { data, isPending, isError, isFetching, refetch } = useCustomers()
+  const [, setParams] = useCustomersParams()
 
   if (isPending) {
     return (
@@ -108,33 +96,19 @@ export function CustomersTable() {
   }
 
   if (isError) {
-    return (
-      <Empty>
-        <EmptyHeader>
-          <EmptyMedia variant="icon">
-            <UsersIcon />
-          </EmptyMedia>
-          <EmptyTitle>{t("errorTitle")}</EmptyTitle>
-          <EmptyDescription>{t("errorDescription")}</EmptyDescription>
-        </EmptyHeader>
-        <EmptyContent>
-          <Button onClick={() => refetch()}>{t("retry")}</Button>
-        </EmptyContent>
-      </Empty>
-    )
+    return <ErrorView onRetry={() => refetch()} />
   }
 
   if (data.items.length === 0) {
     return (
-      <Empty>
-        <EmptyHeader>
-          <EmptyMedia variant="icon">
-            <UsersIcon />
-          </EmptyMedia>
-          <EmptyTitle>{t("emptyTitle")}</EmptyTitle>
-          <EmptyDescription>{t("emptyDescription")}</EmptyDescription>
-        </EmptyHeader>
-      </Empty>
+      <EmptyView
+        title={t("emptyTitle")}
+        message={t("emptyDescription")}
+        action={{
+          label: t("clearFilters"),
+          onClick: () => setParams({ search: "", status: "all", page: 1 }),
+        }}
+      />
     )
   }
 

@@ -156,6 +156,10 @@ const posts = await caller.posts.getMany()
 
 `caller` (`appRouter.createCaller(createTRPCContext)`) runs the procedure directly - no HTTP round-trip, no TanStack Query cache, no hydration. Use this instead of `prefetch()` when the calling component is a Server Component all the way down and nothing beneath it needs to read the same data via `useQuery`.
 
+### A complete list-page example
+
+The [Pagination demo](./demos/pagination.md) wires this together for a URL-driven list: `createLoader` parses `searchParams` on the server, `prefetch()` loads the first page, `HydrateClient` ships it, and the client `useQuery` (same `queryOptions()`) finds it already in the cache. Use it as the template for new list pages.
+
 ## Which one do I use?
 
 | Scenario | Use |

@@ -1,6 +1,6 @@
 # Integrations
 
-Smaller bolt-on integrations that don't warrant their own page.
+Smaller bolt-on integrations that don't warrant their own page: AI, Redis, analytics, Sentry (error tracking) and PWA support.
 
 ## AI (OpenRouter)
 
@@ -76,3 +76,47 @@ plausible("My New Event", { props: { plan: "pro" } });
 ```
 
 The template already tracks `Sign Up` (`register-form.tsx`), `Login` (`login-form.tsx`), and `Upgrade Clicked` (`user-info-card.tsx`) as working examples.
+
+## Error tracking (Sentry)
+
+Optional. The template ships the [Sentry](https://sentry.io) wiring for Next.js, but it stays completely off until you set `NEXT_PUBLIC_SENTRY_DSN`: `next.config.ts` skips `withSentryConfig`, and the server, edge and browser configs are not loaded or initialized at all. This matters because even a disabled `Sentry.init` installs OpenTelemetry instrumentation that patches `fetch` and can break outgoing requests.
+
+**Setup:** create a Next.js project in Sentry and set `NEXT_PUBLIC_SENTRY_DSN` in `.env`. To get readable stack traces in production, also set `SENTRY_ORG`, `SENTRY_PROJECT` and `SENTRY_AUTH_TOKEN` - they are only used while running `next build` to upload source maps.
+
+**Where the pieces live:**
+
+| File | Role |
+|---|---|
+| `src/instrumentation.ts` | Next.js instrumentation hook: loads the server or edge config, exports `onRequestError` (captures errors from Server Components, Route Handlers and Server Actions) |
+| `sentry.server.config.ts` / `sentry.edge.config.ts` | Server and Edge runtime init (the server config also traces Vercel AI SDK calls) |
+| `src/instrumentation-client.ts` | Browser init (session replay: 10% of sessions, 100% on errors) |
+| `src/app/global-error.tsx` | Last-resort error page. Reports to Sentry and picks its text (`globalError` in `messages/*.json`) from the browser language, because it renders without the i18n provider |
+| `next.config.ts` | Wraps the config with `withSentryConfig` (source maps, `/monitoring` tunnel route that avoids ad-blockers) when a DSN is set |
+
+**Things to know:**
+
+- `NEXT_PUBLIC_SENTRY_DSN` is inlined into the browser bundle at **build time**. With Docker it is passed as a build arg - see [Deployment](./deployment.md#error-tracking-sentry-build-args).
+- Tune `tracesSampleRate` (default `1`, i.e. every request) down for production traffic.
+- `vercelAIIntegration` records prompts and model outputs. Remove it from `sentry.server.config.ts` (or set `recordInputs`/`recordOutputs` to `false`) if they can contain sensitive data.
+- The `@sentry/nextjs` v11 import for the build wrapper is `@sentry/nextjs/config` (see `next.config.ts`).
+
+## PWA (installable app)
+
+The app is installable ("Add to home screen") and already-visited pages keep opening offline.
+
+| Piece | Role |
+|---|---|
+| `src/app/manifest.ts` | Web app manifest (name from `APP_NAME`, `start_url: /dashboard`, standalone display, theme color) |
+| `src/app/api/pwa-icon/route.tsx` | Generates placeholder icons (first letter of `APP_NAME` on the brand color) at the sizes the manifest asks for |
+| `public/sw.js` | Hand-written service worker: cache-first for `/_next/static/*`, network-first with offline fallback for page navigations, never touches `/api/*` |
+| `src/components/pwa-register.tsx` | Registers the service worker, in production only (a service worker in `next dev` serves stale bundles) |
+| `src/lib/pwa.ts` | `clearPwaPageCache()`, called on sign-out |
+
+**Why no `next-pwa`/Workbox plugin?** Next.js 16 builds with Turbopack, and the webpack-based PWA plugins do not support it. The service worker is plain JS with no build step. If you need precaching or background sync, look at Serwist's Turbopack support.
+
+**Before you ship:**
+
+- Replace the generated icons with real PNGs in `public/` and point `manifest.ts` at them.
+- Bump `VERSION` in `public/sw.js` whenever you change its caching rules, so clients drop the old caches.
+- Cached pages are user-specific HTML. `clearPwaPageCache()` removes them on sign-out, but think about this if you add other ways to end a session.
+- Test it with `bun run build && bun run start`, not `bun run dev`.

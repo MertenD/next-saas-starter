@@ -13,6 +13,7 @@ Server-side (Server Components, Server Actions) - `src/lib/auth-utils.ts`:
 | `requireUnauth()` | Redirects signed-in users away from auth-only pages (login, signup) back to `/`. |
 | `getSessionOnServer()` | Reads the session without redirecting; `null` when unauthenticated. |
 | `requirePremiumUserFromRequest(req)` | Route Handler variant of `requireAuthAndPremium` - throws a 401/403 `Response` instead of redirecting. |
+| `getEnabledOAuthProviders()` | `src/lib/oauth-providers.ts` - OAuth providers with credentials set. Pass to `LoginForm`/`RegisterForm` so only configured providers get a button. |
 
 Client-side:
 
@@ -42,6 +43,7 @@ tRPC procedure builders (`src/trpc/init.ts`) - see [Architecture](./architecture
 | `isResendEnabled` / `resendClient` | `src/lib/resend.ts` | Whether transactional email is configured, and the Resend client (`null` if not). |
 | `sendEmail({ to, subject, html })` | `src/lib/mailer.ts` | Sends via Resend, falls back to console-logging the email when Resend isn't configured. |
 | `resetPasswordEmailHtml(...)` / `verifyEmailHtml(...)` | `src/lib/mailer.ts` | Pre-built HTML templates for the two auth emails. |
+| `clearPwaPageCache()` | `src/lib/pwa.ts` | Asks the service worker to drop cached pages. Called on sign-out so user-specific pages are not readable offline on shared devices. |
 | `openrouter` / `AI_MODEL` | `src/lib/ai.ts` | Shared Vercel AI SDK provider and default chat model id, for `streamText`/`generateText`. |
 | `getStreamContext()` | `src/lib/stream-context.ts` | Shared resumable-stream context for resumable AI chat responses. |
 
@@ -73,6 +75,7 @@ Full walkthrough: [Data Fetching](./data-fetching.md).
 |---|---|---|
 | `cn(...inputs)` | `src/lib/utils.ts` | Merges Tailwind classes safely (resolves conflicts) via `clsx` + `tailwind-merge`. Use instead of string concatenation. |
 | `useIsMobile()` | `src/hooks/use-mobile.ts` | Live viewport check below the 768px breakpoint. `false` during SSR - prefer CSS breakpoints unless you need a real JS conditional. |
+| `useEntitySearch({ params, setParams })` | `src/hooks/use-entity-search.ts` | Debounced search input state that commits to a URL-backed `search` param and resets to page 1. Pair with `EntitySearch`. |
 | `useUIStore` | `src/stores/ui-store.ts` | Zustand store for cross-cutting UI state (currently: sidebar collapsed/expanded). |
 
 ## Shared components
@@ -86,7 +89,12 @@ Non-`ui/` components in `src/components/` - see [Frontend](./frontend.md) for th
 | `AppShell` | Dashboard layout shell: sidebar + `EmailVerificationBanner` + content area. Wraps every `(dashboard)` page. |
 | `AppSidebar` | Sidebar nav content rendered inside `AppShell`. |
 | `EmailVerificationBanner` | Dismissible-by-verification banner shown while the signed-in user's email is unverified. |
-| `LanguageToggle` | Locale switcher (`en`/`de`); persists the choice via a cookie-writing Server Action. |
+| `LanguageToggle` | Locale switcher (`en`/`de`); persists the choice in the `ui-locale` cookie (Server Action) and on the user profile (`user.locale`). |
+| `LocaleSync` | Mounted in the dashboard layout: applies the saved `user.locale` to the cookie on a new device, or saves the active locale when the user has none yet. |
+| `EntityHeader`, `EntityContainer`, `EntitySearch`, `EntityPagination` | Building blocks for list pages (title + "new" button, page layout, search input, prev/next pagination with result count). See [Pagination demo](./demos/pagination.md). |
+| `EmptyView`, `ErrorView` | Empty (with call to action) and error (with retry) states for list pages. |
+| `MarkdownContent` | Renders Markdown (GitHub-flavored) with design tokens; used for AI chat replies. |
+| `PwaRegister` | Registers the service worker (`public/sw.js`) in production. Mounted once in the root layout. |
 
 Details on the four required UI states (loading/empty/error/content) and confirm-dialog wiring: [Frontend](./frontend.md).
 

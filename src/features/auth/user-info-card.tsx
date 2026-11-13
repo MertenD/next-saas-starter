@@ -24,6 +24,7 @@ import { useHasActiveSubscription } from "@/features/subscriptions/hooks/use-sub
 import { useResendVerificationEmail } from "@/features/user/hooks/use-resend-verification-email"
 import type { PlausibleEvents } from "@/lib/analytics"
 import { authClient } from "@/lib/auth-client"
+import { clearPwaPageCache } from "@/lib/pwa"
 
 type UserInfoCardProps = {
   username: string
@@ -79,7 +80,12 @@ export default function UserInfoCard({ username }: UserInfoCardProps) {
             className="h-8 w-full justify-start gap-2 px-2 text-xs font-medium text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
             onClick={() =>
               authClient.signOut({
-                fetchOptions: { onSuccess: () => router.push("/login") },
+                fetchOptions: {
+                  onSuccess: () => {
+                    clearPwaPageCache()
+                    router.push("/login")
+                  },
+                },
               })
             }
           >

@@ -23,7 +23,7 @@ Full docs live in [`docs/`](./docs/README.md) - also servable as a searchable si
 - [Database](./docs/database.md) - Prisma schema and migrations
 - [Auth & Billing](./docs/auth-and-billing.md) - Better Auth, OAuth, Polar, premium gating
 - [Background Jobs](./docs/background-jobs.md) - Inngest
-- [Integrations](./docs/integrations.md) - AI, Redis, analytics
+- [Integrations](./docs/integrations.md) - AI, Redis, analytics, Sentry, PWA
 - [Frontend](./docs/frontend.md) - UI components, design system, i18n, state management
 - [Make It Yours](./docs/make-it-yours.md) - checklist for turning this template into a real product, separate from Getting Started
 - [Deployment](./docs/deployment.md) - Docker production setup, pre-deploy checklist
@@ -70,6 +70,7 @@ bun run prisma:migrate        # Run DB migrations (dev)
 bun run prisma:migrate-deploy # Deploy migrations (prod)
 bun run prisma:generate       # Regenerate Prisma client after schema changes
 bun run prisma:studio         # Open Prisma Studio UI
+bun run db:seed               # Seed demo posts for existing users (prisma/seed.ts, optional SEED_USER_EMAIL)
 
 bun run inngest:dev   # Start Inngest dev server locally (port 8288) - normally started via `docker compose up -d` instead (see docker-compose.yml)
 
@@ -83,7 +84,7 @@ There are no automated tests in this project.
 
 ## Architecture
 
-Full-stack Next.js app (App Router) with tRPC, PostgreSQL/Prisma, Better Auth, Polar (payments), Inngest (background jobs), Redis, Vercel AI SDK, next-intl (i18n), and Plausible (analytics, optional). Full stack table, request flow, project structure, key files, and tRPC procedure types: [`docs/architecture.md`](./docs/architecture.md).
+Full-stack Next.js app (App Router) with tRPC, PostgreSQL/Prisma, Better Auth, Polar (payments), Inngest (background jobs), Redis, Vercel AI SDK, next-intl (i18n), Plausible (analytics, optional), and Sentry (error tracking, optional, off without `NEXT_PUBLIC_SENTRY_DSN`). Full stack table, request flow, project structure, key files, and tRPC procedure types: [`docs/architecture.md`](./docs/architecture.md).
 
 **Linting/formatting:** Biome (NOT ESLint/Prettier). Never reference or create ESLint config files.
 **Path alias:** `@/*` maps to `./src/*`.
@@ -98,11 +99,20 @@ Copy `.env.example` to `.env`. Full reference for every variable (required vs. o
 
 ## i18n
 
-Supported locales: `en`, `de`. Server: `getTranslations()` from `next-intl/server`. Client: `useTranslations()` from `next-intl`. Details: [`docs/frontend.md`](./docs/frontend.md#internationalization-next-intl).
+Supported locales: `en`, `de`. The locale lives in the `ui-locale` cookie and in `user.locale` (kept in sync by `LanguageToggle` and `LocaleSync`). Server: `getTranslations()` from `next-intl/server`. Client: `useTranslations()` from `next-intl`. Details: [`docs/frontend.md`](./docs/frontend.md#internationalization-next-intl).
 
 ## Database Migrations
 
 `bun run prisma:migrate` (dev), `bun run prisma:generate`, `bun run prisma:migrate-deploy` (prod, runs automatically in the Docker entrypoint). Schema and models: [`docs/database.md`](./docs/database.md).
+
+## Reusable UI pieces to check first
+
+- **List pages** (header, search, pagination, loading/empty/error): use `src/components/entity-components.tsx` (`EntityHeader`, `EntityContainer`, `EntitySearch`, `EntityPagination`, `EmptyView`, `ErrorView`) and `useEntitySearch` instead of building new ones. Reference: `src/features/demo/pagination` ([docs](./docs/demos/pagination.md)), which also shows the server-prefetch pattern (`params-loader` -> `prefetch` -> `HydrateClient` -> client `useQuery` with the same `queryOptions()`).
+- **LLM / Markdown text:** `MarkdownContent` (`src/components/markdown-content.tsx`).
+- **OAuth buttons:** `OAuthButtons` (`src/features/auth/oauth-buttons.tsx`); only render providers returned by `getEnabledOAuthProviders()` (`src/lib/oauth-providers.ts`). A new provider must be added in both places and in `src/lib/auth.ts`.
+- **Service worker / PWA:** `public/sw.js` is hand-written (no `next-pwa`, it does not support Turbopack). Bump its `VERSION` when changing caching rules. Call `clearPwaPageCache()` (`src/lib/pwa.ts`) wherever a session is ended.
+- **Sentry:** config files are `sentry.*.config.ts`, `src/instrumentation*.ts`, `src/app/global-error.tsx`. `withSentryConfig` is imported from `@sentry/nextjs/config` (v11). Never call `Sentry.init` without a DSN guard (a disabled init still patches `fetch`). Client-side `NEXT_PUBLIC_*` values must also be passed as Docker build args (see `Dockerfile`).
+- **`global-error.tsx`** renders without the i18n provider: its texts come from the `globalError` namespace in `messages/*.json`, imported directly.
 
 ## Additional Rules
 

@@ -19,6 +19,19 @@ COPY . .
 # Skip Zod env validation during build - real validation runs at container startup
 ENV SKIP_ENV_VALIDATION=1
 
+# Optional Sentry: the DSN is inlined into the browser bundle at build time, so it
+# must be a build arg (not just a runtime env var). The auth token is only used to
+# upload source maps; it lives in this builder stage only and is not part of the
+# final runner image.
+ARG NEXT_PUBLIC_SENTRY_DSN
+ARG SENTRY_ORG
+ARG SENTRY_PROJECT
+ARG SENTRY_AUTH_TOKEN
+ENV NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN
+ENV SENTRY_ORG=$SENTRY_ORG
+ENV SENTRY_PROJECT=$SENTRY_PROJECT
+ENV SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN
+
 RUN bun run prisma:generate
 RUN bun run build
 

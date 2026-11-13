@@ -68,6 +68,8 @@ model User {
   email         String   @unique
   emailVerified Boolean  @default(false)
   image         String?
+  // Preferred UI language ("en" | "de"), synced with the ui-locale cookie by LocaleSync
+  locale        String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @default(now()) @updatedAt
 

@@ -76,17 +76,29 @@ const { mutate: deletePost, isPending } = useDeletePost();
 
 Both take `isLoading` (pass a mutation's `isPending`) and never auto-close - close them yourself, typically from the mutation's `onSuccess`. See `src/features/demo/posts/components/post-item.tsx` for a working example.
 
+## List pages: entity components
+
+`src/components/entity-components.tsx` holds the presentational building blocks for list pages: `EntityHeader` (title + optional "new" button), `EntityContainer` (page layout with `header`, `search` and `pagination` slots), `EntitySearch`, `EntityPagination`, and the two state views `EmptyView` (always takes an `action`, per the empty-state rule) and `ErrorView` (retry button). Loading states stay feature-specific (a skeleton shaped like your content, see `CustomersTable`). Their texts live in the `entity` i18n namespace. `src/hooks/use-entity-search.ts` is the matching debounced search hook for URL-backed `search` params.
+
+They are deliberately data-agnostic: you bring the query and the params hook. See the [Pagination demo](./demos/pagination.md) for the full wiring, including server-side prefetching.
+
+## Markdown
+
+`MarkdownContent` (`src/components/markdown-content.tsx`, `react-markdown` + `remark-gfm`) renders Markdown with the design tokens. Use it for LLM output; raw HTML in the source is escaped, so untrusted model output is safe. The AI chat demo uses it for assistant messages and asks the model to answer in Markdown through `AI_SYSTEM_PROMPT`.
+
 ## State management
 
 - **Zustand** - client-only UI state that doesn't need to survive a refresh or sync with the server. `src/stores/ui-store.ts` (sidebar collapsed/expanded) is the global example; features can have their own local store, like `demo/booking`'s wizard-step store.
 - **TanStack Query** (via `useTRPC()`) - all server state. `src/trpc/client.tsx`'s `TRPCReactProvider` persists the query cache to IndexedDB with a 7-day retention, so data survives page reloads without a network round-trip.
-- **nuqs** - URL search params as state, for anything that should be shareable/bookmarkable (filters, pagination, sort). See `demo/customers/params.ts`.
+- **nuqs** - URL search params as state, for anything that should be shareable/bookmarkable (filters, pagination, sort). See `demo/pagination/params.ts` (also parsed on the server for prefetching).
 
 ## Internationalization (next-intl)
 
 Supported locales: `en`, `de`. The active locale is stored in the `ui-locale` cookie, set/cleared by server actions in `src/app/actions/set-locale.ts`, and read by `src/i18n/request.ts` (falls back to `en`).
 
-Translation files: `messages/en.json`, `messages/de.json` - both share the same top-level namespace keys (`common`, `sidebar`, `auth`, `dashboard`, `posts`, `settings`, `customers`, `booking`, `demo`). Add new keys to both files.
+The locale is also stored on the user (`user.locale`, an additional Better Auth field). `LanguageToggle` writes both the cookie and `user.locale`. `LocaleSync` (mounted in the dashboard layout) reconciles them: on a new device or after clearing cookies the saved locale is applied to the cookie, and a user without a saved locale gets the active one stored. Logged-out pages only use the cookie.
+
+Translation files: `messages/en.json`, `messages/de.json` - both share the same top-level namespace keys (`common`, `sidebar`, `auth`, `dashboard`, `posts`, `settings`, `pagination`, `booking`, `demo`, `entity`, `globalError`). Add new keys to both files. `globalError` is special: `src/app/global-error.tsx` renders without the i18n provider, so it imports these two files directly and picks one by browser language.
 
 Server component:
 

@@ -79,6 +79,23 @@ Both must be set together - `src/lib/resend.ts` derives `isResendEnabled = !!(RE
 |---|---|---|---|
 | `NEXT_PUBLIC_PLAUSIBLE_SRC` | No | - | Read directly via `process.env.NEXT_PUBLIC_PLAUSIBLE_SRC` in `src/app/layout.tsx` (not part of the Zod schema, since it's optional and public). Your Plausible site script URL (self-hosted or `plausible.io`). Leave unset to disable analytics - no script is rendered and `<PlausibleProvider>` becomes a no-op. See [`integrations.md`](./integrations.md). |
 
+## Error tracking (optional)
+
+| Variable | Required | Default | Description |
+|---|---|---|---|
+| `NEXT_PUBLIC_SENTRY_DSN` | No | - | Read directly from `process.env` in `next.config.ts`, `sentry.*.config.ts` and `src/instrumentation-client.ts` (not part of the Zod schema, since it is optional and public). Leave unset to disable Sentry entirely. Inlined at build time - Docker needs it as a build arg. |
+| `SENTRY_ORG` | No | - | Build-time only: your Sentry organization slug, for source map upload. |
+| `SENTRY_PROJECT` | No | - | Build-time only: your Sentry project slug, for source map upload. |
+| `SENTRY_AUTH_TOKEN` | No | - | Build-time only: auth token for source map upload. Without it the app is still tracked, but stack traces stay minified. Never commit it. |
+
+See [`integrations.md`](./integrations.md#error-tracking-sentry).
+
+## Seed script (optional)
+
+| Variable | Required | Default | Description |
+|---|---|---|---|
+| `SEED_USER_EMAIL` | No | - | Read by `prisma/seed.ts` (`bun run db:seed`). Seeds demo posts for the user with this email. Unset = every existing user without posts. See [`database.md`](./database.md#seeding). |
+
 ## Notes
 
 - `NEXT_PUBLIC_*` variables are inlined into the client bundle at build time (standard Next.js behavior) - never put secrets in one.

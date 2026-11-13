@@ -1,8 +1,7 @@
 "use client"
 
-import { SearchIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
-import { Input } from "@/components/ui/input"
+import { EntitySearch } from "@/components/entity-components"
 import {
   Select,
   SelectContent,
@@ -10,26 +9,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { useCustomersParams } from "@/features/demo/customers/hooks/use-customers-params"
-import { useCustomersSearch } from "@/features/demo/customers/hooks/use-customers-search"
-import { CUSTOMER_STATUS_FILTER_OPTIONS } from "@/features/demo/customers/model/customer"
+import { useCustomersParams } from "@/features/demo/pagination/hooks/use-customers-params"
+import { CUSTOMER_STATUS_FILTER_OPTIONS } from "@/features/demo/pagination/model/customer"
+import { useEntitySearch } from "@/hooks/use-entity-search"
 
 export function CustomersToolbar() {
-  const t = useTranslations("customers")
+  const t = useTranslations("pagination")
   const [params, setParams] = useCustomersParams()
-  const { searchValue, onSearchChange } = useCustomersSearch()
+  const { searchValue, onSearchChange } = useEntitySearch({
+    params,
+    setParams: (next) => setParams(next),
+  })
 
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-      <div className="relative w-full sm:max-w-xs">
-        <SearchIcon className="-translate-y-1/2 pointer-events-none absolute top-1/2 left-3 size-4 text-muted-foreground" />
-        <Input
-          value={searchValue}
-          onChange={(e) => onSearchChange(e.target.value)}
-          placeholder={t("searchPlaceholder")}
-          className="pl-9"
-        />
-      </div>
+      <EntitySearch
+        value={searchValue}
+        onChange={onSearchChange}
+        placeholder={t("searchPlaceholder")}
+      />
       <Select
         value={params.status}
         onValueChange={(value) =>

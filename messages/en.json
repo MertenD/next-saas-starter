@@ -24,8 +24,8 @@
       "settings": "Settings",
       "inngest": "Background Jobs",
       "ai": "AI Chat",
-      "customers": "Customers",
-      "booking": "Booking"
+      "booking": "Booking",
+      "pagination": "Pagination"
     }
   },
   "auth": {
@@ -157,6 +157,7 @@
     "title": "Settings",
     "tabs": {
       "account": "Account",
+      "subscription": "Subscription",
       "general": "General"
     },
     "account": {
@@ -199,52 +200,36 @@
         "retry": "Try again"
       }
     },
+    "theme": {
+      "label": "Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "subscription": {
+      "title": "Subscription",
+      "description": "Manage your plan and billing.",
+      "proBadge": "Pro",
+      "freeBadge": "Free plan",
+      "active": "Active",
+      "renewsOn": "Renews on {date}",
+      "upgradeHint": "Upgrade to Pro to unlock all features.",
+      "upgradeButton": "Upgrade to Pro",
+      "manageBilling": "Manage billing",
+      "verifyEmailFirst": "Please verify your email address before upgrading.",
+      "billingDisabled": "Billing is not configured for this deployment, so every account has full access.",
+      "error": {
+        "title": "Failed to load subscription",
+        "retry": "Try again"
+      }
+    },
     "general": {
       "language": {
         "label": "Interface Language",
         "en": "English",
         "de": "German"
       }
-    },
-    "theme": {
-      "label": "Theme",
-      "light": "Light",
-      "dark": "Dark",
-      "system": "System"
     }
-  },
-  "customers": {
-    "title": "Customers",
-    "description": "A searchable, filterable, sortable, paginated table backed by mock data - URL state powered by nuqs.",
-    "searchPlaceholder": "Search by name or email",
-    "status": {
-      "all": "All statuses",
-      "active": "Active",
-      "invited": "Invited",
-      "suspended": "Suspended"
-    },
-    "plan": {
-      "free": "Free",
-      "pro": "Pro",
-      "enterprise": "Enterprise"
-    },
-    "columns": {
-      "name": "Name",
-      "email": "Email",
-      "plan": "Plan",
-      "status": "Status",
-      "totalSpent": "Total spent",
-      "createdAt": "Joined"
-    },
-    "emptyTitle": "No customers found",
-    "emptyDescription": "Try adjusting your search term or status filter.",
-    "errorTitle": "Failed to load customers",
-    "errorDescription": "Something went wrong while loading the customer list.",
-    "retry": "Try again",
-    "previous": "Previous",
-    "next": "Next",
-    "pageOf": "Page {page} of {totalPages}",
-    "resultsCount": "{count} results"
   },
   "booking": {
     "title": "Booking",
@@ -304,6 +289,33 @@
       "description": "Confirmation ID: {confirmationId}"
     }
   },
+  "pagination": {
+    "title": "Pagination",
+    "description": "A searchable, filterable, sortable, paginated table backed by mock data. URL state powered by nuqs, first page prefetched on the server.",
+    "searchPlaceholder": "Search by name or email",
+    "status": {
+      "all": "All statuses",
+      "active": "Active",
+      "invited": "Invited",
+      "suspended": "Suspended"
+    },
+    "plan": {
+      "free": "Free",
+      "pro": "Pro",
+      "enterprise": "Enterprise"
+    },
+    "columns": {
+      "name": "Name",
+      "email": "Email",
+      "plan": "Plan",
+      "status": "Status",
+      "totalSpent": "Total spent",
+      "createdAt": "Joined"
+    },
+    "emptyTitle": "No customers found",
+    "emptyDescription": "Try adjusting your search term or status filter.",
+    "clearFilters": "Clear filters"
+  },
   "demo": {
     "ai": {
       "heading": "AI Chat - Resumable Streams",
@@ -346,5 +358,21 @@
       "howItWorksLabel": "How it works:",
       "howItWorksBody": "The \"Trigger Job\" button calls a tRPC mutation that sends an Inngest event. The job publishes a status message over <realtimeLink>Inngest Realtime</realtimeLink> as it enters each step (see the <code1>publish()</code1> calls in <code2>src/inngest/functions.ts</code2>). The badge on each run subscribes to that run's channel via <code3>useInngestSubscription</code3> - no polling, updates stream in as they happen. Open <dashboardLink>localhost:8288</dashboardLink> to see the full run trace. The dev server must be running (<code4>bun run inngest:dev</code4> or via <code5>docker compose up -d</code5>)."
     }
+  },
+  "globalError": {
+    "title": "Something went wrong",
+    "description": "An unexpected error occurred. Please try again.",
+    "retry": "Try again"
+  },
+  "entity": {
+    "searchPlaceholder": "Search...",
+    "resultsCount": "{count} results",
+    "previous": "Previous",
+    "next": "Next",
+    "pageOf": "Page {page} of {totalPages}",
+    "errorTitle": "Something went wrong",
+    "errorDescription": "The data could not be loaded. Please try again.",
+    "retry": "Try again",
+    "emptyTitle": "Nothing here yet"
   }
 }

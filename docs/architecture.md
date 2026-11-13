@@ -14,6 +14,8 @@
 | **AI**                        | Vercel AI SDK + OpenRouter |
 | **Cache**                     | Redis |
 | **Analytics**                 | Plausible (self-hosted or cloud, optional) |
+| **Error tracking**            | Sentry (optional, off unless a DSN is set) |
+| **PWA**                       | Web manifest + hand-written service worker |
 | **UI**                        | shadcn/ui + Tailwind CSS v4 |
 | **i18n**                      | next-intl (en + de) |
 | **State**                     | Zustand (client) + TanStack Query (server) |
@@ -47,19 +49,22 @@ src/
 │   ├── (dashboard)/                  # Authenticated route group
 │   │   ├── layout.tsx                 Calls requireAuth(), wraps children in AppShell
 │   │   ├── dashboard/page.tsx         "/dashboard"
-│   │   ├── settings/page.tsx          "/settings" - language toggle
+│   │   ├── settings/page.tsx          "/settings" - account, subscription, language
 │   │   └── demo/                      "/demo/*" - see features.md
 │   │       ├── ai/page.tsx
 │   │       ├── booking/page.tsx
-│   │       ├── customers/page.tsx
 │   │       ├── inngest/page.tsx
+│   │       ├── pagination/page.tsx
 │   │       └── posts/page.tsx
 │   ├── actions/set-locale.ts         # Server actions: set/clear the "ui-locale" cookie
+│   ├── global-error.tsx              # Last-resort error page (reports to Sentry, own i18n)
+│   ├── manifest.ts                   # PWA web app manifest
 │   ├── api/
 │   │   ├── auth/[...all]/route.ts    # Better Auth catch-all (sign-in/up/out, OAuth, Polar checkout/portal)
 │   │   ├── chat/route.ts             # POST - AI SDK streamText via OpenRouter (resumable)
 │   │   ├── chat/[id]/stream/route.ts # GET - resumes an in-flight/completed chat stream
 │   │   ├── inngest/route.ts          # Inngest's Next.js serve handler - registers all functions
+│   │   ├── pwa-icon/route.tsx        # Generated placeholder PWA icons
 │   │   └── trpc/[trpc]/route.ts      # tRPC fetch adapter for the whole appRouter
 │   ├── layout.tsx                    # Root layout: fonts, next-intl, TRPC provider, Plausible, devtools
 │   └── page.tsx                      # "/" - redirects to /dashboard
@@ -69,14 +74,18 @@ src/
 │   ├── app-sidebar.tsx               # Sidebar navigation content
 │   ├── confirm-dialog.tsx            # Standard delete/confirm dialog
 │   ├── critical-confirm-dialog.tsx   # Retype-to-confirm dialog for destructive actions
-│   └── language-toggle.tsx           # i18n locale switcher
+│   ├── entity-components.tsx         # List page building blocks (header, search, pagination, states, boundary)
+│   ├── language-toggle.tsx           # i18n locale switcher
+│   ├── locale-sync.tsx               # Syncs user.locale with the ui-locale cookie
+│   ├── markdown-content.tsx          # Markdown renderer with design tokens
+│   └── pwa-register.tsx              # Registers the service worker (production only)
 ├── features/                         # Domain features - see features.md
 │   ├── auth/                         # Login/register/logout, user info card
 │   ├── demo/
 │   │   ├── ai/                       # Streaming AI chat demo
 │   │   ├── booking/                  # Multi-step wizard demo (Zustand)
-│   │   ├── customers/                # Paginated/filterable table demo
 │   │   ├── inngest/                  # Trigger + live-status job demo
+│   │   ├── pagination/               # Paginated/filterable table demo (entity components, prefetch)
 │   │   └── posts/                    # Canonical CRUD example (real Prisma model)
 │   ├── subscriptions/                # Polar subscription-state hooks
 │   └── user/                         # Current-user data + isPolarEnabled flag
@@ -91,6 +100,9 @@ src/
 │   ├── client.ts                     # Inngest client instance
 │   ├── functions.ts                  # Background job definitions
 │   └── realtime.ts                   # Realtime channel definitions
+├── hooks/                            # use-mobile, use-entity-search
+├── instrumentation.ts                # Next.js hook: loads Sentry server/edge config
+├── instrumentation-client.ts         # Sentry browser init
 ├── i18n/request.ts                   # next-intl config (cookie-based locale, en/de)
 ├── stores/ui-store.ts                # Zustand example store (sidebar collapsed state)
 ├── config/

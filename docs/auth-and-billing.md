@@ -9,7 +9,7 @@ Authentication is [Better Auth](https://www.better-auth.com); billing is [Polar]
 - **Adapter**: Prisma (`prismaAdapter(prisma, { provider: "postgresql" })`).
 - **Email/password**: always enabled, with `autoSignIn: true` (signs the user in immediately after registering). `sendResetPassword` is wired to `src/lib/mailer.ts` to email the "reset your password" link.
 - **Email verification**: `emailVerification.sendOnSignUp: true` sends a verification email right after sign-up, via `sendVerificationEmail` (also wired to `src/lib/mailer.ts`). Verification is **soft** - `requireEmailVerification` is intentionally left unset, so login is never blocked on it. Unverified users just see a badge + "resend" button in `/settings` (Account tab).
-- **OAuth**: Google and GitHub are added to `socialProviders` conditionally - a provider block only appears if both its `CLIENT_ID` and `CLIENT_SECRET` env vars are set, so leaving them unset just omits that provider from the login form.
+- **OAuth**: Google and GitHub are added to `socialProviders` conditionally - a provider block only appears if both its `CLIENT_ID` and `CLIENT_SECRET` env vars are set, so leaving them unset just omits that provider from the login form. The login and signup pages call `getEnabledOAuthProviders()` (`src/lib/oauth-providers.ts`) and pass the result to the forms, which render the shared `OAuthButtons` component (provider logos live in `public/logos/`). To add a provider, extend `OAuthProvider`, `getEnabledOAuthProviders`, the `socialProviders` block in `src/lib/auth.ts`, the logo map in `oauth-buttons.tsx`, and the `continueWith*` message keys.
 - **Polar plugin**: registered only when `isPolarEnabled` is true (see below), wiring `checkout` (product/slug list, success URL) and `portal` (customer self-service billing portal) sub-plugins.
 - **`databaseHooks.user.create.after`**: fires after every new user is created. If Polar is enabled, it creates a matching Polar customer (`externalId: user.id`). If that Polar call fails, it rolls back by deleting the just-created Postgres user and rethrowing - sign-up either fully succeeds (Better Auth user + Polar customer) or fully fails, never half of one.
 
@@ -63,6 +63,10 @@ Every place that checks subscription status (`premiumProcedure`, `requireAuthAnd
 2. Create a product (e.g. "Pro Plan")
 3. Copy its **Product ID** and replace `YOUR_PRODUCT_ID` in `src/lib/auth.ts` (`checkout({ products: [{ productId: "YOUR_PRODUCT_ID", slug: "pro" }] })`)
 4. Set `POLAR_ACCESS_TOKEN`, `POLAR_SUCCESS_URL`, and `POLAR_SERVER` (`sandbox` while testing) in `.env`
+
+## Subscription settings tab
+
+`/settings?tab=subscription` shows the current plan (Pro or Free), the renewal date and the matching action: "Upgrade to Pro" starts the Polar checkout (blocked with a hint while the email is unverified, like the sidebar button), "Manage billing" opens the Polar customer portal. When Polar is not configured the tab says that billing is disabled and every account has full access, instead of offering buttons that would fail. Component: `src/features/settings/components/subscription-settings.tsx`; texts: `settings.subscription` in `messages/*.json`.
 
 ## Premium subscription flow
 

@@ -46,3 +46,6 @@ next-env.d.ts
 /src/generated/
 /docs/.vitepress/dist/
 /docs/.vitepress/cache/
+
+# Sentry
+.env.sentry-build-plugin

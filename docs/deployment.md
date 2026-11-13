@@ -11,6 +11,8 @@ cp .env.example .env
 # Edit .env - set POLAR_SERVER=production, real secrets, your domain as BETTER_AUTH_URL, etc.
 ```
 
+**Optional - Sentry:** `NEXT_PUBLIC_SENTRY_DSN` is baked into the browser bundle during `next build`, so it can't be provided at container runtime only. `docker-compose.prod.yml` forwards `NEXT_PUBLIC_SENTRY_DSN`, `SENTRY_ORG`, `SENTRY_PROJECT` and `SENTRY_AUTH_TOKEN` from your shell or `.env` as build args. See [Error tracking (Sentry) build args](#error-tracking-sentry-build-args).
+
 **2. Start the full stack:**
 
 ```bash
@@ -26,6 +28,19 @@ docker compose -f docker-compose.prod.yml logs -f app
 ```
 
 > **Note:** `DATABASE_URL`, `REDIS_URL`, and `INNGEST_BASE_URL` are overridden inside `docker-compose.prod.yml` to Docker-internal hostnames (`postgres`, `redis`, `inngest`). Every other variable is read from your `.env` file. During the image build, `SKIP_ENV_VALIDATION=1` bypasses Zod env validation (there's no real `.env` at build time) - validation runs for real when the container starts.
+
+### Error tracking (Sentry) build args
+
+The `Dockerfile` declares `NEXT_PUBLIC_SENTRY_DSN`, `SENTRY_ORG`, `SENTRY_PROJECT` and `SENTRY_AUTH_TOKEN` as build args in the `builder` stage, and `docker-compose.prod.yml` fills them from your environment (empty by default, which leaves Sentry off). The auth token only exists in the builder stage and does not end up in the final runner image. If you build without compose:
+
+```bash
+docker build \
+  --build-arg NEXT_PUBLIC_SENTRY_DSN=https://...@o0.ingest.sentry.io/0 \
+  --build-arg SENTRY_ORG=my-org --build-arg SENTRY_PROJECT=my-project \
+  --build-arg SENTRY_AUTH_TOKEN=sntrys_... -t my-app .
+```
+
+Any other `NEXT_PUBLIC_*` variable that the *client* bundle reads needs the same treatment (build arg + `ENV` in the builder stage).
 
 ## Making Inngest durable
 
@@ -115,12 +130,12 @@ If you expose the Inngest container's Realtime endpoint through the same proxy, 
 - [ ] OAuth redirect URIs updated in Google / GitHub developer consoles
 - [ ] Polar product ID replaced in `src/lib/auth.ts`
 - [ ] `NEXT_PUBLIC_INNGEST_BASE_URL` points at a URL the browser can actually reach (not a Docker-internal hostname)
+- [ ] If using Sentry: `NEXT_PUBLIC_SENTRY_DSN` (and the source map vars) passed as build args, not just runtime env
+- [ ] PWA: replaced the placeholder icons and checked `public/sw.js` caching rules (see [Integrations](./integrations.md#pwa-installable-app))
 - [ ] Decided whether the default in-memory `inngest dev` setup is acceptable, or switched to `inngest start` with persistent storage (see above) - the default loses all queued jobs on every restart
 
 ## Optional additions
 
 Intentionally omitted to keep the template lean:
 
-- **Sentry** - error tracking: `bun add @sentry/nextjs`
-- **PWA** - `bun add @ducanh2912/next-pwa`
 - **Framer Motion** - animations: `bun add framer-motion`

@@ -24,8 +24,8 @@
       "settings": "Einstellungen",
       "inngest": "Hintergrundjobs",
       "ai": "KI-Chat",
-      "customers": "Kunden",
-      "booking": "Buchung"
+      "booking": "Buchung",
+      "pagination": "Paginierung"
     }
   },
   "auth": {
@@ -157,6 +157,7 @@
     "title": "Einstellungen",
     "tabs": {
       "account": "Konto",
+      "subscription": "Abo",
       "general": "Allgemein"
     },
     "account": {
@@ -199,52 +200,36 @@
         "retry": "Erneut versuchen"
       }
     },
+    "theme": {
+      "label": "Design",
+      "light": "Hell",
+      "dark": "Dunkel",
+      "system": "System"
+    },
+    "subscription": {
+      "title": "Abonnement",
+      "description": "Verwalte deinen Tarif und deine Abrechnung.",
+      "proBadge": "Pro",
+      "freeBadge": "Kostenloser Tarif",
+      "active": "Aktiv",
+      "renewsOn": "Verlängert sich am {date}",
+      "upgradeHint": "Wechsle zu Pro, um alle Funktionen freizuschalten.",
+      "upgradeButton": "Auf Pro upgraden",
+      "manageBilling": "Abrechnung verwalten",
+      "verifyEmailFirst": "Bitte bestätige zuerst deine E-Mail-Adresse, bevor du upgradest.",
+      "billingDisabled": "Abrechnung ist für diese Installation nicht konfiguriert, daher hat jedes Konto vollen Zugriff.",
+      "error": {
+        "title": "Abonnement konnte nicht geladen werden",
+        "retry": "Erneut versuchen"
+      }
+    },
     "general": {
       "language": {
         "label": "Sprache der Benutzeroberfläche",
         "en": "Englisch",
         "de": "Deutsch"
       }
-    },
-    "theme": {
-      "label": "Design",
-      "light": "Hell",
-      "dark": "Dunkel",
-      "system": "System"
     }
-  },
-  "customers": {
-    "title": "Kunden",
-    "description": "Eine durchsuchbare, filterbare, sortierbare Tabelle mit Paginierung auf Basis von Mock-Daten - URL-Status verwaltet mit nuqs.",
-    "searchPlaceholder": "Suche nach Name oder E-Mail",
-    "status": {
-      "all": "Alle Status",
-      "active": "Aktiv",
-      "invited": "Eingeladen",
-      "suspended": "Gesperrt"
-    },
-    "plan": {
-      "free": "Kostenlos",
-      "pro": "Pro",
-      "enterprise": "Enterprise"
-    },
-    "columns": {
-      "name": "Name",
-      "email": "E-Mail",
-      "plan": "Plan",
-      "status": "Status",
-      "totalSpent": "Gesamtumsatz",
-      "createdAt": "Beigetreten"
-    },
-    "emptyTitle": "Keine Kunden gefunden",
-    "emptyDescription": "Passe deinen Suchbegriff oder Statusfilter an.",
-    "errorTitle": "Kunden konnten nicht geladen werden",
-    "errorDescription": "Beim Laden der Kundenliste ist ein Fehler aufgetreten.",
-    "retry": "Erneut versuchen",
-    "previous": "Zurück",
-    "next": "Weiter",
-    "pageOf": "Seite {page} von {totalPages}",
-    "resultsCount": "{count} Ergebnisse"
   },
   "booking": {
     "title": "Buchung",
@@ -304,6 +289,33 @@
       "description": "Bestätigungs-ID: {confirmationId}"
     }
   },
+  "pagination": {
+    "title": "Paginierung",
+    "description": "Eine durchsuch-, filter- und sortierbare Tabelle mit Mock-Daten. URL-State mit nuqs, erste Seite serverseitig vorgeladen.",
+    "searchPlaceholder": "Suche nach Name oder E-Mail",
+    "status": {
+      "all": "Alle Status",
+      "active": "Aktiv",
+      "invited": "Eingeladen",
+      "suspended": "Gesperrt"
+    },
+    "plan": {
+      "free": "Kostenlos",
+      "pro": "Pro",
+      "enterprise": "Enterprise"
+    },
+    "columns": {
+      "name": "Name",
+      "email": "E-Mail",
+      "plan": "Plan",
+      "status": "Status",
+      "totalSpent": "Gesamtumsatz",
+      "createdAt": "Beigetreten"
+    },
+    "emptyTitle": "Keine Kunden gefunden",
+    "emptyDescription": "Passe deinen Suchbegriff oder Statusfilter an.",
+    "clearFilters": "Filter zurücksetzen"
+  },
   "demo": {
     "ai": {
       "heading": "KI-Chat - Fortsetzbare Streams",
@@ -346,5 +358,21 @@
       "howItWorksLabel": "So funktioniert's:",
       "howItWorksBody": "Der Button „Trigger Job\" ruft eine tRPC-Mutation auf, die ein Inngest-Event sendet. Der Job veröffentlicht bei jedem Schritt eine Statusmeldung über <realtimeLink>Inngest Realtime</realtimeLink> (siehe die <code1>publish()</code1>-Aufrufe in <code2>src/inngest/functions.ts</code2>). Das Badge bei jedem Lauf abonniert den Kanal dieses Laufs über <code3>useInngestSubscription</code3> - kein Polling, Updates kommen live rein. Öffne <dashboardLink>localhost:8288</dashboardLink>, um die vollständige Ausführungs-Trace zu sehen. Der Dev-Server muss laufen (<code4>bun run inngest:dev</code4> oder über <code5>docker compose up -d</code5>)."
     }
+  },
+  "globalError": {
+    "title": "Etwas ist schiefgelaufen",
+    "description": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuche es erneut.",
+    "retry": "Erneut versuchen"
+  },
+  "entity": {
+    "searchPlaceholder": "Suchen...",
+    "resultsCount": "{count} Ergebnisse",
+    "previous": "Zurück",
+    "next": "Weiter",
+    "pageOf": "Seite {page} von {totalPages}",
+    "errorTitle": "Etwas ist schiefgelaufen",
+    "errorDescription": "Die Daten konnten nicht geladen werden. Bitte versuche es erneut.",
+    "retry": "Erneut versuchen",
+    "emptyTitle": "Noch nichts vorhanden"
   }
 }

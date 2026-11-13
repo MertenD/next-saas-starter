@@ -4,6 +4,7 @@ import type { UIMessage } from "ai"
 import { BotIcon, UserIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useEffect, useRef } from "react"
+import { MarkdownContent } from "@/components/markdown-content"
 import { cn } from "@/lib/utils"
 
 type ChatMessagesProps = {
@@ -68,14 +69,21 @@ export function ChatMessages({
             {msg.parts
               ? msg.parts
                   .filter((p) => p.type === "text")
-                  .map((p, i) => (
-                    <span
-                      key={`${msg.id}-${i}`}
-                      className="whitespace-pre-wrap"
-                    >
-                      {p.type === "text" ? p.text : ""}
-                    </span>
-                  ))
+                  .map((p, i) =>
+                    msg.role === "assistant" ? (
+                      <MarkdownContent
+                        key={`${msg.id}-${i}`}
+                        content={p.type === "text" ? p.text : ""}
+                      />
+                    ) : (
+                      <span
+                        key={`${msg.id}-${i}`}
+                        className="whitespace-pre-wrap"
+                      >
+                        {p.type === "text" ? p.text : ""}
+                      </span>
+                    ),
+                  )
               : null}
           </div>
         </div>

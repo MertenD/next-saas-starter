@@ -19,6 +19,7 @@ Server routers are registered centrally in `src/trpc/routers/_app.ts` (see [`arc
 Login/register/logout UI, forgot/reset-password forms, and a user-info card, backed by Better Auth (`authClient`). No `server/` - Better Auth's own catch-all route (`/api/auth/[...all]`) handles the backend. See [`auth-and-billing.md`](./auth-and-billing.md).
 
 - `login-form.tsx`, `register-form.tsx`, `logout-button.tsx`, `user-info-card.tsx`, `forgot-password-form.tsx`, `reset-password-form.tsx`
+- `oauth-buttons.tsx` - the "Continue with GitHub/Google" buttons (with brand logos from `public/logos/`) shared by login and signup. The pages pass in only the providers that are actually configured (`getEnabledOAuthProviders()` in `src/lib/oauth-providers.ts`), so unconfigured providers never render a button.
 
 ### `demo/ai/` - streaming + resumable AI chat
 
@@ -32,11 +33,11 @@ A multi-step, Airbnb-style booking wizard: dates → guests → payment → revi
 
 **Full walkthrough: [demos/booking.md](./demos/booking.md)**
 
-### `demo/customers/` - fully server-driven data table
+### `demo/pagination/` - fully server-driven data table
 
-A searchable, filterable, sortable, paginated data table - no database involved, backed by a randomly generated mock dataset (137 rows). What it's specifically built to show off: every bit of table state (page, search, filter, sort) resolved server-side and mirrored in the URL via nuqs, so the table survives a refresh or a shared link instead of being client-side `useState`.
+A searchable, filterable, sortable, paginated data table - no database involved, backed by a randomly generated mock dataset (137 rows). What it's specifically built to show off: every bit of table state (page, search, filter, sort) resolved server-side and mirrored in the URL via nuqs, so the table survives a refresh or a shared link instead of being client-side `useState`. It is built from the reusable entity components (`src/components/entity-components.tsx`, `src/hooks/use-entity-search.ts`) and prefetches its first page on the server.
 
-**Full walkthrough: [demos/customers.md](./demos/customers.md)**
+**Full walkthrough: [demos/pagination.md](./demos/pagination.md)**
 
 ### `demo/inngest/` - background jobs with live status
 
@@ -60,7 +61,7 @@ A plain CRUD example against a real Prisma model (`Post`), plus a premium-gated 
 
 ### `settings/`
 
-The UI for `/settings` - a `Tabs`-based shell (`components/settings-tabs.tsx`) with the active tab synced to a `?tab=` URL param via `nuqs`, so links (e.g. the post-email-verification redirect) can deep-link to a specific category. Currently two categories: `account-settings.tsx` (profile form, email verification badge, change-password form - composes `user/`'s hooks) and `general-settings.tsx` (the interface language toggle). To add another category later: add one more `TabsTrigger`/`TabsContent` pair in `settings-tabs.tsx` and a new component file alongside the existing ones.
+The UI for `/settings` - a `Tabs`-based shell (`components/settings-tabs.tsx`) with the active tab synced to a `?tab=` URL param via `nuqs`, so links (e.g. the post-email-verification redirect) can deep-link to a specific category. Currently three categories: `account-settings.tsx` (profile form, email verification badge, change-password form - composes `user/`'s hooks), `subscription-settings.tsx` (current plan, renewal date, upgrade/billing-portal button; explains mock mode when Polar isn't configured) and `general-settings.tsx` (the interface language toggle). To add another category later: add one more `TabsTrigger`/`TabsContent` pair in `settings-tabs.tsx` and a new component file alongside the existing ones.
 
 ## Adding a new feature
 

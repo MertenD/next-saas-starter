@@ -8,6 +8,8 @@ import PlausibleProvider from "next-plausible"
 import { NuqsAdapter } from "nuqs/adapters/next/app"
 import type React from "react"
 import { Toaster } from "sonner"
+import { PwaRegister } from "@/components/pwa-register"
+import { APP_DESCRIPTION, APP_NAME } from "@/config/constants"
 import { TRPCReactProvider } from "@/trpc/client"
 
 const inter = Inter({
@@ -28,8 +30,13 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  title: "SaaS Starter",
-  description: "A production-ready Next.js SaaS template",
+  title: APP_NAME,
+  description: APP_DESCRIPTION,
+  appleWebApp: {
+    capable: true,
+    title: APP_NAME,
+    statusBarStyle: "default",
+  },
 }
 
 export default async function RootLayout({
@@ -46,6 +53,7 @@ export default async function RootLayout({
       <NuqsAdapter>
         {children}
         <Toaster />
+        <PwaRegister />
         {process.env.NODE_ENV !== "production" && <ReactQueryDevtools />}
       </NuqsAdapter>
     </TRPCReactProvider>

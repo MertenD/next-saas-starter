@@ -48,6 +48,12 @@ export const auth = betterAuth({
       })
     },
   },
+  user: {
+    additionalFields: {
+      // Preferred UI language, kept in sync with the ui-locale cookie (see src/components/locale-sync.tsx)
+      locale: { type: "string", required: false },
+    },
+  },
   socialProviders: {
     ...(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET
       ? {

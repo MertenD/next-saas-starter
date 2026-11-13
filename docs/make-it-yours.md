@@ -16,6 +16,7 @@
 
 Everything under `/demo/*` exists to demonstrate a technique (see [Features](./features.md)) - none of it is meant to ship. Delete what you don't need, feature by feature, rather than all at once, since `demo/posts` in particular is the pattern to copy for your first real feature (full CRUD, ownership checks, all four UI states, delete confirmation, `premiumProcedure` usage) - see [Features](./features.md#demoposts---canonical-crud-reference). A reasonable order:
 
+0. For `demo/pagination`: the entity components (`src/components/entity-components.tsx`, `src/hooks/use-entity-search.ts`) are reusable beyond the demo - keep them (and the `entity` i18n namespace) and only delete the feature module, page, router entry and docs page.
 1. **Delete the feature module(s):** `src/features/demo/<name>/`.
 2. **Delete the pages:** `src/app/(dashboard)/demo/<name>/`.
 3. **Unregister the router** in `src/trpc/routers/_app.ts` (remove the import and the entry in the router object).
@@ -34,6 +35,8 @@ Every integration in this template is opt-in and degrades gracefully when unconf
 | **Polar billing** | Replacing `YOUR_PRODUCT_ID` in `src/lib/auth.ts` with your real product id and setting the three `POLAR_*` vars | Leaving all three `POLAR_*` vars unset - `isPolarEnabled` (`src/lib/polar.ts`) turns off the plugin and premium gating automatically, no code changes needed |
 | **Resend (email)** | Setting `RESEND_API_KEY` + `EMAIL_FROM` | Leaving unset - emails log to the console instead, fine for a while but not for production |
 | **AI / OpenRouter** | Setting `OPENROUTER_API_KEY` and keeping `demo/ai` (renamed into a real feature) | Deleting `demo/ai` per step 2 above |
+| **Sentry** | Setting `NEXT_PUBLIC_SENTRY_DSN` (plus the source map vars for CI/Docker builds) | Leaving the DSN unset keeps it off. To remove the code: `bun remove @sentry/nextjs`, delete `sentry.*.config.ts`, `src/instrumentation.ts`, `src/instrumentation-client.ts`, `src/app/global-error.tsx` (or reduce it to a plain error page) and the `withSentryConfig` wrapper in `next.config.ts` |
+| **PWA** | Replacing the placeholder icons (`src/app/api/pwa-icon/route.tsx`, `src/app/manifest.ts`) with your brand assets | Deleting `public/sw.js`, `src/components/pwa-register.tsx`, `src/lib/pwa.ts` (and its call on sign-out), `src/app/manifest.ts`, the icon route, and `appleWebApp` in `src/app/layout.tsx` |
 | **Plausible analytics** | Setting `NEXT_PUBLIC_PLAUSIBLE_SRC` | Leaving unset - no tracking script is rendered, nothing further to clean up |
 
 ## 4. Re-check the required environment variables
@@ -60,7 +63,7 @@ If you kept `docs/` (see step 1), sweep it for template-specific language that n
 
 - [ ] Renamed the app (`APP_NAME`, `package.json`, docs title, favicon)
 - [ ] Removed unused demo features (module, page, router registration, sidebar entry, docs page)
-- [ ] Configured or removed OAuth, Polar, Resend, AI, and analytics
+- [ ] Configured or removed OAuth, Polar, Resend, AI, analytics, Sentry and PWA (replaced the placeholder icons)
 - [ ] Generated a fresh `BETTER_AUTH_SECRET` and pointed URLs at your real domain
 - [ ] Decided on one or two locales and cleaned up the rest
 - [ ] Updated `DESIGN.md` to your own brand, or confirmed you're keeping the default

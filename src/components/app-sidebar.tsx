@@ -54,7 +54,7 @@ export default function AppSidebar({ username }: AppSidebarProps) {
     { title: t("nav.posts"), icon: FileTextIcon, url: "/demo/posts" },
     { title: t("nav.inngest"), icon: ZapIcon, url: "/demo/inngest" },
     { title: t("nav.ai"), icon: BotIcon, url: "/demo/ai" },
-    { title: t("nav.customers"), icon: TableIcon, url: "/demo/customers" },
+    { title: t("nav.pagination"), icon: TableIcon, url: "/demo/pagination" },
     { title: t("nav.booking"), icon: CalendarCheckIcon, url: "/demo/booking" },
   ]
 

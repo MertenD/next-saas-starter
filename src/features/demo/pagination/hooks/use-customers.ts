@@ -1,7 +1,7 @@
 "use client"
 
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
-import { useCustomersParams } from "@/features/demo/customers/hooks/use-customers-params"
+import { useCustomersParams } from "@/features/demo/pagination/hooks/use-customers-params"
 import { useTRPC } from "@/trpc/client"
 
 export const useCustomers = () => {
@@ -9,7 +9,7 @@ export const useCustomers = () => {
   const [params] = useCustomersParams()
 
   return useQuery({
-    ...trpc.customers.getMany.queryOptions(params),
+    ...trpc.pagination.getMany.queryOptions(params),
     placeholderData: keepPreviousData,
   })
 }
