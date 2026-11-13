@@ -96,7 +96,7 @@ They are deliberately data-agnostic: you bring the query and the params hook. Se
 
 Supported locales: `en`, `de`. The active locale is stored in the `ui-locale` cookie, set/cleared by server actions in `src/app/actions/set-locale.ts`, and read by `src/i18n/request.ts` (falls back to `en`).
 
-The locale is also stored on the user (`user.locale`, an additional Better Auth field). `LanguageToggle` writes both the cookie and `user.locale`. `LocaleSync` (mounted in the dashboard layout) reconciles them: on a new device or after clearing cookies the saved locale is applied to the cookie, and a user without a saved locale gets the active one stored. Logged-out pages only use the cookie.
+The locale is also stored on the user (`user.locale`, an additional Better Auth field). `LanguageToggle` writes both, `user.locale` first and the cookie second (the reverse order makes `LocaleSync` briefly revert the cookie and the UI flickers between languages). `LocaleSync` (mounted in the dashboard layout) reconciles them: on a new device or after clearing cookies the saved locale is applied to the cookie, and a user without a saved locale gets the active one stored. Logged-out pages only use the cookie.
 
 Translation files: `messages/en.json`, `messages/de.json` - both share the same top-level namespace keys (`common`, `sidebar`, `auth`, `dashboard`, `posts`, `settings`, `pagination`, `booking`, `demo`, `entity`, `globalError`). Add new keys to both files. `globalError` is special: `src/app/global-error.tsx` renders without the i18n provider, so it imports these two files directly and picks one by browser language.
 
