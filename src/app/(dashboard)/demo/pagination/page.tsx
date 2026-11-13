@@ -17,8 +17,10 @@ type PaginationDemoPageProps = {
 export default async function PaginationDemoPage({
   searchParams,
 }: PaginationDemoPageProps) {
-  const t = await getTranslations("pagination")
-  const params = await customersParamsLoader(searchParams)
+  const [t, params] = await Promise.all([
+    getTranslations("pagination"),
+    customersParamsLoader(searchParams),
+  ])
   prefetchCustomers(params)
 
   return (

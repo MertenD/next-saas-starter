@@ -10,8 +10,10 @@ export default async function Layout({
 }: {
   children: React.ReactNode
 }) {
-  const session = await requireAuth()
-  const activeLocale = await getLocale()
+  const [session, activeLocale] = await Promise.all([
+    requireAuth(),
+    getLocale(),
+  ])
 
   return (
     <HydrateClient>
