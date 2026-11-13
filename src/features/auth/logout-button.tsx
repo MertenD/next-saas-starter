@@ -1,28 +1,15 @@
 "use client"
 
-import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
+import { useSignOut } from "@/features/auth/hooks/use-sign-out"
 import { authClient } from "@/lib/auth-client"
-import { clearPwaPageCache } from "@/lib/pwa"
 
 export default function LogoutButton() {
   const { data } = authClient.useSession()
-  const router = useRouter()
+  const signOut = useSignOut()
 
   return (
-    <Button
-      onClick={() =>
-        authClient.signOut({
-          fetchOptions: {
-            onSuccess: () => {
-              clearPwaPageCache()
-              router.push("/login")
-            },
-          },
-        })
-      }
-      disabled={!data}
-    >
+    <Button onClick={signOut} disabled={!data}>
       Sign Out
     </Button>
   )

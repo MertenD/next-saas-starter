@@ -118,5 +118,5 @@ The app is installable ("Add to home screen") and already-visited pages keep ope
 
 - Replace the generated icons with real PNGs in `public/` and point `manifest.ts` at them.
 - Bump `VERSION` in `public/sw.js` whenever you change its caching rules, so clients drop the old caches.
-- Cached pages are user-specific HTML. `clearPwaPageCache()` removes them on sign-out, but think about this if you add other ways to end a session.
+- Cached pages are user-specific HTML. `clearPwaPageCache()` removes them on sign-out, but think about this if you add other ways to end a session. Sign out through `useSignOut()` (`src/features/auth/hooks/use-sign-out.ts`), which also clears the React Query cache and its IndexedDB copy.
 - Test it with `bun run build && bun run start`, not `bun run dev`.

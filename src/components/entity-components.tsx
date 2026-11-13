@@ -93,14 +93,14 @@ export function EntityContainer({
   pagination,
 }: EntityContainerProps) {
   return (
-    <main className="flex flex-col gap-6 p-6">
+    <div className="flex flex-col gap-6 p-6">
       {header}
       <div className="flex flex-col gap-y-4">
         {search}
         {children}
       </div>
       {pagination}
-    </main>
+    </div>
   )
 }
 

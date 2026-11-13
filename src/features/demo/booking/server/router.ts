@@ -8,21 +8,17 @@ const SIMULATED_LATENCY_MS = 600
 const SIMULATED_FAILURE_RATE = 0.2
 
 export const bookingRouter = createTRPCRouter({
-  submit: protectedProcedure
-    .input(bookingSchema)
-    .mutation(async ({ input }) => {
-      await new Promise((resolve) => setTimeout(resolve, SIMULATED_LATENCY_MS))
+  submit: protectedProcedure.input(bookingSchema).mutation(async () => {
+    await new Promise((resolve) => setTimeout(resolve, SIMULATED_LATENCY_MS))
 
-      if (Math.random() < SIMULATED_FAILURE_RATE) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Payment could not be processed.",
-        })
-      }
+    if (Math.random() < SIMULATED_FAILURE_RATE) {
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Payment could not be processed.",
+      })
+    }
 
-      return {
-        confirmationId: crypto.randomUUID(),
-        ...input,
-      }
-    }),
+    // Only the confirmation id goes back: never echo payment details to the client.
+    return { confirmationId: crypto.randomUUID() }
+  }),
 })

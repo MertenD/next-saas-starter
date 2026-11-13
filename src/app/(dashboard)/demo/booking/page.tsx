@@ -5,7 +5,7 @@ export default async function BookingPage() {
   const t = await getTranslations("booking")
 
   return (
-    <main className="flex flex-col gap-6 p-6">
+    <div className="flex flex-col gap-6 p-6">
       <div>
         <h1 className="text-2xl font-bold">{t("title")}</h1>
         <p className="mt-1 text-body-sm text-muted-foreground">
@@ -13,6 +13,6 @@ export default async function BookingPage() {
         </p>
       </div>
       <BookingContainer />
-    </main>
+    </div>
   )
 }

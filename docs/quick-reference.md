@@ -44,6 +44,8 @@ tRPC procedure builders (`src/trpc/init.ts`) - see [Architecture](./architecture
 | `sendEmail({ to, subject, html })` | `src/lib/mailer.ts` | Sends via Resend, falls back to console-logging the email when Resend isn't configured. |
 | `resetPasswordEmailHtml(...)` / `verifyEmailHtml(...)` | `src/lib/mailer.ts` | Pre-built HTML templates for the two auth emails. |
 | `clearPwaPageCache()` | `src/lib/pwa.ts` | Asks the service worker to drop cached pages. Called on sign-out so user-specific pages are not readable offline on shared devices. |
+| `useSignOut()` | `src/features/auth/hooks/use-sign-out.ts` | The one sign-out flow: ends the session, clears the PWA page cache, the React Query cache and its IndexedDB copy, then redirects to `/login`. Never call `authClient.signOut` directly. |
+| `clearPersistedQueryCache()` | `src/trpc/client.tsx` | Removes the IndexedDB-persisted React Query cache. Used by `useSignOut()`. |
 | `openrouter` / `AI_MODEL` | `src/lib/ai.ts` | Shared Vercel AI SDK provider and default chat model id, for `streamText`/`generateText`. |
 | `getStreamContext()` | `src/lib/stream-context.ts` | Shared resumable-stream context for resumable AI chat responses. |
 

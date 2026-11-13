@@ -39,15 +39,15 @@ Streaming an LLM response into the UI, and specifically **resumable streams**: i
 
 2. `useChat({ chat, resume: true })` - the `resume: true` flag is what makes the hook automatically attempt to reconnect to an in-flight stream on mount, instead of only ever starting fresh ones.
 
-3. Sending a message `POST`s to `/api/chat`, which validates the body against `chatRequestSchema` and calls `startChatStream()` (`server/chat.ts`), which in turn calls `streamText()` from the `ai` package against OpenRouter:
+3. Sending a message `POST`s to `/api/chat`, which requires a signed-in user (`getSessionOnServer()`, otherwise `401`), validates the body against `chatRequestSchema` (`400` when invalid) and calls `startChatStream(userId, body)` (`server/chat.ts`), which in turn calls `streamText()` from the `ai` package against OpenRouter:
 
    ```ts
    const result = streamText({ model: openrouter(AI_MODEL), system: AI_SYSTEM_PROMPT, messages: convertToModelMessages(messages) });
    ```
 
-4. Instead of returning `result.textStream` straight to the client, `startChatStream()` wraps it: `getStreamContext().createNewResumableStream(id, () => result.textStream)`. `getStreamContext()` is backed by the `resumable-stream` package, which persists stream chunks (in Redis) keyed by `chatId` as they're produced - not just buffered in the Node process, which would be lost on disconnect.
+4. Instead of returning `result.textStream` straight to the client, `startChatStream()` wraps it: `getStreamContext().createNewResumableStream(id, () => result.textStream)`. `getStreamContext()` is backed by the `resumable-stream` package, which persists stream chunks (in Redis) keyed by user id and `chatId` as they're produced (so only the user who started a stream can resume it) - not just buffered in the Node process, which would be lost on disconnect.
 
-5. If the client reconnects (page refresh mid-response, dropped connection), `useChat`'s `resume: true` fires a `GET /api/chat/[id]/stream`, which calls `resumeChatStream(id)` (`server/chat.ts`), itself wrapping `ctx.resumeExistingStream(chatId)`. If the stream is still buffered server-side, playback continues from where it left off; if it already finished or never existed, the route returns `204` and the client just shows what it already has.
+5. If the client reconnects (page refresh mid-response, dropped connection), `useChat`'s `resume: true` fires a `GET /api/chat/[id]/stream` (also authenticated), which calls `resumeChatStream(userId, id)` (`server/chat.ts`), itself wrapping `ctx.resumeExistingStream(chatId)`. If the stream is still buffered server-side, playback continues from where it left off; if it already finished or never existed, the route returns `204` and the client just shows what it already has.
 
 ## Markdown rendering
 

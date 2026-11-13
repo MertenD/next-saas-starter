@@ -28,12 +28,22 @@ A multi-step form wizard with client-only state that's fully decoupled from serv
    export const useBookingWizardStore = create<BookingWizardState>()(
      persist(
        (set) => ({ step: BOOKING_STEPS[0], data: {}, /* setStepData, next, back, reset */ }),
-       { name: "booking-wizard", storage: createJSONStorage(() => sessionStorage) },
+       {
+         name: "booking-wizard",
+         version: 1,
+         storage: createJSONStorage(() => sessionStorage),
+         skipHydration: true,
+         partialize: (state) => ({ /* step (never "review") + data without card fields */ }),
+       },
      ),
    )
    ```
 
-   `sessionStorage` is the deliberate choice: an accidental refresh mid-wizard shouldn't lose progress, but a half-finished booking draft also shouldn't survive closing the tab the way a `localStorage`-persisted store would. This is the pattern to reach for any time you build a multi-step flow with the same requirement.
+   `sessionStorage` is the deliberate choice: an accidental refresh mid-wizard shouldn't lose progress, but a half-finished booking draft also shouldn't survive closing the tab the way a `localStorage`-persisted store would. This is the pattern to reach for any time you build a multi-step flow with the same requirement. Three details make it safe:
+
+   - **Payment details are never persisted.** `partialize` strips `cardName`, `cardNumber` and `cardExpiry`, and a restored draft never resumes on the review step (it falls back to the payment step, where the user re-enters the card).
+   - **Manual hydration.** `skipHydration: true` keeps the server render and the first client render identical (initial state); `BookingContainer` calls `persist.rehydrate()` after mount and shows a skeleton until then, so there is no hydration mismatch.
+   - **`version`** must be bumped when the persisted shape changes, so old drafts are discarded instead of restored in a wrong shape.
 
 3. **Per-step validation.** Each step component (`BookingStepDates`, `BookingStepGuests`, `BookingStepPayment`) is its own `react-hook-form` form resolved against its own Zod schema (`tripDatesSchema`, `guestsSchema`, `paymentSchema`) - not one giant form for the whole wizard. A step only calls `setStepData()` + `next()` once its own fields pass validation.
 
@@ -46,7 +56,7 @@ A multi-step form wizard with client-only state that's fully decoupled from serv
    const SIMULATED_FAILURE_RATE = 0.2 // fails ~1 in 5 submissions
    ```
 
-   On success it returns a `confirmationId`; the Review step then calls `reset()` on the store (clearing `sessionStorage`) once the user chooses "Book another trip".
+   On success it returns only a `confirmationId` (payment details are never echoed back); the Review step then clears the persisted draft (`clearDraft()`) right away, and calls `reset()` on the store once the user chooses "Book another trip".
 
 ## Try it
 

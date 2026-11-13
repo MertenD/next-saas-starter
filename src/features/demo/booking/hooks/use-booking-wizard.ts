@@ -11,5 +11,8 @@ export function useBookingWizard() {
   const back = useBookingWizardStore((s) => s.back)
   const reset = useBookingWizardStore((s) => s.reset)
 
-  return { step, data, setStepData, goToStep, next, back, reset }
+  /** Removes the persisted draft from `sessionStorage` (e.g. after a successful booking) without touching the in-memory state. */
+  const clearDraft = () => useBookingWizardStore.persist.clearStorage()
+
+  return { step, data, setStepData, goToStep, next, back, reset, clearDraft }
 }

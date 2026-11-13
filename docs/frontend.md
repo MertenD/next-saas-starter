@@ -89,7 +89,7 @@ They are deliberately data-agnostic: you bring the query and the params hook. Se
 ## State management
 
 - **Zustand** - client-only UI state that doesn't need to survive a refresh or sync with the server. `src/stores/ui-store.ts` (sidebar collapsed/expanded) is the global example; features can have their own local store, like `demo/booking`'s wizard-step store.
-- **TanStack Query** (via `useTRPC()`) - all server state. `src/trpc/client.tsx`'s `TRPCReactProvider` persists the query cache to IndexedDB with a 7-day retention, so data survives page reloads without a network round-trip.
+- **TanStack Query** (via `useTRPC()`) - all server state. `src/trpc/client.tsx`'s `TRPCReactProvider` persists the query cache to IndexedDB with a 7-day retention, so data survives page reloads without a network round-trip. The cache holds user-specific data, so it is wiped on sign-out (`useSignOut()`), keyed by user id where the key is not a tRPC key, and invalidated across incompatible deployments by bumping `PERSIST_BUSTER`.
 - **nuqs** - URL search params as state, for anything that should be shareable/bookmarkable (filters, pagination, sort). See `demo/pagination/params.ts` (also parsed on the server for prefetching).
 
 ## Internationalization (next-intl)

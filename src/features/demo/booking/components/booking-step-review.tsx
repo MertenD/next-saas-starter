@@ -20,7 +20,7 @@ function SummaryRow({ label, value }: { label: string; value: string }) {
 
 export function BookingStepReview() {
   const t = useTranslations("booking")
-  const { data, back, reset } = useBookingWizard()
+  const { data, back, reset, clearDraft } = useBookingWizard()
   const {
     mutate,
     isPending,
@@ -102,7 +102,7 @@ export function BookingStepReview() {
         </Button>
         <Button
           type="button"
-          onClick={() => mutate(bookingData)}
+          onClick={() => mutate(bookingData, { onSuccess: clearDraft })}
           disabled={isPending}
         >
           {isPending && <Spinner />}

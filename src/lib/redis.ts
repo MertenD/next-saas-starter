@@ -7,7 +7,20 @@ const globalForRedis = global as unknown as {
   redis: ReturnType<typeof createClient>
 }
 
-const redis = globalForRedis.redis || createClient({ url: env.REDIS_URL })
+/**
+ * Creates the Redis client with an `error` listener attached. Without a
+ * listener, node-redis emits an unhandled `error` event on connection loss,
+ * which crashes the process; with one, the client logs and reconnects.
+ */
+function createRedisClient() {
+  const client = createClient({ url: env.REDIS_URL })
+  client.on("error", (error) => {
+    console.error("[redis] client error:", error)
+  })
+  return client
+}
+
+const redis = globalForRedis.redis || createRedisClient()
 
 if (process.env.NODE_ENV !== "production") {
   globalForRedis.redis = redis

@@ -70,6 +70,23 @@ const idbPersister =
 const PERSIST_MAX_AGE = 7 * 24 * 60 * 60 * 1000
 
 /**
+ * Bump to invalidate every persisted query cache after changing the shape of
+ * cached data or query keys; restored caches with a different buster are
+ * discarded.
+ */
+const PERSIST_BUSTER = "v1"
+
+/**
+ * Removes the persisted (IndexedDB) query cache. Call together with
+ * `queryClient.clear()` whenever a session ends (see `useSignOut`), because
+ * the cache holds user-specific data that must not be restored for the next
+ * person on a shared device.
+ */
+export function clearPersistedQueryCache() {
+  return idbPersister.removeClient()
+}
+
+/**
  * Root client-side provider wiring up the tRPC client, React Query, and
  * IndexedDB cache persistence. Mount once near the app root (see
  * `src/app/layout.tsx`); everything under it can call `useTRPC()`.
@@ -93,7 +110,11 @@ export function TRPCReactProvider(
   return (
     <PersistQueryClientProvider
       client={queryClient}
-      persistOptions={{ persister: idbPersister, maxAge: PERSIST_MAX_AGE }}
+      persistOptions={{
+        persister: idbPersister,
+        maxAge: PERSIST_MAX_AGE,
+        buster: PERSIST_BUSTER,
+      }}
     >
       <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
         {props.children}

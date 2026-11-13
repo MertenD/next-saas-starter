@@ -4,15 +4,32 @@ import { useQuery } from "@tanstack/react-query"
 import { authClient } from "@/lib/auth-client"
 import { useTRPC } from "@/trpc/client"
 
-/** Raw Polar customer state (subscriptions, entitlements, ...) for the signed-in user. Prefer {@link useHasActiveSubscription} for simple premium checks. */
-export const useSubscription = () => {
-  return useQuery({
-    queryKey: ["subscription"],
+/**
+ * Polar customer state query, keyed by the signed-in user's id so a cached
+ * (and IndexedDB-persisted) result can never be served to a different user.
+ * Stays disabled until the session (and therefore the user id) is known.
+ */
+function useCustomerStateQuery(enabled: boolean) {
+  const { data: session } = authClient.useSession()
+  const userId = session?.user.id
+
+  const query = useQuery({
+    queryKey: ["subscription", userId],
     queryFn: async () => {
       const { data } = await authClient.customer.state()
       return data
     },
+    enabled: enabled && !!userId,
   })
+
+  return { ...query, isSessionPending: !userId }
+}
+
+/** Raw Polar customer state (subscriptions, entitlements, ...) for the signed-in user. Prefer {@link useHasActiveSubscription} for simple premium checks. */
+export const useSubscription = () => {
+  const { isSessionPending: _isSessionPending, ...query } =
+    useCustomerStateQuery(true)
+  return query
 }
 
 /**
@@ -34,16 +51,9 @@ export const useHasActiveSubscription = () => {
   const {
     data: customerState,
     isLoading,
+    isSessionPending,
     ...rest
-  } = useQuery({
-    queryKey: ["subscription"],
-    queryFn: async () => {
-      const { data } = await authClient.customer.state()
-      return data
-    },
-    // Only run when Polar is configured
-    enabled: polarEnabled === true,
-  })
+  } = useCustomerStateQuery(polarEnabled === true)
 
   // When Polar is not configured, all users are treated as premium (dev/mock mode)
   if (!polarEnabled) {
@@ -62,7 +72,8 @@ export const useHasActiveSubscription = () => {
   return {
     hasActiveSubscription,
     subscription: customerState?.activeSubscriptions?.[0],
-    isLoading,
+    // The query is disabled until the session is known, so treat that as loading too
+    isLoading: isLoading || isSessionPending,
     ...rest,
   }
 }

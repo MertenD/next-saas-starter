@@ -20,11 +20,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+import { useSignOut } from "@/features/auth/hooks/use-sign-out"
 import { useHasActiveSubscription } from "@/features/subscriptions/hooks/use-subscription"
 import { useResendVerificationEmail } from "@/features/user/hooks/use-resend-verification-email"
 import type { PlausibleEvents } from "@/lib/analytics"
 import { authClient } from "@/lib/auth-client"
-import { clearPwaPageCache } from "@/lib/pwa"
 
 type UserInfoCardProps = {
   username: string
@@ -32,6 +32,7 @@ type UserInfoCardProps = {
 
 export default function UserInfoCard({ username }: UserInfoCardProps) {
   const router = useRouter()
+  const signOut = useSignOut()
   const { data: session } = authClient.useSession()
   const t = useTranslations("auth.userInfo")
 
@@ -78,16 +79,7 @@ export default function UserInfoCard({ username }: UserInfoCardProps) {
             variant="ghost"
             size="sm"
             className="h-8 w-full justify-start gap-2 px-2 text-xs font-medium text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-            onClick={() =>
-              authClient.signOut({
-                fetchOptions: {
-                  onSuccess: () => {
-                    clearPwaPageCache()
-                    router.push("/login")
-                  },
-                },
-              })
-            }
+            onClick={signOut}
           >
             <LogOutIcon className="h-4 w-4" />
             {t("logoutLabel")}

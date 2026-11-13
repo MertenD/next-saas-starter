@@ -28,6 +28,13 @@ const INITIAL_STATE: Pick<BookingWizardState, "step" | "data"> = {
  * `localStorage`) so an accidental refresh mid-wizard doesn't lose progress,
  * while a booking draft still doesn't outlive the browser tab. Reusable
  * pattern for any other multi-step wizard that needs refresh-safe state.
+ *
+ * Payment details (card name, number, expiry) are deliberately never
+ * persisted (`partialize`), and a restored draft never resumes on the review
+ * step, which needs them. Hydration is manual (`skipHydration`): the server
+ * render and the first client render both use the initial state, then
+ * `BookingContainer` calls `persist.rehydrate()` after mount, which avoids a
+ * hydration mismatch. Bump `version` when the persisted shape changes.
  */
 export const useBookingWizardStore = create<BookingWizardState>()(
   persist(
@@ -52,7 +59,21 @@ export const useBookingWizardStore = create<BookingWizardState>()(
     }),
     {
       name: "booking-wizard",
+      version: 1,
       storage: createJSONStorage(() => sessionStorage),
+      skipHydration: true,
+      partialize: (state) => {
+        const {
+          cardName: _cardName,
+          cardNumber: _cardNumber,
+          cardExpiry: _cardExpiry,
+          ...safeData
+        } = state.data
+        return {
+          step: state.step === "review" ? "payment" : state.step,
+          data: safeData,
+        }
+      },
     },
   ),
 )

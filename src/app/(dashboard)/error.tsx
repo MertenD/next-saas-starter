@@ -21,8 +21,8 @@ export default function DashboardError({
   }, [error])
 
   return (
-    <main className="p-6">
+    <div className="p-6">
       <ErrorView onRetry={retry} />
-    </main>
+    </div>
   )
 }

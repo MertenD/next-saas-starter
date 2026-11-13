@@ -8,7 +8,7 @@ export default async function DashboardPage() {
   ])
 
   return (
-    <main className="flex flex-col gap-6 p-6">
+    <div className="flex flex-col gap-6 p-6">
       <div>
         <h1 className="text-2xl font-bold">{t("title")}</h1>
         <p className="text-muted-foreground">
@@ -18,6 +18,6 @@ export default async function DashboardPage() {
       <div className="rounded-lg border p-6">
         <p className="text-sm text-muted-foreground">{t("placeholderBody")}</p>
       </div>
-    </main>
+    </div>
   )
 }
