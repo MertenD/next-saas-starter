@@ -1,8 +1,21 @@
 import type { Session, User } from "better-auth"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
+import { cache } from "react"
 import { auth } from "@/lib/auth"
 import { isPolarEnabled, polarClient } from "@/lib/polar"
+
+/**
+ * Reads the current session without redirecting; returns `null` when
+ * unauthenticated. Wrapped in `React.cache()` so a layout and its page (or any
+ * other server code in the same request) share a single session lookup. All
+ * guards below build on it.
+ */
+export const getSessionOnServer = cache(async () => {
+  return auth.api.getSession({
+    headers: await headers(),
+  })
+})
 
 /**
  * Server Component / Server Action guard: resolves the current session from
@@ -11,9 +24,7 @@ import { isPolarEnabled, polarClient } from "@/lib/polar"
  * `auth.api.getSession`.
  */
 export const requireAuth = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  })
+  const session = await getSessionOnServer()
 
   if (!session) {
     redirect("/login")
@@ -30,9 +41,7 @@ export const requireAuth = async () => {
  * so local/dev environments without billing set up still work.
  */
 export const requireAuthAndPremium = async (nonPremiumRedirectUrl = "/") => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  })
+  const session = await getSessionOnServer()
 
   if (!session) {
     redirect("/login")
@@ -62,22 +71,13 @@ export const requireAuthAndPremium = async (nonPremiumRedirectUrl = "/") => {
  * from auth-only pages (login, signup, ...) back to `/`.
  */
 export const requireUnauth = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  })
+  const session = await getSessionOnServer()
 
   if (session) {
     redirect("/")
   }
 
   return session
-}
-
-/** Reads the current session without redirecting; returns `null` when unauthenticated. */
-export const getSessionOnServer = async () => {
-  return auth.api.getSession({
-    headers: await headers(),
-  })
 }
 
 /**
@@ -91,9 +91,7 @@ export async function requirePremiumUserFromRequest(_req: Request): Promise<{
   session: Session
   user: User
 }> {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  })
+  const session = await getSessionOnServer()
 
   if (!session) {
     throw new Response("Unauthorized", { status: 401 })

@@ -31,7 +31,7 @@ Authentication is [Better Auth](https://www.better-auth.com); billing is [Polar]
 | `requireAuth()` | Redirects to `/login` if there's no session. Used in `(dashboard)/layout.tsx`. |
 | `requireUnauth()` | Redirects to `/` if there *is* a session. Used in `(auth)` pages so logged-in users can't see login/signup. |
 | `requireAuthAndPremium(redirectUrl)` | Like `requireAuth()`, plus checks for an active Polar subscription and redirects if absent - skipped entirely when Polar is unconfigured. |
-| `getSessionOnServer()` | Returns the session (or `null`) without redirecting. |
+| `getSessionOnServer()` | Returns the session (or `null`) without redirecting. Wrapped in `React.cache()`, so all guards above share one lookup per request. |
 | `requirePremiumUserFromRequest(req)` | Same premium check as above, but throws a `401`/`403` `Response` instead of redirecting - for use in raw Next.js route handlers rather than Server Components. |
 
 There's no `middleware.ts` in this project - all route protection goes through these functions, called explicitly in layouts/pages/routes.
