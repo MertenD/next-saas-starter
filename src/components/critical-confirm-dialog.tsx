@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl"
 import type * as React from "react"
-import { useEffect, useId, useState } from "react"
+import { useId, useState } from "react"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -52,10 +52,14 @@ export function CriticalConfirmDialog({
   const resolvedCancelLabel = cancelLabel ?? t("cancelLabel")
   const inputId = useId()
   const [typedValue, setTypedValue] = useState("")
+  const [wasOpen, setWasOpen] = useState(open)
 
-  useEffect(() => {
+  // Reset the input when the dialog closes (also when the parent closes it,
+  // e.g. in a mutation's onSuccess) by adjusting state during render.
+  if (open !== wasOpen) {
+    setWasOpen(open)
     if (!open) setTypedValue("")
-  }, [open])
+  }
 
   const isMatch = typedValue === confirmationValue
 

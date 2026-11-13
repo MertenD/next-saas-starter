@@ -1,5 +1,8 @@
 {
   "common": {
+    "errors": {
+      "generic": "Etwas ist schiefgelaufen. Bitte versuche es gleich noch einmal."
+    },
     "confirmDialog": {
       "confirmLabel": "Bestätigen",
       "cancelLabel": "Abbrechen"

@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useTranslations } from "next-intl"
 import { toast } from "sonner"
+import { useErrorMessage } from "@/hooks/use-error-message"
 import { authClient } from "@/lib/auth-client"
 import { useTRPC } from "@/trpc/client"
 
@@ -14,11 +15,12 @@ export const useUpdateProfile = () => {
   const trpc = useTRPC()
   const queryClient = useQueryClient()
   const t = useTranslations("settings.account.profile")
+  const getErrorMessage = useErrorMessage()
 
   return useMutation({
     mutationFn: async (values: UpdateProfileInput) => {
       const { data, error } = await authClient.updateUser(values)
-      if (error) throw new Error(error.message)
+      if (error) throw new Error(getErrorMessage(error))
       return data
     },
     onSuccess: () => {

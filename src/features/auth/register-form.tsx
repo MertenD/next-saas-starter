@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { OAuthButtons } from "@/features/auth/oauth-buttons"
+import { useErrorMessage } from "@/hooks/use-error-message"
 import type { PlausibleEvents } from "@/lib/analytics"
 import { authClient } from "@/lib/auth-client"
 import type { OAuthProvider } from "@/lib/oauth-providers"
@@ -40,6 +41,7 @@ export default function RegisterForm({ oauthProviders }: RegisterFormProps) {
   const plausible = usePlausible<PlausibleEvents>()
   const [oauthLoading, setOauthLoading] = useState<OAuthProvider | null>(null)
   const t = useTranslations("auth.register")
+  const getErrorMessage = useErrorMessage()
 
   const registerSchema = z.object({
     name: z.string().min(1, t("validation.nameRequired")),
@@ -70,7 +72,7 @@ export default function RegisterForm({ oauthProviders }: RegisterFormProps) {
           router.push("/")
         },
         onError: (context) => {
-          toast.error(context.error.message)
+          toast.error(getErrorMessage(context.error))
         },
       },
     )
@@ -83,7 +85,7 @@ export default function RegisterForm({ oauthProviders }: RegisterFormProps) {
       { provider, callbackURL: "/" },
       {
         onError: (ctx) => {
-          toast.error(ctx.error.message)
+          toast.error(getErrorMessage(ctx.error))
           setOauthLoading(null)
         },
       },

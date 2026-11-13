@@ -48,6 +48,8 @@ src/
 │   │   └── signup/page.tsx            "/signup"
 │   ├── (dashboard)/                  # Authenticated route group
 │   │   ├── layout.tsx                 Calls requireAuth(), wraps children in AppShell
+│   │   ├── loading.tsx                Skeleton shown while a dashboard page streams in
+│   │   ├── error.tsx                  Route error boundary (ErrorView + retry, reports to Sentry)
 │   │   ├── dashboard/page.tsx         "/dashboard"
 │   │   ├── settings/page.tsx          "/settings" - account, subscription, language
 │   │   └── demo/                      "/demo/*" - see features.md
@@ -58,6 +60,7 @@ src/
 │   │       └── posts/page.tsx
 │   ├── actions/set-locale.ts         # Server actions: set/clear the "ui-locale" cookie
 │   ├── global-error.tsx              # Last-resort error page (reports to Sentry, own i18n)
+│   ├── loading.tsx                   # Spinner shown while the (dashboard) layout resolves the session
 │   ├── manifest.ts                   # PWA web app manifest
 │   ├── api/
 │   │   ├── auth/[...all]/route.ts    # Better Auth catch-all (sign-in/up/out, OAuth, Polar checkout/portal)

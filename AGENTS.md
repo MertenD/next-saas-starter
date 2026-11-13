@@ -108,7 +108,8 @@ Supported locales: `en`, `de`. The locale lives in the `ui-locale` cookie and in
 ## Reusable UI pieces to check first
 
 - **List pages** (header, search, pagination, loading/empty/error): use `src/components/entity-components.tsx` (`EntityHeader`, `EntityContainer`, `EntitySearch`, `EntityPagination`, `EmptyView`, `ErrorView`) and `useEntitySearch` instead of building new ones. Reference: `src/features/demo/pagination` ([docs](./docs/demos/pagination.md)), which also shows the server-prefetch pattern (`params-loader` -> `prefetch` -> `HydrateClient` -> client `useQuery` with the same `queryOptions()`).
-- **LLM / Markdown text:** `MarkdownContent` (`src/components/markdown-content.tsx`).
+- **LLM / Markdown text:** `MarkdownContent` (`src/components/markdown-content.tsx`). It lazy-loads `markdown-renderer.tsx`; never import the renderer directly.
+- **Route loading/error:** `src/app/loading.tsx` (spinner, covers the session-blocking dashboard layout), `src/app/(dashboard)/loading.tsx` (skeleton) and `src/app/(dashboard)/error.tsx` (`ErrorView` + `retry`). This Next.js version passes `retry` (not `reset`) to `error.tsx`.
 - **OAuth buttons:** `OAuthButtons` (`src/features/auth/oauth-buttons.tsx`); only render providers returned by `getEnabledOAuthProviders()` (`src/lib/oauth-providers.ts`). A new provider must be added in both places and in `src/lib/auth.ts`.
 - **Service worker / PWA:** `public/sw.js` is hand-written (no `next-pwa`, it does not support Turbopack). Bump its `VERSION` when changing caching rules. Call `clearPwaPageCache()` (`src/lib/pwa.ts`) wherever a session is ended.
 - **Sentry:** config files are `sentry.*.config.ts`, `src/instrumentation*.ts`, `src/app/global-error.tsx`. `withSentryConfig` is imported from `@sentry/nextjs/config` (v11). Never call `Sentry.init` without a DSN guard (a disabled init still patches `fetch`). Client-side `NEXT_PUBLIC_*` values must also be passed as Docker build args (see `Dockerfile`).

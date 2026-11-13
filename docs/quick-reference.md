@@ -74,7 +74,8 @@ Full walkthrough: [Data Fetching](./data-fetching.md).
 | Export | Where | What it does |
 |---|---|---|
 | `cn(...inputs)` | `src/lib/utils.ts` | Merges Tailwind classes safely (resolves conflicts) via `clsx` + `tailwind-merge`. Use instead of string concatenation. |
-| `useIsMobile()` | `src/hooks/use-mobile.ts` | Live viewport check below the 768px breakpoint. `false` during SSR - prefer CSS breakpoints unless you need a real JS conditional. |
+| `useErrorMessage()` | `src/hooks/use-error-message.ts` | Returns `(error) => string` for Better Auth/fetch errors, never empty and never technical: 5xx and empty messages map to `common.errors.generic`, other errors keep the server's message. Use it for every `toast.error(...)` fed by `authClient`. |
+| `useIsMobile()` | `src/hooks/use-mobile.ts` | Live viewport check below the 768px breakpoint (`useSyncExternalStore`). `false` during SSR and hydration - prefer CSS breakpoints unless you need a real JS conditional. |
 | `useEntitySearch({ params, setParams })` | `src/hooks/use-entity-search.ts` | Debounced search input state that commits to a URL-backed `search` param and resets to page 1. Pair with `EntitySearch`. |
 | `useUIStore` | `src/stores/ui-store.ts` | Zustand store for cross-cutting UI state (currently: sidebar collapsed/expanded). |
 

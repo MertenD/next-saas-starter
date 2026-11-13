@@ -24,10 +24,12 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { useErrorMessage } from "@/hooks/use-error-message"
 import { authClient } from "@/lib/auth-client"
 
 export default function ForgotPasswordForm() {
   const t = useTranslations("auth.forgotPassword")
+  const getErrorMessage = useErrorMessage()
   const [submitted, setSubmitted] = useState(false)
 
   const forgotPasswordSchema = z.object({
@@ -46,7 +48,7 @@ export default function ForgotPasswordForm() {
       {
         onSuccess: () => setSubmitted(true),
         onError: (context) => {
-          toast.error(context.error.message)
+          toast.error(getErrorMessage(context.error))
         },
       },
     )

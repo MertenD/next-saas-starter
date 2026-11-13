@@ -1,5 +1,8 @@
 {
   "common": {
+    "errors": {
+      "generic": "Something went wrong. Please try again in a moment."
+    },
     "confirmDialog": {
       "confirmLabel": "Confirm",
       "cancelLabel": "Cancel"

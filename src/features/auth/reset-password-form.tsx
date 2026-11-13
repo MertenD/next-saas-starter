@@ -24,10 +24,12 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { useErrorMessage } from "@/hooks/use-error-message"
 import { authClient } from "@/lib/auth-client"
 
 export default function ResetPasswordForm() {
   const t = useTranslations("auth.resetPassword")
+  const getErrorMessage = useErrorMessage()
   const router = useRouter()
   const searchParams = useSearchParams()
   const token = searchParams.get("token")
@@ -61,7 +63,7 @@ export default function ResetPasswordForm() {
           router.push("/login")
         },
         onError: (context) => {
-          toast.error(context.error.message)
+          toast.error(getErrorMessage(context.error))
         },
       },
     )
