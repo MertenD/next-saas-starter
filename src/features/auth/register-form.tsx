@@ -64,12 +64,12 @@ export default function RegisterForm({ oauthProviders }: RegisterFormProps) {
         name: values.name,
         email: values.email,
         password: values.password,
-        callbackURL: "/",
+        callbackURL: "/dashboard",
       },
       {
         onSuccess: () => {
           plausible("Sign Up")
-          router.push("/")
+          router.push("/dashboard")
         },
         onError: (context) => {
           toast.error(getErrorMessage(context.error))
@@ -82,7 +82,7 @@ export default function RegisterForm({ oauthProviders }: RegisterFormProps) {
     setOauthLoading(provider)
     plausible("Sign Up")
     await authClient.signIn.social(
-      { provider, callbackURL: "/" },
+      { provider, callbackURL: "/dashboard" },
       {
         onError: (ctx) => {
           toast.error(getErrorMessage(ctx.error))

@@ -29,10 +29,6 @@ import {
 import UserInfoCard from "@/features/auth/user-info-card"
 import { cn } from "@/lib/utils"
 
-type AppSidebarProps = {
-  username: string
-}
-
 /**
  * Main dashboard navigation sidebar. Nav items are split into core app
  * links and a "demo" section listing every demo feature under
@@ -40,7 +36,7 @@ type AppSidebarProps = {
  * `demoItems` (and the matching `sidebar.nav.*` translation keys) so it's
  * discoverable.
  */
-export default function AppSidebar({ username }: AppSidebarProps) {
+export default function AppSidebar() {
   const pathName = usePathname()
   const t = useTranslations("sidebar")
   const tBrand = useTranslations("auth.layout")
@@ -83,7 +79,7 @@ export default function AppSidebar({ username }: AppSidebarProps) {
             "data-[active=true]:bg-primary data-[active=true]:text-primary-foreground data-[active=true]:shadow-sm data-[active=true]:hover:bg-primary data-[active=true]:hover:text-primary-foreground",
           )}
         >
-          <Link prefetch href={url}>
+          <Link href={url}>
             <Icon />
             <span>{title}</span>
           </Link>
@@ -100,7 +96,7 @@ export default function AppSidebar({ username }: AppSidebarProps) {
             asChild
             className="h-10 gap-x-4 px-4 group-data-[collapsible=icon]:hidden"
           >
-            <Link href="/" prefetch>
+            <Link href="/dashboard">
               <span className="font-semibold text-sm">{tBrand("brand")}</span>
             </Link>
           </SidebarMenuButton>
@@ -132,7 +128,7 @@ export default function AppSidebar({ username }: AppSidebarProps) {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter className="bg-card p-4 group-data-[collapsible=icon]:hidden">
-        <UserInfoCard username={username} />
+        <UserInfoCard />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

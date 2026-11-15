@@ -11,19 +11,35 @@ import {
   protectedProcedure,
 } from "@/trpc/init"
 
+/** Upper bound for `getMany`, so one user can never make the endpoint return an unbounded list. */
+const MAX_POSTS = 100
+
+/** Prisma error code "record to update/delete not found" (also raised when the extra `userId` filter does not match). */
+function isRecordNotFound(error: unknown) {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    error.code === "P2025"
+  )
+}
+
 export const postsRouter = createTRPCRouter({
   getMany: protectedProcedure.query(async ({ ctx }) => {
     return prisma.post.findMany({
       where: { userId: ctx.auth.user.id },
       orderBy: { createdAt: "desc" },
+      take: MAX_POSTS,
     })
   }),
 
   getOne: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
-      const post = await prisma.post.findUnique({ where: { id: input.id } })
-      if (!post || post.userId !== ctx.auth.user.id) {
+      const post = await prisma.post.findFirst({
+        where: { id: input.id, userId: ctx.auth.user.id },
+      })
+      if (!post) {
         throw new TRPCError({ code: "NOT_FOUND" })
       }
       return post
@@ -37,25 +53,34 @@ export const postsRouter = createTRPCRouter({
       })
     }),
 
+  // Ownership is part of the `where`, so check and write are one database
+  // round trip. A foreign or missing post raises P2025, mapped to NOT_FOUND.
   update: protectedProcedure
     .input(updatePostSchema)
     .mutation(async ({ ctx, input }) => {
       const { id, ...data } = input
-      const post = await prisma.post.findUnique({ where: { id } })
-      if (!post || post.userId !== ctx.auth.user.id) {
-        throw new TRPCError({ code: "NOT_FOUND" })
+      try {
+        return await prisma.post.update({
+          where: { id, userId: ctx.auth.user.id },
+          data,
+        })
+      } catch (error) {
+        if (isRecordNotFound(error)) throw new TRPCError({ code: "NOT_FOUND" })
+        throw error
       }
-      return prisma.post.update({ where: { id }, data })
     }),
 
   delete: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const post = await prisma.post.findUnique({ where: { id: input.id } })
-      if (!post || post.userId !== ctx.auth.user.id) {
-        throw new TRPCError({ code: "NOT_FOUND" })
+      try {
+        return await prisma.post.delete({
+          where: { id: input.id, userId: ctx.auth.user.id },
+        })
+      } catch (error) {
+        if (isRecordNotFound(error)) throw new TRPCError({ code: "NOT_FOUND" })
+        throw error
       }
-      return prisma.post.delete({ where: { id: input.id } })
     }),
 
   // Example of a premium-gated procedure

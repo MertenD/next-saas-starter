@@ -21,7 +21,7 @@ Authentication is [Better Auth](https://www.better-auth.com); billing is [Polar]
 - **Email verification**: sent automatically on sign-up. Better Auth's own `/api/auth/...` route verifies the token and redirects - no custom verify page is needed. Users can trigger a fresh one from `/settings` via `authClient.sendVerificationEmail()` (see `src/features/user/hooks/use-resend-verification-email.ts`).
 - **Change password** (while logged in): the "Change password" form in `/settings` (Account tab) calls `authClient.changePassword({ currentPassword, newPassword, revokeOtherSessions: false })`.
 - **Emails**: `src/lib/mailer.ts` sends via Resend (`src/lib/resend.ts`) when `RESEND_API_KEY`/`EMAIL_FROM` are set; otherwise it logs the recipient/subject/link to the console instead, so these flows are testable in local dev with zero Resend setup. See [`environment-variables.md`](./environment-variables.md#resend-email-optional).
-- **Dashboard banner**: `src/components/email-verification-banner.tsx` reads `authClient.useSession()` directly (`emailVerified` is a base Better Auth session field, no extra query needed) and renders a non-dismissible `Alert` with a resend button for any unverified user. It's mounted once in `src/components/app-shell.tsx` (inside `SidebarInset`, above `{children}`), so it appears on every `(dashboard)` route with no per-page wiring.
+- **Dashboard banner**: `src/components/email-verification-banner.tsx` reads the current user from the server-resolved dashboard context (`useDashboard()`, filled by the `(dashboard)` layout from the session, so there is no client-side session request and no flash) and renders a non-dismissible `Alert` with a resend button for any unverified user. It's mounted once in `src/components/app-shell.tsx` (inside `SidebarInset`, above `{children}`), so it appears on every `(dashboard)` route with no per-page wiring.
 - **Gated checkout**: `UpgradeToProButton` in `src/features/auth/user-info-card.tsx` checks `session.user.emailVerified` before calling `authClient.checkout()`. Unverified users get a `Dialog` explaining verification is required, with its own resend action, instead of opening Polar checkout - unverified accounts should never be able to pay (failed receipt delivery, weaker fraud/chargeback and account-recovery guarantees).
 
 `src/lib/auth-utils.ts` holds the server-side guards:
@@ -73,7 +73,7 @@ Every place that checks subscription status (`premiumProcedure`, `requireAuthAnd
 1. User signs up → Better Auth creates the `User` row → `databaseHooks.user.create.after` creates a matching Polar customer.
 2. User upgrades → `authClient.checkout({ slug: "pro" })` opens the Polar checkout for the product registered under that slug.
 3. `premiumProcedure` (server) checks for an active subscription via `polarClient.customers.getStateExternal({ externalId: user.id })`.
-4. `useHasActiveSubscription()` (client, from `src/features/subscriptions/hooks/use-subscription.ts`) exposes the same check for UI gating - it first reads the public `user.isPolarEnabled` tRPC flag, and short-circuits to "everyone is premium" when Polar isn't configured.
+4. `useHasActiveSubscription()` (client, from `src/features/subscriptions/hooks/use-subscription.ts`) exposes the same check for UI gating - it reads the `polarEnabled` flag from the dashboard context (resolved on the server, no extra request), and short-circuits to "everyone is premium" when Polar isn't configured.
 
 ## Premium feature gating - usage
 

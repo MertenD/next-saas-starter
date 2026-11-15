@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
 import { toast } from "sonner"
 import { useErrorMessage } from "@/hooks/use-error-message"
@@ -10,10 +11,15 @@ type UpdateProfileInput = {
   image?: string
 }
 
-/** Updates the signed-in user's name/image via Better Auth, then invalidates `trpc.user.me` so the UI reflects the change. */
+/**
+ * Updates the signed-in user's name/image via Better Auth, then invalidates
+ * `trpc.user.me` and refreshes the router so the server-resolved dashboard
+ * context (sidebar name and avatar) picks up the change.
+ */
 export const useUpdateProfile = () => {
   const trpc = useTRPC()
   const queryClient = useQueryClient()
+  const router = useRouter()
   const t = useTranslations("settings.account.profile")
   const getErrorMessage = useErrorMessage()
 
@@ -26,6 +32,7 @@ export const useUpdateProfile = () => {
     onSuccess: () => {
       toast.success(t("updateSuccess"))
       queryClient.invalidateQueries(trpc.user.me.queryOptions())
+      router.refresh()
     },
     onError: (err) => toast.error(err.message),
   })

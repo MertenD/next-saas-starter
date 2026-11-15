@@ -1,9 +1,9 @@
 "use client"
 
-import { useQuery } from "@tanstack/react-query"
 import { CreditCardIcon, StarIcon } from "lucide-react"
 import { useFormatter, useTranslations } from "next-intl"
 import { toast } from "sonner"
+import { useDashboard } from "@/components/dashboard-context"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -17,7 +17,6 @@ import {
 import { Skeleton } from "@/components/ui/skeleton"
 import { useHasActiveSubscription } from "@/features/subscriptions/hooks/use-subscription"
 import { authClient } from "@/lib/auth-client"
-import { useTRPC } from "@/trpc/client"
 
 /**
  * Settings tab showing the current plan and the matching action: upgrade to
@@ -28,23 +27,19 @@ import { useTRPC } from "@/trpc/client"
 export default function SubscriptionSettings() {
   const t = useTranslations("settings.subscription")
   const format = useFormatter()
-  const trpc = useTRPC()
-  const { data: session } = authClient.useSession()
-  const { data: polarEnabled, isPending: isPolarPending } = useQuery(
-    trpc.user.isPolarEnabled.queryOptions(),
-  )
+  const { user, polarEnabled } = useDashboard()
   const { hasActiveSubscription, subscription, isLoading, isError, refetch } =
     useHasActiveSubscription()
 
   function handleUpgrade() {
-    if (session && !session.user.emailVerified) {
+    if (!user.emailVerified) {
       toast.error(t("verifyEmailFirst"))
       return
     }
     authClient.checkout({ slug: "pro" })
   }
 
-  if (isPolarPending || isLoading) {
+  if (isLoading) {
     return (
       <Card>
         <CardContent className="space-y-3 pt-6">

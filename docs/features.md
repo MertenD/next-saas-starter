@@ -57,7 +57,7 @@ A plain CRUD example against a real Prisma model (`Post`), plus a premium-gated 
 
 ### `user/`
 
-`server/router.ts` exposes `user.me` (current user's id/name/email/image/emailVerified/createdAt) and `user.isPolarEnabled` (a public procedure exposing the billing-configured flag to the client). `hooks/use-user.ts` wraps `user.me` as `useCurrentUser()`. `hooks/use-update-profile.ts`, `hooks/use-change-password.ts`, and `hooks/use-resend-verification-email.ts` wrap the corresponding `authClient` calls (`updateUser`, `changePassword`, `sendVerificationEmail`) with toasts and `user.me` cache invalidation - no custom tRPC mutations needed since Better Auth's client already exposes these directly.
+`server/router.ts` exposes `user.me` (current user's id/name/email/image/emailVerified/createdAt) . The billing-configured flag and the current user's basics are not fetched by the client: the `(dashboard)` layout resolves them on the server and hands them over via `DashboardProvider` / `useDashboard()` (`src/components/dashboard-context.tsx`). `hooks/use-user.ts` wraps `user.me` as `useCurrentUser()`. `hooks/use-update-profile.ts`, `hooks/use-change-password.ts`, and `hooks/use-resend-verification-email.ts` wrap the corresponding `authClient` calls (`updateUser`, `changePassword`, `sendVerificationEmail`) with toasts and `user.me` cache invalidation (the profile update also calls `router.refresh()` so the server-resolved dashboard context updates) - no custom tRPC mutations needed since Better Auth's client already exposes these directly.
 
 ### `settings/`
 
@@ -88,7 +88,7 @@ model Project {
   updatedAt   DateTime @updatedAt
   userId      String
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  @@index([userId])
+  @@index([userId, createdAt])
   @@map("project")
 }
 ```

@@ -22,6 +22,16 @@ export const demoJobStatusSchema = z.object({
 
 export type DemoJobStatus = z.infer<typeof demoJobStatusSchema>
 
+/**
+ * Channel key of one demoJob run: namespaced by the user who triggered it.
+ * The server derives the key from the session when it issues a subscription
+ * token, so a user can only ever subscribe to their own runs, even if they
+ * guess another run's event id.
+ */
+export function demoJobKey(userId: string, eventId: string) {
+  return `${userId}:${eventId}`
+}
+
 export const demoJobChannel = channel(
   (eventId: string) => `demo-job:${eventId}`,
 ).addTopic(topic("status").schema(demoJobStatusSchema))

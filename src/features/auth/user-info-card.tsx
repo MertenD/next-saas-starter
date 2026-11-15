@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
 import { usePlausible } from "next-plausible"
 import { useState } from "react"
+import { useDashboard } from "@/components/dashboard-context"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import {
@@ -26,18 +27,14 @@ import { useResendVerificationEmail } from "@/features/user/hooks/use-resend-ver
 import type { PlausibleEvents } from "@/lib/analytics"
 import { authClient } from "@/lib/auth-client"
 
-type UserInfoCardProps = {
-  username: string
-}
-
-export default function UserInfoCard({ username }: UserInfoCardProps) {
+export default function UserInfoCard() {
   const router = useRouter()
   const signOut = useSignOut()
-  const { data: session } = authClient.useSession()
+  const { user } = useDashboard()
   const t = useTranslations("auth.userInfo")
 
-  const displayName = session?.user.name?.split("@")[0] ?? username
-  const avatarImage = session?.user.image ?? undefined
+  const displayName = user.name.split("@")[0]
+  const avatarImage = user.image ?? undefined
 
   return (
     <div className="rounded-lg border bg-linear-to-br from-chart-1/10 to-chart-2/10 p-4">
@@ -92,7 +89,7 @@ export default function UserInfoCard({ username }: UserInfoCardProps) {
 
 function UpgradeToProButton() {
   const { hasActiveSubscription, isLoading } = useHasActiveSubscription()
-  const { data: session } = authClient.useSession()
+  const { user } = useDashboard()
   const plausible = usePlausible<PlausibleEvents>()
   const t = useTranslations("auth.userInfo")
   const [verifyDialogOpen, setVerifyDialogOpen] = useState(false)
@@ -104,7 +101,7 @@ function UpgradeToProButton() {
   }
 
   function handleClick() {
-    if (session && !session.user.emailVerified) {
+    if (!user.emailVerified) {
       setVerifyDialogOpen(true)
       return
     }
@@ -140,7 +137,7 @@ function UpgradeToProButton() {
             </Button>
             <Button
               disabled={isResending}
-              onClick={() => session && resendVerification(session.user.email)}
+              onClick={() => resendVerification(user.email)}
             >
               {t("verifyDialog.resendButton")}
             </Button>

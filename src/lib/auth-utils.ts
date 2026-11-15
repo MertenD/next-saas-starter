@@ -18,6 +18,28 @@ export const getSessionOnServer = cache(async () => {
 })
 
 /**
+ * The Polar customer state (subscriptions, entitlements) of a user, or `null`
+ * when Polar isn't configured. Wrapped in `React.cache()` so every guard that
+ * checks the subscription during one request (layout, page, tRPC procedures
+ * run during SSR prefetch) shares a single Polar API call. Rejects when the
+ * Polar API call fails; callers decide whether that means "deny" or "error".
+ */
+export const getPolarCustomerState = cache(async (userId: string) => {
+  if (!isPolarEnabled || !polarClient) return null
+  return polarClient.customers.getStateExternal({ externalId: userId })
+})
+
+/** The customer state returned by {@link getPolarCustomerState} when Polar is configured. */
+export type PolarCustomerState = NonNullable<
+  Awaited<ReturnType<typeof getPolarCustomerState>>
+>
+
+/** Whether a Polar customer state has at least one active subscription. */
+export function hasActiveSubscription(customer: PolarCustomerState) {
+  return (customer.activeSubscriptions?.length ?? 0) > 0
+}
+
+/**
  * Server Component / Server Action guard: resolves the current session from
  * request headers and redirects to `/login` if there isn't one. Call this at
  * the top of any protected page or layout instead of manually reading
@@ -48,18 +70,12 @@ export const requireAuthAndPremium = async (nonPremiumRedirectUrl = "/") => {
   }
 
   // When Polar is not configured, skip the subscription check (dev/mock mode)
-  if (!isPolarEnabled || !polarClient) {
+  const customer = await getPolarCustomerState(session.user.id)
+  if (!customer) {
     return session
   }
 
-  const customer = await polarClient.customers.getStateExternal({
-    externalId: session.user.id,
-  })
-
-  if (
-    !customer.activeSubscriptions ||
-    customer.activeSubscriptions.length === 0
-  ) {
+  if (!hasActiveSubscription(customer)) {
     redirect(nonPremiumRedirectUrl)
   }
 
@@ -68,13 +84,13 @@ export const requireAuthAndPremium = async (nonPremiumRedirectUrl = "/") => {
 
 /**
  * Inverse of {@link requireAuth}: redirects already-authenticated users away
- * from auth-only pages (login, signup, ...) back to `/`.
+ * from auth-only pages (login, signup, ...) back to `/dashboard`.
  */
 export const requireUnauth = async () => {
   const session = await getSessionOnServer()
 
   if (session) {
-    redirect("/")
+    redirect("/dashboard")
   }
 
   return session
@@ -98,18 +114,12 @@ export async function requirePremiumUserFromRequest(_req: Request): Promise<{
   }
 
   // When Polar is not configured, skip the subscription check (dev/mock mode)
-  if (!isPolarEnabled || !polarClient) {
+  const customer = await getPolarCustomerState(session.user.id)
+  if (!customer) {
     return session
   }
 
-  const customer = await polarClient.customers.getStateExternal({
-    externalId: session.user.id,
-  })
-
-  if (
-    !customer.activeSubscriptions ||
-    customer.activeSubscriptions.length === 0
-  ) {
+  if (!hasActiveSubscription(customer)) {
     throw new Response("Premium required", { status: 403 })
   }
 

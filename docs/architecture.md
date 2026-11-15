@@ -69,8 +69,7 @@ src/
 │   │   ├── inngest/route.ts          # Inngest's Next.js serve handler - registers all functions
 │   │   ├── pwa-icon/route.tsx        # Generated placeholder PWA icons
 │   │   └── trpc/[trpc]/route.ts      # tRPC fetch adapter for the whole appRouter
-│   ├── layout.tsx                    # Root layout: fonts, next-intl, TRPC provider, Plausible, devtools
-│   └── page.tsx                      # "/" - redirects to /dashboard
+│   └── layout.tsx                    # Root layout: fonts, next-intl, TRPC provider, Plausible, devtools ("/" redirects to /dashboard via next.config.ts)
 ├── components/
 │   ├── ui/                           # shadcn/ui primitives (see frontend.md)
 │   ├── app-shell.tsx                 # Dashboard shell wrapping the sidebar nav
@@ -91,7 +90,7 @@ src/
 │   │   ├── pagination/               # Paginated/filterable table demo (entity components, prefetch)
 │   │   └── posts/                    # Canonical CRUD example (real Prisma model)
 │   ├── subscriptions/                # Polar subscription-state hooks
-│   └── user/                         # Current-user data + isPolarEnabled flag
+│   └── user/                         # Current-user data (user.me)
 ├── lib/                              # See "Key files" below
 ├── trpc/
 │   ├── init.ts                       # baseProcedure, protectedProcedure, premiumProcedure

@@ -19,14 +19,14 @@ The canonical full CRUD reference implementation against a real Prisma-backed mo
 
 ## How it works
 
-1. **Ownership checks, by hand, every time.** `postsRouter` exposes `getMany`, `getOne`, `create`, `update`, `delete` - all `protectedProcedure`. Prisma has no per-request row-level security, so `getOne`, `update`, and `delete` each explicitly check `post.userId === ctx.auth.user.id` before returning or mutating anything, throwing `NOT_FOUND` otherwise:
+1. **Ownership checks, in the query itself.** `postsRouter` exposes `getMany`, `getOne`, `create`, `update`, `delete` - all `protectedProcedure`. Prisma has no per-request row-level security, so `getOne`, `update`, and `delete` put `userId: ctx.auth.user.id` into the `where` of the query that reads or mutates the row, which keeps the ownership check and the write in a single database round trip. A foreign or missing post throws `NOT_FOUND`:
 
    ```ts
-   const post = await prisma.post.findUnique({ where: { id: input.id } })
-   if (!post || post.userId !== ctx.auth.user.id) {
-     throw new TRPCError({ code: "NOT_FOUND" })
-   }
+   // update / delete: Prisma raises P2025 when nothing matches id AND userId
+   await prisma.post.delete({ where: { id: input.id, userId: ctx.auth.user.id } })
    ```
+
+   `getMany` is capped at `MAX_POSTS` (100) rows and served by the composite index `@@index([userId, createdAt])`. The page prefetches the list on the server (`prefetch()` + `HydrateClient`), so the list is in the first HTML.
 
 2. **Cache invalidation, the simple way.** Every mutation hook in `use-posts.ts` follows the same shape on success: show a toast, then `queryClient.invalidateQueries(trpc.posts.getMany.queryOptions())`. Rather than hand-patching the cached list after a create/update/delete, it just refetches - the correct default until you have a specific reason (e.g. a very expensive query) to optimize further.
 

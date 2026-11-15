@@ -1,7 +1,10 @@
 "use client"
 import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister"
 // ^-- to make sure we can mount the Provider from a server component
-import type { QueryClient } from "@tanstack/react-query"
+import {
+  defaultShouldDehydrateQuery,
+  type QueryClient,
+} from "@tanstack/react-query"
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client"
 import { createTRPCClient, httpBatchLink } from "@trpc/client"
 import { createTRPCContext } from "@trpc/tanstack-react-query"
@@ -74,7 +77,7 @@ const PERSIST_MAX_AGE = 7 * 24 * 60 * 60 * 1000
  * cached data or query keys; restored caches with a different buster are
  * discarded.
  */
-const PERSIST_BUSTER = "v1"
+const PERSIST_BUSTER = "v2"
 
 /**
  * Removes the persisted (IndexedDB) query cache. Call together with
@@ -114,6 +117,11 @@ export function TRPCReactProvider(
         persister: idbPersister,
         maxAge: PERSIST_MAX_AGE,
         buster: PERSIST_BUSTER,
+        // The shared QueryClient also dehydrates pending queries (for SSR
+        // streaming). A pending query's in-flight promise cannot be stored in
+        // IndexedDB (it serializes to `{}`), and restoring it throws
+        // "promise.then is not a function". Persist finished queries only.
+        dehydrateOptions: { shouldDehydrateQuery: defaultShouldDehydrateQuery },
       }}
     >
       <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>

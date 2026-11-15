@@ -84,39 +84,27 @@ Use this when a page already knows what data it needs at request time and you wa
 
 ```tsx
 // src/app/(dashboard)/demo/posts/page.tsx
-import { prefetch, trpc } from "@/trpc/server"
+import { HydrateClient, prefetch, trpc } from "@/trpc/server"
 import { PostsContainer } from "@/features/demo/posts/components/posts-container"
 
 export default async function PostsPage() {
   prefetch(trpc.posts.getMany.queryOptions())
 
   return (
-    <main className="flex flex-col gap-6 p-6">
-      <PostsContainer />
-    </main>
+    <div className="flex flex-col gap-6 p-6">
+      <HydrateClient>
+        <PostsContainer />
+      </HydrateClient>
+    </div>
   )
 }
 ```
 
 `trpc` here is the server-side "options proxy" from `src/trpc/server.tsx` - it builds the exact same `queryOptions()` shape as the client `useTRPC()` does, just without needing React context. `prefetch()` runs the query against a request-scoped `QueryClient` (via `getQueryClient()`, cached per-request with React's `cache()`) and stores the result in its cache. Note it's **not awaited** - `prefetchQuery` populates the cache and lets Next.js's streaming SSR pick up the promise, so the page doesn't block on it.
 
-**Step 2 - make sure the tree is wrapped in `HydrateClient`.**
+**Step 2 - wrap the client subtree in `HydrateClient` (in the same page that prefetches).**
 
-```tsx
-// src/app/(dashboard)/layout.tsx
-import { HydrateClient } from "@/trpc/server"
-
-export default async function Layout({ children }: { children: React.ReactNode }) {
-  const session = await requireAuth()
-  return (
-    <HydrateClient>
-      <AppShell username={session.user.name}>{children}</AppShell>
-    </HydrateClient>
-  )
-}
-```
-
-This is already done once, at the top of the `(dashboard)` route group - every page under it (including `PostsPage` above) is covered automatically. You only need your own `<HydrateClient>` if you're prefetching from a route outside `(dashboard)`. `HydrateClient` calls `dehydrate()` on the request-scoped `QueryClient` and serializes its cache (via superjson, so `Date`s etc. survive) into the HTML as part of a `HydrationBoundary`.
+The page from step 1 already does this: `<HydrateClient>` around `<PostsContainer />`. Every page that calls `prefetch()` needs its own `HydrateClient` below the `prefetch()` call. The one in `src/app/(dashboard)/layout.tsx` runs earlier in the render, before the page has prefetched anything, so it can't carry the page's data. `HydrateClient` calls `dehydrate()` on the request-scoped `QueryClient` and serializes its cache (via superjson, so `Date`s etc. survive) into the HTML as part of a `HydrationBoundary`.
 
 **Step 3 - read the same query from a client component with `useSuspenseQuery`.**
 

@@ -58,7 +58,7 @@ export default function LoginForm({ oauthProviders }: LoginFormProps) {
     setOauthLoading(provider)
     plausible("Login")
     await authClient.signIn.social(
-      { provider, callbackURL: "/" },
+      { provider, callbackURL: "/dashboard" },
       {
         onError: (ctx) => {
           toast.error(getErrorMessage(ctx.error))
@@ -70,11 +70,15 @@ export default function LoginForm({ oauthProviders }: LoginFormProps) {
 
   async function onSubmit(values: LoginFormValues) {
     await authClient.signIn.email(
-      { email: values.email, password: values.password, callbackURL: "/" },
+      {
+        email: values.email,
+        password: values.password,
+        callbackURL: "/dashboard",
+      },
       {
         onSuccess: () => {
           plausible("Login")
-          router.push("/")
+          router.push("/dashboard")
         },
         onError: (context) => {
           toast.error(getErrorMessage(context.error))

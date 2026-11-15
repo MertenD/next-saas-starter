@@ -1,5 +1,5 @@
 import { inngest } from "./client"
-import { demoJobChannel } from "./realtime"
+import { demoJobChannel, demoJobKey } from "./realtime"
 
 /**
  * Every event name the app can send/receive through Inngest. Add new events
@@ -31,9 +31,12 @@ export const demoJob = inngest.createFunction(
   { id: "demo-job", name: "Demo Background Job" },
   { event: InngestEvents.DemoTriggered },
   async ({ event, step, publish }) => {
-    // event.id is the ID returned by inngest.send() - the channel key the
-    // client subscribes to. Falls back defensively; always set in practice.
-    const status = demoJobChannel(event.id ?? "unknown")
+    // event.id is the ID returned by inngest.send(); together with the
+    // triggering user's id it forms the channel key the client subscribes to
+    // (see `demoJobKey`). Falls back defensively; always set in practice.
+    const status = demoJobChannel(
+      demoJobKey(String(event.data.userId ?? "unknown"), event.id ?? "unknown"),
+    )
 
     try {
       // Step 1: Simulate an async data fetch

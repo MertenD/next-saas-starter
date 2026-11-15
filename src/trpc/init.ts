@@ -1,9 +1,11 @@
 import { initTRPC, TRPCError } from "@trpc/server"
-import { headers } from "next/headers"
 import { cache } from "react"
 import superjson from "superjson"
-import { auth } from "@/lib/auth"
-import { isPolarEnabled, polarClient } from "@/lib/polar"
+import {
+  getPolarCustomerState,
+  getSessionOnServer,
+  hasActiveSubscription,
+} from "@/lib/auth-utils"
 
 /**
  * Builds the per-request tRPC context. Wrapped in React's `cache()` so it's
@@ -32,9 +34,9 @@ export const baseProcedure = t.procedure
  * Use for any endpoint that reads/writes user-specific data.
  */
 export const protectedProcedure = baseProcedure.use(async ({ ctx, next }) => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  })
+  // Cached per request: during SSR prefetch the layout and every procedure
+  // share one session lookup instead of each doing their own.
+  const session = await getSessionOnServer()
 
   if (!session) {
     throw new TRPCError({
@@ -55,28 +57,24 @@ export const protectedProcedure = baseProcedure.use(async ({ ctx, next }) => {
  */
 export const premiumProcedure = protectedProcedure.use(
   async ({ ctx, next }) => {
-    // When Polar is not configured, grant premium access (local dev / mock mode)
-    if (!isPolarEnabled || !polarClient) {
+    // A failing Polar API call is treated like "no subscription".
+    const customer = await getPolarCustomerState(ctx.auth.user.id).catch(
+      () => undefined,
+    )
+
+    // When Polar is not configured (`null`), grant premium access (local dev / mock mode)
+    if (customer === null) {
       return next({ ctx: { ...ctx, customer: null } })
     }
 
-    // biome-ignore lint/suspicious/noImplicitAnyLet: typed by Polar SDK after assignment
-    let customer
-    try {
-      customer = await polarClient.customers.getStateExternal({
-        externalId: ctx.auth.user.id,
-      })
-    } catch {
+    if (!customer) {
       throw new TRPCError({
         code: "FORBIDDEN",
         message: "Active Subscription required",
       })
     }
 
-    if (
-      !customer.activeSubscriptions ||
-      customer.activeSubscriptions.length === 0
-    ) {
+    if (!hasActiveSubscription(customer)) {
       throw new TRPCError({
         code: "FORBIDDEN",
         message: "Active Subscription required",

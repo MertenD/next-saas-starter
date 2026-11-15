@@ -7,7 +7,6 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { useUIStore } from "@/stores/ui-store"
 
 type AppShellProps = {
-  username: string
   children: React.ReactNode
 }
 
@@ -17,7 +16,7 @@ type AppShellProps = {
  * collapsed state is lifted to `useUIStore` (rather than local state) so it
  * can be read/toggled from both this component and the sidebar itself.
  */
-export default function AppShell({ username, children }: AppShellProps) {
+export default function AppShell({ children }: AppShellProps) {
   const sidebarCollapsed = useUIStore((state) => state.sidebarCollapsed)
   const setSidebarCollapsed = useUIStore((state) => state.setSidebarCollapsed)
 
@@ -26,7 +25,7 @@ export default function AppShell({ username, children }: AppShellProps) {
       open={!sidebarCollapsed}
       onOpenChange={(open) => setSidebarCollapsed(!open)}
     >
-      <AppSidebar username={username} />
+      <AppSidebar />
       <SidebarInset className="bg-background overflow-y-auto">
         <EmailVerificationBanner />
         {children}

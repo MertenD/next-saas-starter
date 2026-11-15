@@ -31,6 +31,7 @@ tRPC procedure builders (`src/trpc/init.ts`) - see [Architecture](./architecture
 | `baseProcedure` | Public, no auth. |
 | `protectedProcedure` | Requires a session, throws `UNAUTHORIZED` otherwise. Attaches `ctx.auth`. |
 | `premiumProcedure` | `protectedProcedure` + active subscription check, throws `FORBIDDEN` otherwise. Attaches `ctx.customer`. |
+| `getPolarCustomerState(userId)` / `hasActiveSubscription(customer)` | Server-side, `src/lib/auth-utils.ts`. Request-cached Polar customer lookup (`null` when Polar is off) and the active-subscription predicate; used by every server-side premium check. |
 
 ## Backend clients & services
 
@@ -89,6 +90,7 @@ Non-`ui/` components in `src/components/` - see [Frontend](./frontend.md) for th
 |---|---|
 | `ConfirmDialog` | Standard "Are you sure?" dialog for ordinary, low-stakes deletes. Never wire a delete straight to a click. |
 | `CriticalConfirmDialog` | Destructive/hard-to-reverse deletes - user must retype a confirmation string before confirming. |
+| `DashboardProvider` / `useDashboard()` | Server-resolved current user (`id`, `name`, `email`, `image`, `emailVerified`) and `polarEnabled`, provided by the `(dashboard)` layout (`src/components/dashboard-context.tsx`). Use it instead of `authClient.useSession()` or a billing-flag query in dashboard client components. |
 | `AppShell` | Dashboard layout shell: sidebar + `EmailVerificationBanner` + content area. Wraps every `(dashboard)` page. |
 | `AppSidebar` | Sidebar nav content rendered inside `AppShell`. |
 | `EmailVerificationBanner` | Dismissible-by-verification banner shown while the signed-in user's email is unverified. |
