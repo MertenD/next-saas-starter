@@ -7,11 +7,11 @@ import { BookingStepDates } from "@/features/demo/booking/components/booking-ste
 import { BookingStepGuests } from "@/features/demo/booking/components/booking-step-guests"
 import { BookingStepPayment } from "@/features/demo/booking/components/booking-step-payment"
 import { BookingStepReview } from "@/features/demo/booking/components/booking-step-review"
-import { useBookingWizard } from "@/features/demo/booking/hooks/use-booking-wizard"
+import { useBookingStep } from "@/features/demo/booking/hooks/use-booking-wizard"
 import { useBookingWizardStore } from "@/features/demo/booking/store/booking-wizard-store"
 
 export function BookingContainer() {
-  const { step } = useBookingWizard()
+  const step = useBookingStep()
   const [hydrated, setHydrated] = useState(false)
 
   // The store skips automatic hydration (see its doc comment): restore the

@@ -11,17 +11,21 @@ type PaginationDemoPageProps = {
 }
 
 /**
- * Parses the URL state on the server and prefetches the first query, so the
- * table is already in the HTML on load (or when sharing a filtered link).
+ * Parses the URL state on the server and prefetches (and awaits) the first
+ * query, so the table is already in the HTML on load (or when sharing a
+ * filtered link). `loading.tsx` shows the skeleton while this resolves.
  */
 export default async function PaginationDemoPage({
   searchParams,
 }: PaginationDemoPageProps) {
-  const [t, params] = await Promise.all([
+  const params = await customersParamsLoader(searchParams)
+  // Awaited on purpose: with `useQuery` the server HTML must already contain
+  // the data. A pending (not awaited) prefetch renders the skeleton on the
+  // server while the client hydrates with data, which is a hydration mismatch.
+  const [t] = await Promise.all([
     getTranslations("pagination"),
-    customersParamsLoader(searchParams),
+    prefetchCustomers(params),
   ])
-  prefetchCustomers(params)
 
   return (
     <HydrateClient>

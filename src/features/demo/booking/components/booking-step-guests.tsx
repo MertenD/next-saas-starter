@@ -1,11 +1,18 @@
 "use client"
 
+import { zodResolver } from "@hookform/resolvers/zod"
 import { MinusIcon, PlusIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
-import { useForm } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import { Button } from "@/components/ui/button"
-import { useBookingWizard } from "@/features/demo/booking/hooks/use-booking-wizard"
-import type { GuestsData } from "@/features/demo/booking/schema/booking-schema"
+import {
+  useBookingActions,
+  useBookingData,
+} from "@/features/demo/booking/hooks/use-booking-wizard"
+import {
+  type GuestsData,
+  guestsSchema,
+} from "@/features/demo/booking/schema/booking-schema"
 
 const GUEST_FIELDS = ["adults", "children", "infants"] as const
 
@@ -20,9 +27,11 @@ const GUEST_LIMITS: Record<
 
 export function BookingStepGuests() {
   const t = useTranslations("booking")
-  const { data, setStepData, next, back } = useBookingWizard()
+  const data = useBookingData()
+  const { setStepData, next, back } = useBookingActions()
 
   const form = useForm<GuestsData>({
+    resolver: zodResolver(guestsSchema),
     defaultValues: {
       adults: data.adults ?? 1,
       children: data.children ?? 0,
@@ -30,12 +39,18 @@ export function BookingStepGuests() {
     },
   })
 
-  const values = form.watch()
+  // `useWatch` instead of `form.watch()`: subscribes this component to the
+  // values without opting out of the React Compiler's optimizations.
+  const [adults, children, infants] = useWatch({
+    control: form.control,
+    name: [...GUEST_FIELDS],
+  })
+  const values: GuestsData = { adults, children, infants }
 
   function adjust(field: (typeof GUEST_FIELDS)[number], delta: number) {
     const { min, max } = GUEST_LIMITS[field]
-    const nextValue = Math.min(max, Math.max(min, values[field] + delta))
-    form.setValue(field, nextValue)
+    const current = form.getValues(field)
+    form.setValue(field, Math.min(max, Math.max(min, current + delta)))
   }
 
   function onSubmit(formValues: GuestsData) {

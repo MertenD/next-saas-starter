@@ -12,6 +12,7 @@ import {
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useTranslations } from "next-intl"
+import type React from "react"
 import {
   Sidebar,
   SidebarContent,
@@ -29,64 +30,71 @@ import {
 import UserInfoCard from "@/features/auth/user-info-card"
 import { cn } from "@/lib/utils"
 
+type NavItem = {
+  /** Key inside the `sidebar` i18n namespace. */
+  titleKey: string
+  icon: React.ElementType
+  url: string
+}
+
+const MAIN_ITEMS: NavItem[] = [
+  { titleKey: "nav.dashboard", icon: HomeIcon, url: "/dashboard" },
+  { titleKey: "nav.settings", icon: SettingsIcon, url: "/settings" },
+]
+
+/**
+ * One entry per demo feature under `src/features/demo/*`. When adding a new
+ * demo feature, add its entry here (and the matching `sidebar.nav.*`
+ * translation keys) so it's discoverable.
+ */
+const DEMO_ITEMS: NavItem[] = [
+  { titleKey: "nav.posts", icon: FileTextIcon, url: "/demo/posts" },
+  { titleKey: "nav.inngest", icon: ZapIcon, url: "/demo/inngest" },
+  { titleKey: "nav.ai", icon: BotIcon, url: "/demo/ai" },
+  { titleKey: "nav.pagination", icon: TableIcon, url: "/demo/pagination" },
+  { titleKey: "nav.booking", icon: CalendarCheckIcon, url: "/demo/booking" },
+]
+
+function NavLink({
+  url,
+  icon: Icon,
+  title,
+}: {
+  url: string
+  icon: React.ElementType
+  title: string
+}) {
+  const pathName = usePathname()
+  const isActive =
+    url === "/dashboard" ? pathName === "/dashboard" : pathName.startsWith(url)
+
+  return (
+    <SidebarMenuItem>
+      <SidebarMenuButton
+        asChild
+        isActive={isActive}
+        tooltip={title}
+        className={cn(
+          "text-muted-foreground hover:bg-accent hover:text-foreground",
+          "data-[active=true]:bg-primary data-[active=true]:text-primary-foreground data-[active=true]:shadow-sm data-[active=true]:hover:bg-primary data-[active=true]:hover:text-primary-foreground",
+        )}
+      >
+        <Link href={url}>
+          <Icon />
+          <span>{title}</span>
+        </Link>
+      </SidebarMenuButton>
+    </SidebarMenuItem>
+  )
+}
+
 /**
  * Main dashboard navigation sidebar. Nav items are split into core app
- * links and a "demo" section listing every demo feature under
- * `src/features/demo/*` - when adding a new demo feature, add its entry to
- * `demoItems` (and the matching `sidebar.nav.*` translation keys) so it's
- * discoverable.
+ * links (`MAIN_ITEMS`) and a "demo" section (`DEMO_ITEMS`).
  */
 export default function AppSidebar() {
-  const pathName = usePathname()
   const t = useTranslations("sidebar")
   const tBrand = useTranslations("auth.layout")
-
-  const mainItems = [
-    { title: t("nav.dashboard"), icon: HomeIcon, url: "/dashboard" },
-    { title: t("nav.settings"), icon: SettingsIcon, url: "/settings" },
-  ]
-
-  const demoItems = [
-    { title: t("nav.posts"), icon: FileTextIcon, url: "/demo/posts" },
-    { title: t("nav.inngest"), icon: ZapIcon, url: "/demo/inngest" },
-    { title: t("nav.ai"), icon: BotIcon, url: "/demo/ai" },
-    { title: t("nav.pagination"), icon: TableIcon, url: "/demo/pagination" },
-    { title: t("nav.booking"), icon: CalendarCheckIcon, url: "/demo/booking" },
-  ]
-
-  const NavLink = ({
-    url,
-    icon: Icon,
-    title,
-  }: {
-    url: string
-    icon: React.ElementType
-    title: string
-  }) => {
-    const isActive =
-      url === "/dashboard"
-        ? pathName === "/dashboard"
-        : pathName.startsWith(url)
-
-    return (
-      <SidebarMenuItem>
-        <SidebarMenuButton
-          asChild
-          isActive={isActive}
-          tooltip={title}
-          className={cn(
-            "text-muted-foreground hover:bg-accent hover:text-foreground",
-            "data-[active=true]:bg-primary data-[active=true]:text-primary-foreground data-[active=true]:shadow-sm data-[active=true]:hover:bg-primary data-[active=true]:hover:text-primary-foreground",
-          )}
-        >
-          <Link href={url}>
-            <Icon />
-            <span>{title}</span>
-          </Link>
-        </SidebarMenuButton>
-      </SidebarMenuItem>
-    )
-  }
 
   return (
     <Sidebar collapsible="icon">
@@ -107,8 +115,8 @@ export default function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {mainItems.map((item) => (
-                <NavLink key={item.url} {...item} />
+              {MAIN_ITEMS.map(({ titleKey, ...item }) => (
+                <NavLink key={item.url} title={t(titleKey)} {...item} />
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
@@ -120,8 +128,8 @@ export default function AppSidebar() {
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {demoItems.map((item) => (
-                <NavLink key={item.url} {...item} />
+              {DEMO_ITEMS.map(({ titleKey, ...item }) => (
+                <NavLink key={item.url} title={t(titleKey)} {...item} />
               ))}
             </SidebarMenu>
           </SidebarGroupContent>

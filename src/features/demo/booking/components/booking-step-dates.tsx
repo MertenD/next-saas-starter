@@ -14,12 +14,16 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { useBookingWizard } from "@/features/demo/booking/hooks/use-booking-wizard"
+import {
+  useBookingActions,
+  useBookingData,
+} from "@/features/demo/booking/hooks/use-booking-wizard"
 import type { TripDatesData } from "@/features/demo/booking/schema/booking-schema"
 
 export function BookingStepDates() {
   const t = useTranslations("booking")
-  const { data, setStepData, next } = useBookingWizard()
+  const data = useBookingData()
+  const { setStepData, next } = useBookingActions()
 
   const tripDatesFormSchema = z
     .object({

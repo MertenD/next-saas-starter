@@ -5,7 +5,10 @@ import { useTranslations } from "next-intl"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
-import { useBookingWizard } from "@/features/demo/booking/hooks/use-booking-wizard"
+import {
+  useBookingActions,
+  useBookingData,
+} from "@/features/demo/booking/hooks/use-booking-wizard"
 import { useSubmitBooking } from "@/features/demo/booking/hooks/use-submit-booking"
 import type { BookingFormData } from "@/features/demo/booking/schema/booking-schema"
 
@@ -20,7 +23,8 @@ function SummaryRow({ label, value }: { label: string; value: string }) {
 
 export function BookingStepReview() {
   const t = useTranslations("booking")
-  const { data, back, reset, clearDraft } = useBookingWizard()
+  const data = useBookingData()
+  const { back, reset, clearDraft } = useBookingActions()
   const {
     mutate,
     isPending,

@@ -42,7 +42,7 @@ A customers table (mock data) that doubles as the reference for list pages. It i
 
    The mock dataset itself (`MOCK_CUSTOMERS`) is generated once, at module load, via a small `weightedPick()` helper over `Math.random()` - so it's a fresh random set of 137 rows on every server restart, but stable for the lifetime of that running process (not regenerated per request).
 
-6. **Server prefetch.** `page.tsx` parses the URL with `customersParamsLoader(searchParams)`, calls `prefetchCustomers(params)` (not awaited, so the page streams) and wraps the content in `HydrateClient`. The client `useQuery` uses the same `queryOptions()` and therefore finds the data already in the hydrated cache: the first paint (also for a shared, filtered link) contains the table with no loading skeleton. Later interactions go through the client `useQuery` as before. See [Data Fetching](../data-fetching.md#server-side-prefetch-hydrateclient).
+6. **Server prefetch.** `page.tsx` parses the URL with `customersParamsLoader(searchParams)`, calls `prefetchCustomers(params)` (awaited, so the server HTML already contains the table; `loading.tsx` covers the wait) and wraps the content in `HydrateClient`. The client `useQuery` uses the same `queryOptions()` and therefore finds the data already in the hydrated cache: the first paint (also for a shared, filtered link) contains the table with no loading skeleton. Later interactions go through the client `useQuery` as before. See [Data Fetching](../data-fetching.md#server-side-prefetch-hydrateclient).
 
 7. **All four states.** `CustomersTable` renders a table-shaped skeleton while loading, `ErrorView` (retry) on error, `EmptyView` (with a "Clear filters" action) when nothing matches, and the rows otherwise.
 

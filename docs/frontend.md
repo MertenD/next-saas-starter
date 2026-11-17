@@ -88,9 +88,15 @@ They are deliberately data-agnostic: you bring the query and the params hook. Se
 
 ## State management
 
-- **Zustand** - client-only UI state that doesn't need to survive a refresh or sync with the server. `src/stores/ui-store.ts` (sidebar collapsed/expanded) is the global example; features can have their own local store, like `demo/booking`'s wizard-step store.
+- **Zustand** - client-only UI state that doesn't need to survive a refresh or sync with the server. there is no global store at the moment; features can have their own local store, like `demo/booking`'s wizard-step store.
 - **TanStack Query** (via `useTRPC()`) - all server state. `src/trpc/client.tsx`'s `TRPCReactProvider` persists the query cache to IndexedDB with a 7-day retention, so data survives page reloads without a network round-trip. The cache holds user-specific data, so it is wiped on sign-out (`useSignOut()`), keyed by user id where the key is not a tRPC key, and invalidated across incompatible deployments by bumping `PERSIST_BUSTER`.
 - **nuqs** - URL search params as state, for anything that should be shareable/bookmarkable (filters, pagination, sort). See `demo/pagination/params.ts` (also parsed on the server for prefetching).
+
+## React Compiler
+
+`reactCompiler: true` in `next.config.ts` turns on the React Compiler (requires the dev dependency `babel-plugin-react-compiler`). At build time it memoizes values, callbacks and JSX inside components and hooks, so do not write `useMemo` or `useCallback` for render performance. A Zod schema built from translated messages inside a form component, for example, is simply declared inline. 
+
+If the compiler ever miscompiles a component, add the `"use no memo"` directive to that component or hook as an opt-out. Keep components pure (no mutation of props, state or refs during render), otherwise the compiler skips them.
 
 ## Internationalization (next-intl)
 

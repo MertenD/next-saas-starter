@@ -29,7 +29,7 @@ Streaming AI chat demo using the Vercel AI SDK against OpenRouter. What it's spe
 
 ### `demo/booking/` - multi-step wizard with client-only state
 
-A multi-step, Airbnb-style booking wizard: dates → guests → payment → review. What it's specifically built to show off: a feature-scoped, `sessionStorage`-persisted Zustand store (separate from the global `src/stores/ui-store.ts`), per-step Zod validation, and a deliberately flaky backend that forces real error/retry handling.
+A multi-step, Airbnb-style booking wizard: dates → guests → payment → review. What it's specifically built to show off: a feature-scoped, `sessionStorage`-persisted Zustand store (feature-local, not a global store), per-step Zod validation, and a deliberately flaky backend that forces real error/retry handling.
 
 **Full walkthrough: [demos/booking.md](./demos/booking.md)**
 

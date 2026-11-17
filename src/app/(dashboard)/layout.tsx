@@ -1,3 +1,4 @@
+import { cookies } from "next/headers"
 import { getLocale } from "next-intl/server"
 import type React from "react"
 import AppShell from "@/components/app-shell"
@@ -7,16 +8,21 @@ import { requireAuth } from "@/lib/auth-utils"
 import { isPolarEnabled } from "@/lib/polar"
 import { HydrateClient } from "@/trpc/server"
 
+/** Cookie written by `SidebarProvider` (`src/components/ui/sidebar.tsx`) with the open/closed state. */
+const SIDEBAR_COOKIE_NAME = "sidebar_state"
+
 export default async function Layout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const [session, activeLocale] = await Promise.all([
+  const [session, activeLocale, cookieStore] = await Promise.all([
     requireAuth(),
     getLocale(),
+    cookies(),
   ])
   const { user } = session
+  const defaultOpen = cookieStore.get(SIDEBAR_COOKIE_NAME)?.value !== "false"
 
   return (
     <HydrateClient>
@@ -33,7 +39,7 @@ export default async function Layout({
         }}
       >
         <LocaleSync userLocale={user.locale} activeLocale={activeLocale} />
-        <AppShell>{children}</AppShell>
+        <AppShell defaultOpen={defaultOpen}>{children}</AppShell>
       </DashboardProvider>
     </HydrateClient>
   )

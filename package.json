@@ -95,6 +95,7 @@
     "@types/node": "^20.19.43",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "babel-plugin-react-compiler": "^1.0.0",
     "inngest-cli": "^1.53.0",
     "mprocs": "^0.9.6",
     "prisma": "^6.19.3",

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useEffectEvent, useState } from "react"
 import { PAGINATION } from "@/config/constants"
 
 type UseEntitySearchProps<T extends { search: string; page: number }> = {
@@ -17,6 +17,10 @@ type UseEntitySearchProps<T extends { search: string; page: number }> = {
  *
  * `setParams` must accept the *whole* params object (spread of the current
  * params plus the changes) - wrap a nuqs `useQueryStates` setter if needed.
+ * It does not need to be a stable function: the commit runs through
+ * `useEffectEvent`, so a new `setParams` identity per render does not restart
+ * the debounce timer. The local input also follows the URL when `params.search`
+ * changes from elsewhere (e.g. a "clear filters" button).
  */
 export function useEntitySearch<T extends { search: string; page: number }>({
   params,
@@ -24,29 +28,32 @@ export function useEntitySearch<T extends { search: string; page: number }>({
   debounceMs = 400,
 }: UseEntitySearchProps<T>) {
   const [localSearch, setLocalSearch] = useState(params.search)
+  const [lastUrlSearch, setLastUrlSearch] = useState(params.search)
 
+  // Follow the URL when it changes from outside: adjusting state during
+  // render instead of mirroring it in an effect avoids a render with stale text.
+  if (params.search !== lastUrlSearch) {
+    setLastUrlSearch(params.search)
+    setLocalSearch(params.search)
+  }
+
+  const commit = useEffectEvent((search: string) => {
+    setParams({ ...params, search, page: PAGINATION.DEFAULT_PAGE })
+  })
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: `commit` is a useEffectEvent and must not be listed as a dependency
   useEffect(() => {
-    if (localSearch === "" && params.search !== "") {
-      setParams({ ...params, search: "", page: PAGINATION.DEFAULT_PAGE })
+    if (localSearch === params.search) return
+
+    // Clearing the input commits immediately, everything else is debounced
+    if (localSearch === "") {
+      commit("")
       return
     }
 
-    const timer = setTimeout(() => {
-      if (localSearch !== params.search) {
-        setParams({
-          ...params,
-          search: localSearch,
-          page: PAGINATION.DEFAULT_PAGE,
-        })
-      }
-    }, debounceMs)
-
+    const timer = setTimeout(() => commit(localSearch), debounceMs)
     return () => clearTimeout(timer)
-  }, [localSearch, params, setParams, debounceMs])
-
-  useEffect(() => {
-    setLocalSearch(params.search)
-  }, [params.search])
+  }, [localSearch, params.search, debounceMs])
 
   return { searchValue: localSearch, onSearchChange: setLocalSearch }
 }

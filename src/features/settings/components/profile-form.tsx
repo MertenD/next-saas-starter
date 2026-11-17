@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useTranslations } from "next-intl"
-import { useForm } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import { z } from "zod"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -43,7 +43,13 @@ export default function ProfileForm({ user }: ProfileFormProps) {
     defaultValues: { name: user.name, image: user.image ?? "" },
   })
 
-  const imagePreview = form.watch("image")
+  // `useWatch` re-renders only this component for the one field, instead of
+  // `form.watch`, which subscribes the whole form. The preview URL is only
+  // used once it is a valid URL, so half-typed values don't trigger image requests.
+  const imageValue = useWatch({ control: form.control, name: "image" })
+  const imagePreview = z.url().safeParse(imageValue).success
+    ? imageValue
+    : undefined
 
   function onSubmit(values: ProfileFormValues) {
     updateProfile({ name: values.name, image: values.image || undefined })
@@ -54,7 +60,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <div className="flex items-center gap-4">
           <Avatar className="size-16">
-            <AvatarImage src={imagePreview || undefined} />
+            <AvatarImage src={imagePreview} />
             <AvatarFallback className="bg-primary text-primary-foreground text-lg font-bold">
               {user.name[0]?.toUpperCase() ?? "U"}
             </AvatarFallback>

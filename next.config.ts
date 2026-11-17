@@ -6,6 +6,10 @@ const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts")
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  // React Compiler: memoizes components and hooks automatically at build time,
+  // so no manual useMemo/useCallback is needed for render performance.
+  // Requires `babel-plugin-react-compiler`. See docs/frontend.md.
+  reactCompiler: true,
   async redirects() {
     return [
       {

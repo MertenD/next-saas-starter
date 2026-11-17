@@ -4,7 +4,7 @@ import type { UIMessage } from "ai"
 import { BotIcon, UserIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import type React from "react"
-import { useEffect, useRef } from "react"
+import { memo, useEffect, useRef } from "react"
 import { MarkdownContent } from "@/components/markdown-content"
 import { cn } from "@/lib/utils"
 
@@ -61,6 +61,28 @@ function UserRow({ text }: { text: string }) {
   )
 }
 
+/**
+ * One chat message. Memoized: while an answer streams, only the last message
+ * object changes, so earlier messages (and their Markdown parse) are skipped.
+ */
+const MessageRow = memo(function MessageRow({
+  message,
+}: {
+  message: UIMessage
+}) {
+  const text = getMessageText(message)
+
+  if (message.role === "user") {
+    return <UserRow text={text} />
+  }
+
+  return (
+    <AssistantRow>
+      <MarkdownContent content={text} />
+    </AssistantRow>
+  )
+})
+
 export function ChatMessages({
   messages,
   isLoading,
@@ -87,15 +109,9 @@ export function ChatMessages({
         <p className="mt-1">{t("startConversationBody")}</p>
       </AssistantRow>
 
-      {messages.map((msg) =>
-        msg.role === "user" ? (
-          <UserRow key={msg.id} text={getMessageText(msg)} />
-        ) : (
-          <AssistantRow key={msg.id}>
-            <MarkdownContent content={getMessageText(msg)} />
-          </AssistantRow>
-        ),
-      )}
+      {messages.map((msg) => (
+        <MessageRow key={msg.id} message={msg} />
+      ))}
 
       {isLoading && (
         <div className="mb-4 flex w-full justify-start gap-2">

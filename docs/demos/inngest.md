@@ -19,7 +19,7 @@ Triggering a durable, multi-step background job from a UI action, then streaming
 | `components/job-steps-card.tsx` | Step list + trigger button |
 | `components/run-history-card.tsx` | Triggered-run list, empty state |
 | `components/run-status-badge.tsx` | Live status badge for one run |
-| `components/how-it-works-card.tsx` | Static explainer card |
+| `components/how-it-works-card.tsx` | Static explainer card (a Server Component, rendered by the page next to the client container) |
 | `src/inngest/functions.ts` | `demoJob` - the actual multi-step job |
 | `src/inngest/realtime.ts` | `demoJobChannel` - the Realtime channel/topic definition |
 | `src/inngest/client.ts` | Inngest client instance |

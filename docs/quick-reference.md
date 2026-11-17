@@ -58,7 +58,7 @@ tRPC procedure builders (`src/trpc/init.ts`) - see [Architecture](./architecture
 | `TRPCReactProvider` | `src/trpc/client.tsx` | Root client provider (tRPC + React Query + IndexedDB persistence). Mounted once in `layout.tsx`. |
 | `trpc` (options proxy) | `src/trpc/server.tsx` | Server Components: build the same query options as `useTRPC()`, for use with `prefetch`. |
 | `caller` | `src/trpc/server.tsx` | Direct server-side procedure calls as plain async functions, no HTTP round-trip. |
-| `prefetch(queryOptions)` | `src/trpc/server.tsx` | Prefetches a query into the request-scoped `QueryClient` from a Server Component. |
+| `prefetch(queryOptions)` | `src/trpc/server.tsx` | Prefetches a query into the request-scoped `QueryClient` from a Server Component. `await` it when the client reads the query with `useQuery`; skip the `await` only together with `useSuspenseQuery` in `<Suspense>`. See [Data Fetching](./data-fetching.md#which-variant-do-i-use). |
 | `HydrateClient` | `src/trpc/server.tsx` | Wrap a subtree that used `prefetch` so the client tree gets the already-fetched data. |
 | `makeQueryClient()` | `src/trpc/query-client.ts` | Factory for a correctly-configured `QueryClient`. Used internally by both providers above - rarely called directly. |
 
@@ -77,10 +77,9 @@ Full walkthrough: [Data Fetching](./data-fetching.md).
 | Export | Where | What it does |
 |---|---|---|
 | `cn(...inputs)` | `src/lib/utils.ts` | Merges Tailwind classes safely (resolves conflicts) via `clsx` + `tailwind-merge`. Use instead of string concatenation. |
-| `useErrorMessage()` | `src/hooks/use-error-message.ts` | Returns `(error) => string` for Better Auth/fetch errors, never empty and never technical: 5xx and empty messages map to `common.errors.generic`, other errors keep the server's message. Use it for every `toast.error(...)` fed by `authClient`. |
+| `useErrorMessage()` | `src/hooks/use-error-message.ts` | Returns `(error) => string` for Better Auth/fetch errors, never empty and never technical: 5xx and empty messages map to `common.errors.generic`, other errors keep the server's message. The returned function is stable per locale. Use it for every `toast.error(...)` fed by `authClient`. |
 | `useIsMobile()` | `src/hooks/use-mobile.ts` | Live viewport check below the 768px breakpoint (`useSyncExternalStore`). `false` during SSR and hydration - prefer CSS breakpoints unless you need a real JS conditional. |
-| `useEntitySearch({ params, setParams })` | `src/hooks/use-entity-search.ts` | Debounced search input state that commits to a URL-backed `search` param and resets to page 1. Pair with `EntitySearch`. |
-| `useUIStore` | `src/stores/ui-store.ts` | Zustand store for cross-cutting UI state (currently: sidebar collapsed/expanded). |
+| `useEntitySearch({ params, setParams })` | `src/hooks/use-entity-search.ts` | Debounced search input state that commits to a URL-backed `search` param and resets to page 1. Pair with `EntitySearch`. `setParams` may change identity every render (the commit runs through `useEffectEvent`), and the input follows the URL when `search` changes from elsewhere. |
 
 ## Shared components
 
@@ -91,7 +90,7 @@ Non-`ui/` components in `src/components/` - see [Frontend](./frontend.md) for th
 | `ConfirmDialog` | Standard "Are you sure?" dialog for ordinary, low-stakes deletes. Never wire a delete straight to a click. |
 | `CriticalConfirmDialog` | Destructive/hard-to-reverse deletes - user must retype a confirmation string before confirming. |
 | `DashboardProvider` / `useDashboard()` | Server-resolved current user (`id`, `name`, `email`, `image`, `emailVerified`) and `polarEnabled`, provided by the `(dashboard)` layout (`src/components/dashboard-context.tsx`). Use it instead of `authClient.useSession()` or a billing-flag query in dashboard client components. |
-| `AppShell` | Dashboard layout shell: sidebar + `EmailVerificationBanner` + content area. Wraps every `(dashboard)` page. |
+| `AppShell` | Dashboard layout shell: sidebar + `EmailVerificationBanner` + content area. Wraps every `(dashboard)` page. Takes `defaultOpen` (from the `sidebar_state` cookie, read in the layout). |
 | `AppSidebar` | Sidebar nav content rendered inside `AppShell`. |
 | `EmailVerificationBanner` | Dismissible-by-verification banner shown while the signed-in user's email is unverified. |
 | `LanguageToggle` | Locale switcher (`en`/`de`); persists the choice in the `ui-locale` cookie (Server Action) and on the user profile (`user.locale`). |

@@ -10,7 +10,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { JOB_STEPS } from "@/features/demo/inngest/model/inngest-demo"
+import {
+  INNGEST_DASHBOARD_URL,
+  JOB_STEPS,
+} from "@/features/demo/inngest/model/inngest-demo"
 
 type JobStepsCardProps = {
   onTrigger: () => void
@@ -59,7 +62,7 @@ export function JobStepsCard({ onTrigger, isPending }: JobStepsCardProps) {
           </Button>
           <Button variant="outline" asChild>
             <a
-              href="http://localhost:8288"
+              href={INNGEST_DASHBOARD_URL}
               target="_blank"
               rel="noopener noreferrer"
             >

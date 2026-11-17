@@ -14,12 +14,16 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { useBookingWizard } from "@/features/demo/booking/hooks/use-booking-wizard"
+import {
+  useBookingActions,
+  useBookingData,
+} from "@/features/demo/booking/hooks/use-booking-wizard"
 import type { PaymentData } from "@/features/demo/booking/schema/booking-schema"
 
 export function BookingStepPayment() {
   const t = useTranslations("booking")
-  const { data, setStepData, next, back } = useBookingWizard()
+  const data = useBookingData()
+  const { setStepData, next, back } = useBookingActions()
 
   const paymentFormSchema = z.object({
     cardName: z.string().min(1, t("form.validation.cardNameRequired")),

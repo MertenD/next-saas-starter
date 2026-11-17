@@ -25,3 +25,6 @@ export const JOB_STEPS = [
     icon: CheckCircleIcon,
   },
 ] as const
+
+/** Local Inngest dev server UI, linked from the demo page. */
+export const INNGEST_DASHBOARD_URL = "http://localhost:8288"

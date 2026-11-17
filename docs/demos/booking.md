@@ -4,7 +4,7 @@
 
 ## What this demonstrates
 
-A multi-step form wizard with client-only state that's fully decoupled from server state: a feature-scoped Zustand store (not the global `src/stores/ui-store.ts`) persisted to `sessionStorage`, per-step validation with `react-hook-form` + Zod, and handling a genuinely unreliable backend - the submit endpoint fails at random on purpose, forcing the last step to implement a real error/retry path instead of assuming the happy path.
+A multi-step form wizard with client-only state that's fully decoupled from server state: a feature-scoped Zustand store (feature-local, not a global store) persisted to `sessionStorage`, per-step validation with `react-hook-form` + Zod, and handling a genuinely unreliable backend - the submit endpoint fails at random on purpose, forcing the last step to implement a real error/retry path instead of assuming the happy path.
 
 ## Key files
 
@@ -13,7 +13,7 @@ A multi-step form wizard with client-only state that's fully decoupled from serv
 | `model/booking.ts` | `BOOKING_STEPS` order (`dates → guests → payment → review`) |
 | `schema/booking-schema.ts` | Per-step Zod schemas + the combined `bookingSchema` |
 | `store/booking-wizard-store.ts` | Zustand store, `persist` middleware → `sessionStorage` |
-| `hooks/use-booking-wizard.ts` | Thin hook over the store (step, data, navigation) |
+| `hooks/use-booking-wizard.ts` | Narrow hooks over the store: `useBookingStep()`, `useBookingData()`, `useBookingActions()` (components subscribe only to what they need) |
 | `hooks/use-submit-booking.ts` | Wraps the `booking.submit` mutation |
 | `server/router.ts` | `bookingRouter.submit` - simulated latency + random failure |
 | `components/booking-container.tsx` + one component per step | UI |
@@ -45,7 +45,7 @@ A multi-step form wizard with client-only state that's fully decoupled from serv
    - **Manual hydration.** `skipHydration: true` keeps the server render and the first client render identical (initial state); `BookingContainer` calls `persist.rehydrate()` after mount and shows a skeleton until then, so there is no hydration mismatch.
    - **`version`** must be bumped when the persisted shape changes, so old drafts are discarded instead of restored in a wrong shape.
 
-3. **Per-step validation.** Each step component (`BookingStepDates`, `BookingStepGuests`, `BookingStepPayment`) is its own `react-hook-form` form resolved against its own Zod schema (`tripDatesSchema`, `guestsSchema`, `paymentSchema`) - not one giant form for the whole wizard. A step only calls `setStepData()` + `next()` once its own fields pass validation.
+3. **Per-step validation.** Each step (`BookingStepDates`, `BookingStepGuests`, `BookingStepPayment`) is its own `react-hook-form` form resolved against its own Zod schema (dates and payment build theirs inside the component because the error messages are translated, the React Compiler memoizes it; guests uses the shared `guestsSchema`) - not one giant form for the whole wizard. A step only calls `setStepData()` + `next()` once its own fields pass validation.
 
 4. **Submission.** The Review step calls `useSubmitBooking()` → the `booking.submit` tRPC mutation with the accumulated `data` (validated again server-side against the combined `bookingSchema`).
 

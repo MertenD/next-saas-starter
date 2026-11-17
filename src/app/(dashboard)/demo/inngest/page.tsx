@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server"
+import { HowItWorksCard } from "@/features/demo/inngest/components/how-it-works-card"
 import { InngestDemoContainer } from "@/features/demo/inngest/components/inngest-demo-container"
 
 export default async function InngestDemoPage() {
@@ -11,6 +12,7 @@ export default async function InngestDemoPage() {
         <p className="mt-1 text-muted-foreground text-sm">{t("intro")}</p>
       </div>
       <InngestDemoContainer />
+      <HowItWorksCard />
     </div>
   )
 }

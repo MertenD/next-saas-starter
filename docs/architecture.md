@@ -106,7 +106,6 @@ src/
 ├── instrumentation.ts                # Next.js hook: loads Sentry server/edge config
 ├── instrumentation-client.ts         # Sentry browser init
 ├── i18n/request.ts                   # next-intl config (cookie-based locale, en/de)
-├── stores/ui-store.ts                # Zustand example store (sidebar collapsed state)
 ├── config/
 │   ├── env.ts                        # Zod-validated environment variables
 │   └── constants.ts                  # App-wide constants (APP_NAME, PAGINATION, ...)
