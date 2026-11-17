@@ -327,13 +327,16 @@
       "streamIdLabel": "Stream ID:",
       "cachedInRedisBadge": "cached in Redis",
       "startConversation": "Start a conversation",
-      "startConversationBody": "The stream is buffered in Redis - refreshing mid-response resumes it automatically.",
+      "startConversationBody": "The stream is buffered in Redis - refreshing mid-response resumes it automatically. The chat id survives a refresh; use New chat for a fresh one.",
       "streamingCaption": "Streaming… try refreshing - Redis will resume the response",
+      "newChat": "New chat",
+      "thinking": "The assistant is thinking",
       "apiKeyMissingChatError": "OPENROUTER_API_KEY is not configured. Add it to your .env file.",
       "genericError": "Error: {message}",
       "inputPlaceholder": "Type a message...",
       "inputHint": "Enter to send, Shift+Enter for a new line",
-      "sendLabel": "Send message"
+      "sendLabel": "Send message",
+      "stopLabel": "Stop generating"
     },
     "inngest": {
       "heading": "Background Jobs - Inngest",

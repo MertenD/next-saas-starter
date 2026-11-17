@@ -2,6 +2,7 @@
 
 import { useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
+import { clearChatSession } from "@/features/demo/ai/model/chat-session"
 import { authClient } from "@/lib/auth-client"
 import { clearPwaPageCache } from "@/lib/pwa"
 import { clearPersistedQueryCache } from "@/trpc/client"
@@ -23,6 +24,7 @@ export function useSignOut() {
       fetchOptions: {
         onSuccess: async () => {
           clearPwaPageCache()
+          clearChatSession()
           queryClient.clear()
           await clearPersistedQueryCache()
           router.push("/login")

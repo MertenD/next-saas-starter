@@ -1,6 +1,6 @@
 "use client"
 
-import { SendIcon } from "lucide-react"
+import { ArrowUpIcon, SquareIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import type React from "react"
 import { useState } from "react"
@@ -10,10 +10,11 @@ import { useIsMobile } from "@/hooks/use-mobile"
 
 type ChatInputProps = {
   onSend: (text: string) => void
+  onStop: () => void
   isLoading: boolean
 }
 
-export function ChatInput({ onSend, isLoading }: ChatInputProps) {
+export function ChatInput({ onSend, onStop, isLoading }: ChatInputProps) {
   const t = useTranslations("demo.ai")
   const isMobile = useIsMobile()
   const [input, setInput] = useState("")
@@ -34,32 +35,43 @@ export function ChatInput({ onSend, isLoading }: ChatInputProps) {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="shrink-0 border-border border-t p-2"
-    >
-      <div className="flex items-end gap-2">
-        <Textarea
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={onKeyDown}
-          placeholder={t("inputPlaceholder")}
-          rows={Math.min(3, Math.max(1, input.split("\n").length))}
-          className="max-h-32 min-h-10 resize-none py-2 text-body-sm"
-        />
-        <Button
-          type="submit"
-          size="icon-sm"
-          className="shrink-0"
-          disabled={isLoading || !input.trim()}
-          aria-label={t("sendLabel")}
-        >
-          <SendIcon className="h-4 w-4" />
-        </Button>
+    <form onSubmit={handleSubmit} className="shrink-0 px-4 pb-3">
+      <div className="mx-auto w-full max-w-3xl">
+        <div className="flex items-end gap-2 rounded-3xl border border-border bg-background py-2 pr-2 pl-4 shadow-sm focus-within:border-foreground">
+          <Textarea
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={onKeyDown}
+            placeholder={t("inputPlaceholder")}
+            rows={Math.min(6, Math.max(1, input.split("\n").length))}
+            className="max-h-40 min-h-10 resize-none border-0 bg-transparent px-0 py-2 text-body-md shadow-none focus-visible:ring-0 dark:bg-transparent"
+          />
+          {isLoading ? (
+            <Button
+              type="button"
+              size="icon-sm"
+              className="shrink-0 rounded-full"
+              onClick={onStop}
+              aria-label={t("stopLabel")}
+            >
+              <SquareIcon className="size-4 fill-current" />
+            </Button>
+          ) : (
+            <Button
+              type="submit"
+              size="icon-sm"
+              className="shrink-0 rounded-full"
+              disabled={!input.trim()}
+              aria-label={t("sendLabel")}
+            >
+              <ArrowUpIcon className="size-5" />
+            </Button>
+          )}
+        </div>
+        <p className="mt-2 text-center text-caption-sm text-muted-foreground">
+          {isLoading ? t("streamingCaption") : t("inputHint")}
+        </p>
       </div>
-      <p className="mt-1 text-caption-sm text-muted-foreground">
-        {t("inputHint")}
-      </p>
     </form>
   )
 }

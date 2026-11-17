@@ -327,13 +327,16 @@
       "streamIdLabel": "Stream-ID:",
       "cachedInRedisBadge": "in Redis zwischengespeichert",
       "startConversation": "Starte eine Unterhaltung",
-      "startConversationBody": "Der Stream wird in Redis gepuffert - ein Neuladen während der Antwort setzt sie automatisch fort.",
+      "startConversationBody": "Der Stream wird in Redis gepuffert - ein Neuladen während der Antwort setzt sie automatisch fort. Die Chat-ID bleibt beim Neuladen gleich; mit Neuer Chat startest du einen frischen.",
       "streamingCaption": "Wird gestreamt … versuch es mit Neuladen - Redis setzt die Antwort fort",
+      "newChat": "Neuer Chat",
+      "thinking": "Der Assistent denkt nach",
       "apiKeyMissingChatError": "OPENROUTER_API_KEY ist nicht konfiguriert. Füge sie deiner .env-Datei hinzu.",
       "genericError": "Fehler: {message}",
       "inputPlaceholder": "Nachricht eingeben...",
       "inputHint": "Enter zum Senden, Shift+Enter für eine neue Zeile",
-      "sendLabel": "Nachricht senden"
+      "sendLabel": "Nachricht senden",
+      "stopLabel": "Antwort stoppen"
     },
     "inngest": {
       "heading": "Hintergrundjobs - Inngest",

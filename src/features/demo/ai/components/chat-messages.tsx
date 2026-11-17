@@ -1,12 +1,15 @@
 "use client"
 
 import type { UIMessage } from "ai"
-import { BotIcon, UserIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
-import type React from "react"
 import { memo, useEffect, useRef } from "react"
 import { MarkdownContent } from "@/components/markdown-content"
-import { cn } from "@/lib/utils"
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyTitle,
+} from "@/components/ui/empty"
 
 type ChatMessagesProps = {
   messages: UIMessage[]
@@ -21,43 +24,32 @@ function getMessageText(message: UIMessage): string {
     .join("")
 }
 
-/** Avatar bubble shown next to every message (bot on the left, user on the right). */
-function Avatar({ sender }: { sender: "assistant" | "user" }) {
-  const Icon = sender === "user" ? UserIcon : BotIcon
-
-  return (
-    <div
-      className={cn(
-        "flex h-6 w-6 shrink-0 items-center justify-center rounded-full",
-        sender === "user" ? "bg-primary/20" : "bg-primary/10",
-      )}
-    >
-      <Icon className="h-4 w-4 text-primary" />
-    </div>
-  )
-}
-
-/** Assistant row: avatar on the left, muted bubble with a flat bottom-left corner. */
-function AssistantRow({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="mb-4 flex w-full justify-start gap-2">
-      <Avatar sender="assistant" />
-      <div className="max-w-[80%] break-words rounded-lg rounded-bl-none bg-muted px-3 py-2 text-foreground text-sm">
-        {children}
-      </div>
-    </div>
-  )
-}
-
-/** User row: primary bubble with a flat bottom-right corner, avatar on the right. */
+/** Right-aligned soft bubble for the user, like in Claude.ai and ChatGPT. */
 function UserRow({ text }: { text: string }) {
   return (
-    <div className="mb-4 flex w-full justify-end gap-2">
-      <div className="max-w-[80%] break-words rounded-lg rounded-br-none bg-primary px-3 py-2 text-primary-foreground text-sm">
-        <span className="whitespace-pre-wrap">{text}</span>
+    <div className="flex justify-end">
+      <div className="max-w-[85%] whitespace-pre-wrap break-words rounded-2xl bg-secondary px-4 py-2.5 text-body-md text-foreground">
+        {text}
       </div>
-      <Avatar sender="user" />
     </div>
+  )
+}
+
+/** Assistant answers are plain text on the page background, no bubble and no avatar. */
+function AssistantRow({ text }: { text: string }) {
+  return (
+    <div className="break-words text-body-md text-foreground">
+      <MarkdownContent content={text} />
+    </div>
+  )
+}
+
+/** Single pulsing dot shown in the assistant's slot until the first token arrives. */
+function ThinkingIndicator({ label }: { label: string }) {
+  return (
+    <output aria-label={label} className="block py-2">
+      <span className="block size-2.5 animate-pulse rounded-full bg-foreground" />
+    </output>
   )
 }
 
@@ -76,11 +68,7 @@ const MessageRow = memo(function MessageRow({
     return <UserRow text={text} />
   }
 
-  return (
-    <AssistantRow>
-      <MarkdownContent content={text} />
-    </AssistantRow>
-  )
+  return <AssistantRow text={text} />
 })
 
 export function ChatMessages({
@@ -94,6 +82,11 @@ export function ChatMessages({
   const lastMessage = messages[messages.length - 1]
   const lastTextLength = lastMessage ? getMessageText(lastMessage).length : 0
 
+  // The indicator only bridges the wait for the first token. Once the answer
+  // has text, the growing text itself is the feedback.
+  const showThinking =
+    isLoading && !(lastMessage?.role === "assistant" && lastTextLength > 0)
+
   // biome-ignore lint/correctness/useExhaustiveDependencies: scroll to the bottom whenever new content arrives, not on ref changes
   useEffect(() => {
     if (scrollRef.current) {
@@ -102,40 +95,34 @@ export function ChatMessages({
   }, [messages.length, lastTextLength, isLoading])
 
   return (
-    <div className="flex-1 overflow-y-auto p-2" ref={scrollRef}>
-      {/* Welcome message, always the first bubble of the conversation */}
-      <AssistantRow>
-        <p className="font-medium">{t("startConversation")}</p>
-        <p className="mt-1">{t("startConversationBody")}</p>
-      </AssistantRow>
+    <div className="flex-1 overflow-y-auto" ref={scrollRef}>
+      <div className="mx-auto flex min-h-full w-full max-w-3xl flex-col gap-6 px-4 py-6">
+        {messages.length === 0 && !isLoading && (
+          <Empty className="my-auto border-0">
+            <EmptyHeader>
+              <EmptyTitle>{t("startConversation")}</EmptyTitle>
+              <EmptyDescription>{t("startConversationBody")}</EmptyDescription>
+            </EmptyHeader>
+          </Empty>
+        )}
 
-      {messages.map((msg) => (
-        <MessageRow key={msg.id} message={msg} />
-      ))}
+        {messages.map((msg) => (
+          <MessageRow key={msg.id} message={msg} />
+        ))}
 
-      {isLoading && (
-        <div className="mb-4 flex w-full justify-start gap-2">
-          <Avatar sender="assistant" />
-          <div className="flex max-w-[80%] flex-col gap-1.5">
-            <div className="flex items-center gap-1 py-2">
-              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground [animation-delay:0ms]" />
-              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground [animation-delay:150ms]" />
-              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground [animation-delay:300ms]" />
-            </div>
-            <p className="text-muted-foreground text-xs">
-              {t("streamingCaption")}
-            </p>
+        {showThinking && <ThinkingIndicator label={t("thinking")} />}
+
+        {error && (
+          <div
+            role="alert"
+            className="rounded-lg border border-destructive/50 p-3 text-body-sm text-destructive"
+          >
+            {error.message.includes("OPENROUTER_API_KEY")
+              ? t("apiKeyMissingChatError")
+              : t("genericError", { message: error.message })}
           </div>
-        </div>
-      )}
-
-      {error && (
-        <div className="rounded-lg border border-destructive/50 p-3 text-destructive text-sm">
-          {error.message.includes("OPENROUTER_API_KEY")
-            ? t("apiKeyMissingChatError")
-            : t("genericError", { message: error.message })}
-        </div>
-      )}
+        )}
+      </div>
     </div>
   )
 }
