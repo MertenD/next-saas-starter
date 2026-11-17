@@ -18,7 +18,7 @@ Server routers are registered centrally in `src/trpc/routers/_app.ts` (see [`arc
 
 Login/register/logout UI, forgot/reset-password forms, and a user-info card, backed by Better Auth (`authClient`). No `server/` - Better Auth's own catch-all route (`/api/auth/[...all]`) handles the backend. See [`auth-and-billing.md`](./auth-and-billing.md).
 
-- `login-form.tsx`, `register-form.tsx`, `logout-button.tsx`, `hooks/use-sign-out.ts`, `user-info-card.tsx`, `forgot-password-form.tsx`, `reset-password-form.tsx`
+- `login-form.tsx`, `register-form.tsx`, `hooks/use-sign-out.ts`, `user-info-card.tsx`, `forgot-password-form.tsx`, `reset-password-form.tsx`
 - `oauth-buttons.tsx` - the "Continue with GitHub/Google" buttons (with brand logos from `public/logos/`) shared by login and signup. The pages pass in only the providers that are actually configured (`getEnabledOAuthProviders()` in `src/lib/oauth-providers.ts`), so unconfigured providers never render a button.
 
 ### `demo/ai/` - streaming + resumable AI chat

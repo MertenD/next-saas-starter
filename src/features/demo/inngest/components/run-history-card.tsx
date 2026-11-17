@@ -1,7 +1,7 @@
 "use client"
 
 import { PlayIcon, ZapIcon } from "lucide-react"
-import { useTranslations } from "next-intl"
+import { useFormatter, useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -33,6 +33,7 @@ export function RunHistoryCard({
   isPending,
 }: RunHistoryCardProps) {
   const t = useTranslations("demo.inngest")
+  const format = useFormatter()
 
   return (
     <Card>
@@ -69,7 +70,11 @@ export function RunHistoryCard({
                     {run.eventId}
                   </p>
                   <p className="mt-0.5 text-xs text-muted-foreground">
-                    {t("triggeredAtLabel", { time: run.triggeredAt })}
+                    {t("triggeredAtLabel", {
+                      time: format.dateTime(run.triggeredAt, {
+                        timeStyle: "medium",
+                      }),
+                    })}
                   </p>
                 </div>
                 <RunStatusBadge eventId={run.eventId} />

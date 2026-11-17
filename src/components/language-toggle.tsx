@@ -6,16 +6,15 @@ import { useState, useTransition } from "react"
 import { setLocaleAction } from "@/app/actions/set-locale"
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
+import { SUPPORTED_LOCALES } from "@/config/constants"
 import { authClient } from "@/lib/auth-client"
-
-const LOCALES = ["en", "de"] as const
 
 /**
  * Locale switcher: first saves the chosen locale on the user profile
  * (`user.locale`, read back by `LocaleSync`), then persists it via
  * `setLocaleAction` (a cookie-writing Server Action, see
  * `src/app/actions/set-locale.ts`), then refreshes the router so the new locale's messages are loaded server-side
- * (see `src/i18n/request.ts`). Extend `LOCALES` when adding a new supported
+ * (see `src/i18n/request.ts`). Extend `SUPPORTED_LOCALES` (`src/config/constants.ts`) when adding a new supported
  * language. While switching, all buttons are disabled and the clicked one
  * shows a `Spinner`.
  */
@@ -42,7 +41,7 @@ export function LanguageToggle() {
 
   return (
     <div className="flex gap-2">
-      {LOCALES.map((locale) => (
+      {SUPPORTED_LOCALES.map((locale) => (
         <Button
           key={locale}
           variant="outline"

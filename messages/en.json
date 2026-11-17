@@ -153,7 +153,8 @@
       "publishedBadge": "Published",
       "deleteConfirmTitle": "Delete post?",
       "deleteConfirmDescription": "\"{title}\" will be permanently deleted. This can't be undone.",
-      "deleteConfirmLabel": "Delete"
+      "deleteConfirmLabel": "Delete",
+      "deleteLabel": "Delete post"
     }
   },
   "settings": {
@@ -199,8 +200,7 @@
         }
       },
       "error": {
-        "title": "Failed to load account settings",
-        "retry": "Try again"
+        "title": "Failed to load account settings"
       }
     },
     "theme": {
@@ -222,8 +222,7 @@
       "verifyEmailFirst": "Please verify your email address before upgrading.",
       "billingDisabled": "Billing is not configured for this deployment, so every account has full access.",
       "error": {
-        "title": "Failed to load subscription",
-        "retry": "Try again"
+        "title": "Failed to load subscription"
       }
     },
     "general": {

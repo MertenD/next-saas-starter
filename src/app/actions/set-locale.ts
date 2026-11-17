@@ -1,8 +1,7 @@
 "use server"
 
 import { cookies } from "next/headers"
-
-const SUPPORTED = ["en", "de"]
+import { isSupportedLocale } from "@/config/constants"
 
 /**
  * Persists the user's chosen locale in the `ui-locale` cookie, which
@@ -11,7 +10,7 @@ const SUPPORTED = ["en", "de"]
  * Silently ignores unsupported locale values.
  */
 export async function setLocaleAction(locale: string): Promise<void> {
-  if (!SUPPORTED.includes(locale)) return
+  if (!isSupportedLocale(locale)) return
   const cookieStore = await cookies()
   cookieStore.set("ui-locale", locale, {
     path: "/",

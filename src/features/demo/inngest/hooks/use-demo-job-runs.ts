@@ -15,10 +15,7 @@ export function useDemoJobRuns() {
   const { mutate: trigger, isPending } = useMutation(
     trpc.demo.triggerDemoJob.mutationOptions({
       onSuccess: ({ eventId }) => {
-        setRuns((prev) => [
-          { eventId, triggeredAt: new Date().toLocaleTimeString() },
-          ...prev,
-        ])
+        setRuns((prev) => [{ eventId, triggeredAt: new Date() }, ...prev])
         toast.success(t("triggerSuccessTitle"), {
           description: t("triggerSuccessDescription", { eventId }),
         })

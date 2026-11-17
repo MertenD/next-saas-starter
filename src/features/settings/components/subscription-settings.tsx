@@ -4,6 +4,7 @@ import { CreditCardIcon, StarIcon } from "lucide-react"
 import { useFormatter, useTranslations } from "next-intl"
 import { toast } from "sonner"
 import { useDashboard } from "@/components/dashboard-context"
+import { ErrorView } from "@/components/entity-components"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -63,16 +64,7 @@ export default function SubscriptionSettings() {
   }
 
   if (isError) {
-    return (
-      <Card>
-        <CardContent className="space-y-4 pt-6 text-center">
-          <p className="text-muted-foreground text-sm">{t("error.title")}</p>
-          <Button variant="outline" onClick={() => refetch()}>
-            {t("error.retry")}
-          </Button>
-        </CardContent>
-      </Card>
-    )
+    return <ErrorView message={t("error.title")} onRetry={() => refetch()} />
   }
 
   const renewsAt = subscription?.currentPeriodEnd

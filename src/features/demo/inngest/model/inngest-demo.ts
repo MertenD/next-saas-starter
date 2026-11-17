@@ -2,7 +2,8 @@ import { CheckCircleIcon, ClockIcon, ZapIcon } from "lucide-react"
 
 export type Run = {
   eventId: string
-  triggeredAt: string
+  /** Kept as a `Date` and formatted at render time, so it follows the active locale. */
+  triggeredAt: Date
 }
 
 export const JOB_STEPS = [

@@ -153,7 +153,8 @@
       "publishedBadge": "Veröffentlicht",
       "deleteConfirmTitle": "Beitrag löschen?",
       "deleteConfirmDescription": "„{title}\" wird endgültig gelöscht. Dies kann nicht rückgängig gemacht werden.",
-      "deleteConfirmLabel": "Löschen"
+      "deleteConfirmLabel": "Löschen",
+      "deleteLabel": "Beitrag löschen"
     }
   },
   "settings": {
@@ -199,8 +200,7 @@
         }
       },
       "error": {
-        "title": "Kontoeinstellungen konnten nicht geladen werden",
-        "retry": "Erneut versuchen"
+        "title": "Kontoeinstellungen konnten nicht geladen werden"
       }
     },
     "theme": {
@@ -222,8 +222,7 @@
       "verifyEmailFirst": "Bitte bestätige zuerst deine E-Mail-Adresse, bevor du upgradest.",
       "billingDisabled": "Abrechnung ist für diese Installation nicht konfiguriert, daher hat jedes Konto vollen Zugriff.",
       "error": {
-        "title": "Abonnement konnte nicht geladen werden",
-        "retry": "Erneut versuchen"
+        "title": "Abonnement konnte nicht geladen werden"
       }
     },
     "general": {

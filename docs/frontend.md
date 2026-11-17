@@ -100,6 +100,10 @@ If the compiler ever miscompiles a component, add the `"use no memo"` directive 
 
 ## Internationalization (next-intl)
 
+- The supported locales are defined once, in `SUPPORTED_LOCALES` (`src/config/constants.ts`), together with `DEFAULT_LOCALE` and the `isSupportedLocale()` guard. The server config, the cookie action and the language switcher all use it.
+- Format dates, times and numbers with `useFormatter()` (client) or `getFormatter()` (server) from next-intl, never with `toLocaleDateString()`, `Intl.*("en-US")` or other hardcoded locales: they follow the active locale and avoid server/client mismatches. Keep timestamps as `Date` in state and format them at render time.
+- Settings and list views show load errors with the shared `ErrorView` (`src/components/entity-components.tsx`), not with hand-built cards.
+
 Supported locales: `en`, `de`. The active locale is stored in the `ui-locale` cookie, set/cleared by server actions in `src/app/actions/set-locale.ts`, and read by `src/i18n/request.ts` (falls back to `en`).
 
 The locale is also stored on the user (`user.locale`, an additional Better Auth field). `LanguageToggle` writes both, `user.locale` first and the cookie second (the reverse order makes `LocaleSync` briefly revert the cookie and the UI flickers between languages). `LocaleSync` (mounted in the dashboard layout) reconciles them: on a new device or after clearing cookies the saved locale is applied to the cookie, and a user without a saved locale gets the active one stored. Logged-out pages only use the cookie.

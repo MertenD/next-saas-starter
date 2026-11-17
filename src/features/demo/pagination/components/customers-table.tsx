@@ -1,7 +1,7 @@
 "use client"
 
 import { ArrowDownIcon, ArrowUpDownIcon, ArrowUpIcon } from "lucide-react"
-import { useTranslations } from "next-intl"
+import { useFormatter, useTranslations } from "next-intl"
 import type * as React from "react"
 import { EmptyView, ErrorView } from "@/components/entity-components"
 import { Badge } from "@/components/ui/badge"
@@ -30,14 +30,6 @@ const STATUS_BADGE_VARIANT: Record<
   invited: "secondary",
   suspended: "outline",
 }
-
-const currencyFormatter = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-  maximumFractionDigits: 0,
-})
-
-const dateFormatter = new Intl.DateTimeFormat("en-US", { dateStyle: "medium" })
 
 function SortableHead({
   field,
@@ -79,6 +71,7 @@ function SortableHead({
 
 export function CustomersTable() {
   const t = useTranslations("pagination")
+  const format = useFormatter()
   const { data, isPending, isError, isFetching, refetch } = useCustomers()
   const [, setParams] = useCustomersParams()
 
@@ -148,10 +141,16 @@ export function CustomersTable() {
                 </Badge>
               </TableCell>
               <TableCell>
-                {currencyFormatter.format(customer.totalSpent)}
+                {format.number(customer.totalSpent, {
+                  style: "currency",
+                  currency: "USD",
+                  maximumFractionDigits: 0,
+                })}
               </TableCell>
               <TableCell className="text-muted-foreground">
-                {dateFormatter.format(new Date(customer.createdAt))}
+                {format.dateTime(new Date(customer.createdAt), {
+                  dateStyle: "medium",
+                })}
               </TableCell>
             </TableRow>
           ))}

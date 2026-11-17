@@ -1,7 +1,7 @@
 "use client"
 
 import { useTranslations } from "next-intl"
-import { Button } from "@/components/ui/button"
+import { ErrorView } from "@/components/entity-components"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -27,16 +27,7 @@ export default function AccountSettings() {
   }
 
   if (isError || !user) {
-    return (
-      <Card>
-        <CardContent className="space-y-4 pt-6 text-center">
-          <p className="text-muted-foreground text-sm">{t("error.title")}</p>
-          <Button variant="outline" onClick={() => refetch()}>
-            {t("error.retry")}
-          </Button>
-        </CardContent>
-      </Card>
-    )
+    return <ErrorView message={t("error.title")} onRetry={() => refetch()} />
   }
 
   return (

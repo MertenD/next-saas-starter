@@ -6,7 +6,7 @@ import {
   SettingsIcon,
   StarIcon,
 } from "lucide-react"
-import { useRouter } from "next/navigation"
+import Link from "next/link"
 import { useTranslations } from "next-intl"
 import { usePlausible } from "next-plausible"
 import { useState } from "react"
@@ -28,7 +28,6 @@ import type { PlausibleEvents } from "@/lib/analytics"
 import { authClient } from "@/lib/auth-client"
 
 export default function UserInfoCard() {
-  const router = useRouter()
   const signOut = useSignOut()
   const { user } = useDashboard()
   const t = useTranslations("auth.userInfo")
@@ -64,13 +63,15 @@ export default function UserInfoCard() {
             {t("billingLabel")}
           </Button>
           <Button
+            asChild
             variant="ghost"
             size="sm"
             className="h-8 w-full justify-start gap-2 px-2 text-xs font-medium"
-            onClick={() => router.push("/settings")}
           >
-            <SettingsIcon className="h-4 w-4" />
-            {t("settingsLabel")}
+            <Link href="/settings">
+              <SettingsIcon className="h-4 w-4" />
+              {t("settingsLabel")}
+            </Link>
           </Button>
           <Button
             variant="ghost"

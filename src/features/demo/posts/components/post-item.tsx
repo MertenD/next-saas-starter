@@ -1,21 +1,17 @@
 "use client"
 
-type Post = {
-  id: string
-  title: string
-  content: string
-  published: boolean
-  createdAt: Date
-  updatedAt: Date
-  userId: string
-}
-
+import type { inferRouterOutputs } from "@trpc/server"
 import { TrashIcon } from "lucide-react"
-import { useTranslations } from "next-intl"
+import { useFormatter, useTranslations } from "next-intl"
 import { useState } from "react"
 import { ConfirmDialog } from "@/components/confirm-dialog"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { useDeletePost } from "@/features/demo/posts/hooks/use-posts"
+import type { AppRouter } from "@/trpc/routers/_app"
+
+/** A post as returned by `trpc.posts.getMany`, so the type can't drift from the router. */
+type Post = inferRouterOutputs<AppRouter>["posts"]["getMany"][number]
 
 type PostItemProps = {
   post: Post
@@ -25,6 +21,7 @@ export function PostItem({ post }: PostItemProps) {
   const [confirmOpen, setConfirmOpen] = useState(false)
   const { mutate: deletePost, isPending } = useDeletePost()
   const t = useTranslations("posts.item")
+  const format = useFormatter()
 
   return (
     <div className="flex items-start justify-between rounded-lg border p-4">
@@ -32,16 +29,14 @@ export function PostItem({ post }: PostItemProps) {
         <div className="flex items-center gap-2">
           <h3 className="font-medium text-sm">{post.title}</h3>
           {post.published && (
-            <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs text-green-700">
-              {t("publishedBadge")}
-            </span>
+            <Badge variant="secondary">{t("publishedBadge")}</Badge>
           )}
         </div>
         <p className="text-muted-foreground text-sm line-clamp-2">
           {post.content}
         </p>
         <p className="text-xs text-muted-foreground">
-          {new Date(post.createdAt).toLocaleDateString()}
+          {format.dateTime(post.createdAt, { dateStyle: "medium" })}
         </p>
       </div>
       <Button
@@ -50,6 +45,7 @@ export function PostItem({ post }: PostItemProps) {
         className="h-8 w-8 text-muted-foreground hover:text-destructive"
         onClick={() => setConfirmOpen(true)}
         disabled={isPending}
+        aria-label={t("deleteLabel")}
       >
         <TrashIcon className="h-4 w-4" />
       </Button>

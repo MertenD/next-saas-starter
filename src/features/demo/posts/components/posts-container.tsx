@@ -2,12 +2,22 @@
 
 import { FileTextIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
+import { ErrorView } from "@/components/entity-components"
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty"
+import { Skeleton } from "@/components/ui/skeleton"
 import { usePosts } from "@/features/demo/posts/hooks/use-posts"
 import { PostCreateDialog } from "./post-create-dialog"
 import { PostItem } from "./post-item"
 
 export function PostsContainer() {
-  const { data: posts, isLoading, isError } = usePosts()
+  const { data: posts, isLoading, isError, refetch } = usePosts()
   const t = useTranslations("posts")
 
   return (
@@ -19,26 +29,29 @@ export function PostsContainer() {
 
       {isLoading && (
         <div className="space-y-2">
-          {["skeleton-1", "skeleton-2", "skeleton-3"].map((key) => (
-            <div key={key} className="h-20 animate-pulse rounded-lg bg-muted" />
+          {Array.from({ length: 3 }, (_, i) => i).map((i) => (
+            <Skeleton key={`post-skeleton-${i}`} className="h-20 w-full" />
           ))}
         </div>
       )}
 
-      {isError && (
-        <div className="rounded-lg border border-destructive/50 p-4 text-sm text-destructive">
-          {t("loadError")}
-        </div>
+      {isError && !posts && (
+        <ErrorView message={t("loadError")} onRetry={() => refetch()} />
       )}
 
-      {!isLoading && posts?.length === 0 && (
-        <div className="flex flex-col items-center justify-center gap-2 rounded-lg border border-dashed py-12 text-center">
-          <FileTextIcon className="h-8 w-8 text-muted-foreground" />
-          <p className="font-medium text-sm">{t("emptyTitle")}</p>
-          <p className="text-muted-foreground text-xs">
-            {t("emptyDescription")}
-          </p>
-        </div>
+      {posts && posts.length === 0 && (
+        <Empty className="border">
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <FileTextIcon />
+            </EmptyMedia>
+            <EmptyTitle>{t("emptyTitle")}</EmptyTitle>
+            <EmptyDescription>{t("emptyDescription")}</EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
+            <PostCreateDialog />
+          </EmptyContent>
+        </Empty>
       )}
 
       {posts && posts.length > 0 && (
