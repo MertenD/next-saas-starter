@@ -32,7 +32,7 @@ export default function UserInfoCard() {
   const { user } = useDashboard()
   const t = useTranslations("auth.userInfo")
 
-  const displayName = user.name.split("@")[0]
+  const displayName = user.name.split("@")[0] ?? user.name
   const avatarImage = user.image ?? undefined
 
   return (

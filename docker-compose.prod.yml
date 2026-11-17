@@ -6,6 +6,7 @@ services:
       # Optional Sentry, read from the shell or a .env next to this file
       args:
         NEXT_PUBLIC_SENTRY_DSN: ${NEXT_PUBLIC_SENTRY_DSN:-}
+        NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE: ${NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE:-}
         SENTRY_ORG: ${SENTRY_ORG:-}
         SENTRY_PROJECT: ${SENTRY_PROJECT:-}
         SENTRY_AUTH_TOKEN: ${SENTRY_AUTH_TOKEN:-}
@@ -26,7 +27,7 @@ services:
     restart: unless-stopped
 
   inngest:
-    image: inngest/inngest:latest
+    image: inngest/inngest:v1.53.0 # keep in sync with inngest-cli in package.json
     command: inngest dev -u http://app:3000/api/inngest
     ports:
       - "8288:8288"

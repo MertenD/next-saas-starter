@@ -14,6 +14,7 @@ Full documentation for this Next.js SaaS starter template. Start with [Getting S
 | [Auth & Billing](./auth-and-billing.md) | Better Auth configuration, OAuth setup, Polar billing, premium feature gating. |
 | [Background Jobs](./background-jobs.md) | Inngest concepts, existing jobs, adding new jobs, Realtime subscriptions. |
 | [Integrations](./integrations.md) | AI (OpenRouter), Redis, Plausible analytics, Sentry error tracking, and PWA support. |
+| [Service Worker](./service-worker.md) | The hand-written PWA service worker: caching strategies, offline behavior, updates and versions, privacy on sign-out, testing and troubleshooting. |
 | [Frontend](./frontend.md) | UI components, the design system, required UI states, confirm dialogs, state management, i18n. |
 | [Deployment](./deployment.md) | Docker production setup, making Inngest durable, reverse proxy, pre-deploy checklist. |
 

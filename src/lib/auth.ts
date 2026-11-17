@@ -2,6 +2,8 @@ import { checkout, polar, portal } from "@polar-sh/better-auth"
 import { betterAuth } from "better-auth"
 import { prismaAdapter } from "better-auth/adapters/prisma"
 import { env } from "@/config/env"
+import { inngest } from "@/inngest/client"
+import { InngestEvents } from "@/inngest/functions"
 import prisma from "@/lib/db"
 import {
   resetPasswordEmailHtml,
@@ -9,6 +11,42 @@ import {
   verifyEmailHtml,
 } from "@/lib/mailer"
 import { isPolarEnabled, polarClient } from "./polar"
+
+/**
+ * Mirrors a freshly created local user into Polar as a customer. Does nothing
+ * when Polar isn't configured. If the Polar call fails, the local user is
+ * deleted again and the error is rethrown, so sign-up fails instead of leaving
+ * a user without a Polar customer.
+ */
+async function mirrorUserToPolar(user: {
+  id: string
+  email: string
+  name: string
+}) {
+  if (!isPolarEnabled || !polarClient) return
+
+  let polarCustomer = null
+  try {
+    polarCustomer = await polarClient.customers.create({
+      externalId: user.id,
+      email: user.email,
+      name: user.name,
+    })
+  } catch (error) {
+    console.error("Error creating Polar customer:", error)
+
+    if (polarCustomer) {
+      try {
+        await polarClient.customers.delete({ id: polarCustomer.id })
+      } catch (polarError) {
+        console.error("Error rolling back Polar customer:", polarError)
+      }
+    }
+
+    await prisma.user.delete({ where: { id: user.id } })
+    throw error
+  }
+}
 
 /**
  * The server-side Better Auth instance. This is the single source of truth
@@ -100,29 +138,17 @@ export const auth = betterAuth({
     user: {
       create: {
         after: async (user) => {
-          if (!isPolarEnabled || !polarClient) return
+          await mirrorUserToPolar(user)
 
-          let polarCustomer = null
-          try {
-            polarCustomer = await polarClient.customers.create({
-              externalId: user.id,
-              email: user.email,
-              name: user.name,
+          // Fire and forget: a down Inngest server must never break sign-up.
+          inngest
+            .send({
+              name: InngestEvents.UserSignedUp,
+              data: { userId: user.id, email: user.email },
             })
-          } catch (error) {
-            console.error("Error creating Polar customer:", error)
-
-            if (polarCustomer) {
-              try {
-                await polarClient.customers.delete({ id: polarCustomer.id })
-              } catch (polarError) {
-                console.error("Error rolling back Polar customer:", polarError)
-              }
-            }
-
-            await prisma.user.delete({ where: { id: user.id } })
-            throw error
-          }
+            .catch((error) => {
+              console.error("Error sending user signed up event:", error)
+            })
         },
       },
     },

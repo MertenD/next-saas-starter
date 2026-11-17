@@ -25,9 +25,9 @@ export const inngest = new Inngest({
 
 ## Existing jobs
 
-Both defined in `src/inngest/functions.ts`, triggered by events in the `InngestEvents` enum:
+Both defined in `src/inngest/functions.ts`, triggered by events in the `InngestEvents` constant (`as const` object; use `InngestEventName` for the union type):
 
-- **`onUserSignedUp`** (`UserSignedUp` event) - sleeps 1s and returns a welcome message. Stubbed with a `TODO` for real logic (sending a welcome email, provisioning resources, etc.) - not currently wired to fire from the sign-up flow itself.
+- **`onUserSignedUp`** (`UserSignedUp` event) - sleeps 1s and returns a welcome message. Stubbed with a `TODO` for real logic (sending a welcome email, provisioning resources, etc.). The event is sent from the Better Auth `user.create` hook in `src/lib/auth.ts` after a user is created (fire and forget: a down Inngest server is logged, but never makes sign-up fail).
 - **`demoJob`** (`DemoTriggered` event) - the `/demo/inngest` job. Three steps: `fetch-stats` (simulated async fetch), `processing-delay` (a `step.sleep("processing-delay", "5s")` to demonstrate durable scheduling), `generate-report`. Publishes live progress at each stage over Inngest Realtime via `demoJobChannel` (`src/inngest/realtime.ts`, topic `"status"`), and publishes a `failed` status before rethrowing on error.
 
 ## Realtime subscriptions

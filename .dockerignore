@@ -1,6 +1,5 @@
-# Dependencies
+# Dependencies (bun.lock must NOT be ignored: the Dockerfile copies it for `bun install --frozen-lockfile`)
 node_modules
-bun.lock
 
 # Next.js build output
 .next

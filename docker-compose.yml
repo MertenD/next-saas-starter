@@ -22,7 +22,7 @@ services:
   # Inngest dev server - polls the Next.js app (running on the host via
   # `bun run dev`) for background job functions at /api/inngest.
   inngest:
-    image: inngest/inngest:latest
+    image: inngest/inngest:v1.53.0 # keep in sync with inngest-cli in package.json
     restart: unless-stopped
     command: inngest dev -u http://host.docker.internal:3000/api/inngest
     ports:

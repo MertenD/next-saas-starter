@@ -4,8 +4,39 @@ import createNextIntlPlugin from "next-intl/plugin"
 
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts")
 
+/**
+ * Response headers sent with every page and API response. This is a
+ * deliberately conservative set that cannot break scripts or styles:
+ * clickjacking and MIME-sniffing protection, a referrer policy, a locked-down
+ * Permissions-Policy and the non-script CSP directives. A full
+ * `script-src`/`style-src` CSP needs per-request nonces (a proxy) and is not
+ * part of the template, see docs/deployment.md. HSTS is only sent in
+ * production (browsers ignore it over plain HTTP anyway).
+ */
+const securityHeaders = [
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "X-Frame-Options", value: "DENY" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  {
+    key: "Permissions-Policy",
+    value: "camera=(), microphone=(), geolocation=()",
+  },
+  {
+    key: "Content-Security-Policy",
+    value: "frame-ancestors 'none'; base-uri 'self'; object-src 'none'",
+  },
+  ...(process.env.NODE_ENV === "production"
+    ? [{ key: "Strict-Transport-Security", value: "max-age=31536000" }]
+    : []),
+]
+
 const nextConfig: NextConfig = {
   output: "standalone",
+  // Don't advertise the framework in an `X-Powered-By` header.
+  poweredByHeader: false,
+  async headers() {
+    return [{ source: "/:path*", headers: securityHeaders }]
+  },
   // React Compiler: memoizes components and hooks automatically at build time,
   // so no manual useMemo/useCallback is needed for render performance.
   // Requires `babel-plugin-react-compiler`. See docs/frontend.md.

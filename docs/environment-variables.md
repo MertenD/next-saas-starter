@@ -84,8 +84,10 @@ Both must be set together - `src/lib/resend.ts` derives `isResendEnabled = !!(RE
 | Variable | Required | Default | Description |
 |---|---|---|---|
 | `NEXT_PUBLIC_SENTRY_DSN` | No | - | Read directly from `process.env` in `next.config.ts`, `sentry.*.config.ts` and `src/instrumentation-client.ts` (not part of the Zod schema, since it is optional and public). Leave unset to disable Sentry entirely. Inlined at build time - Docker needs it as a build arg. |
+| `NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE` | No | `1` in development, `0.1` in production | Share of requests Sentry traces, a number from `0` to `1` (`0` disables tracing). Read through `getTracesSampleRate()` in `src/config/sentry.ts` by the browser, Node and Edge Sentry inits. Invalid values are ignored with a warning. Like the DSN it is inlined into the browser bundle at build time, so with Docker it is a build arg. |
 | `SENTRY_ORG` | No | - | Build-time only: your Sentry organization slug, for source map upload. |
 | `SENTRY_PROJECT` | No | - | Build-time only: your Sentry project slug, for source map upload. |
+| `SENTRY_RECORD_AI_DATA` | No | - | Set to `1` to record AI prompts and model outputs in Sentry traces (read in `sentry.server.config.ts`). Off by default because they can contain personal data. |
 | `SENTRY_AUTH_TOKEN` | No | - | Build-time only: auth token for source map upload. Without it the app is still tracked, but stack traces stay minified. Never commit it. |
 
 See [`integrations.md`](./integrations.md#error-tracking-sentry).

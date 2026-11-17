@@ -8,13 +8,18 @@ import { demoJobChannel, demoJobKey } from "./realtime"
  * handle it. Functions defined here must also be registered in
  * `src/app/api/inngest/route.ts` to be picked up by the Inngest dev server.
  */
-export enum InngestEvents {
-  UserSignedUp = "user/signed.up",
-  SendWelcomeEmail = "email/send.welcome",
-  DemoTriggered = "demo/triggered",
-}
+export const InngestEvents = {
+  UserSignedUp: "user/signed.up",
+  SendWelcomeEmail: "email/send.welcome",
+  DemoTriggered: "demo/triggered",
+} as const
 
-// Triggered after a new user signs up - extend this with real logic
+/** Union of all event name strings in {@link InngestEvents}. */
+export type InngestEventName =
+  (typeof InngestEvents)[keyof typeof InngestEvents]
+
+// Triggered after a new user signs up (sent from the Better Auth user-create
+// hook in `src/lib/auth.ts`) - extend this with real logic
 export const onUserSignedUp = inngest.createFunction(
   { id: "on-user-signed-up" },
   { event: InngestEvents.UserSignedUp },

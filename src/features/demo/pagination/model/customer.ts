@@ -126,7 +126,9 @@ function weightedPick<T>(options: [T, number][]): T {
     cumulative += weight
     if (roll <= cumulative) return value
   }
-  return options[options.length - 1][0]
+  const last = options[options.length - 1]
+  if (!last) throw new Error("weightedPick needs at least one option")
+  return last[0]
 }
 
 function generateCustomers(count: number): Customer[] {

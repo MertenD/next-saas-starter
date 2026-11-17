@@ -21,6 +21,8 @@ docker compose -f docker-compose.prod.yml up --build -d
 
 `docker-entrypoint.sh` runs `prisma migrate deploy` automatically before starting the server, so migrations apply on every deploy.
 
+The container runs as the unprivileged `bun` user (not root) and has a `HEALTHCHECK` against Better Auth's `/api/auth/ok` (it answers without touching the database, so it only reports whether the server process is up). `docker ps` shows `healthy`/`unhealthy`. The Inngest image in both compose files is pinned to the same version as the `inngest-cli` dev dependency in `package.json` - bump them together.
+
 **3. Check logs:**
 
 ```bash
@@ -31,7 +33,7 @@ docker compose -f docker-compose.prod.yml logs -f app
 
 ### Error tracking (Sentry) build args
 
-The `Dockerfile` declares `NEXT_PUBLIC_SENTRY_DSN`, `SENTRY_ORG`, `SENTRY_PROJECT` and `SENTRY_AUTH_TOKEN` as build args in the `builder` stage, and `docker-compose.prod.yml` fills them from your environment (empty by default, which leaves Sentry off). The auth token only exists in the builder stage and does not end up in the final runner image. If you build without compose:
+The `Dockerfile` declares `NEXT_PUBLIC_SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE` (optional, default `0.1` in production), `SENTRY_ORG`, `SENTRY_PROJECT` and `SENTRY_AUTH_TOKEN` as build args in the `builder` stage, and `docker-compose.prod.yml` fills them from your environment (empty by default, which leaves Sentry off). The auth token only exists in the builder stage and does not end up in the final runner image. If you build without compose:
 
 ```bash
 docker build \
@@ -69,7 +71,7 @@ postgres:
 ```yaml
 # docker-compose.prod.yml
 inngest:
-  image: inngest/inngest:latest
+  image: inngest/inngest:v1.53.0 # pin a version, keep in sync with inngest-cli
   command: >
     inngest start --host 0.0.0.0
     --postgres-uri postgres://saas:saas@postgres:5432/inngest_db
@@ -131,6 +133,7 @@ If you expose the Inngest container's Realtime endpoint through the same proxy, 
 - [ ] Polar product ID replaced in `src/lib/auth.ts`
 - [ ] `NEXT_PUBLIC_INNGEST_BASE_URL` points at a URL the browser can actually reach (not a Docker-internal hostname)
 - [ ] If using Sentry: `NEXT_PUBLIC_SENTRY_DSN` (and the source map vars) passed as build args, not just runtime env
+- [ ] Security headers (`next.config.ts`) are conservative on purpose (no `script-src`). If you need a full Content-Security-Policy, add per-request nonces through a proxy - a static `script-src` breaks Next.js' inline scripts
 - [ ] PWA: replaced the placeholder icons and checked `public/sw.js` caching rules (see [Integrations](./integrations.md#pwa-installable-app))
 - [ ] Decided whether the default in-memory `inngest dev` setup is acceptable, or switched to `inngest start` with persistent storage (see above) - the default loses all queued jobs on every restart
 

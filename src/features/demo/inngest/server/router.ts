@@ -1,4 +1,5 @@
 import { getSubscriptionToken } from "@inngest/realtime"
+import { TRPCError } from "@trpc/server"
 import { getJobSubscriptionTokenSchema } from "@/features/demo/inngest/schema/inngest-demo-schema"
 import { inngest } from "@/inngest/client"
 import { InngestEvents } from "@/inngest/functions"
@@ -11,7 +12,14 @@ export const demoRouter = createTRPCRouter({
       name: InngestEvents.DemoTriggered,
       data: { triggeredBy: ctx.auth.user.email, userId: ctx.auth.user.id },
     })
-    return { eventId: ids[0] }
+    const eventId = ids[0]
+    if (!eventId) {
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Inngest did not return an event id.",
+      })
+    }
+    return { eventId }
   }),
 
   // Issues a short-lived Realtime subscription token scoped to one run's

@@ -47,6 +47,7 @@ export default defineConfig({
           { text: "Auth & Billing", link: "/auth-and-billing" },
           { text: "Background Jobs", link: "/background-jobs" },
           { text: "Integrations", link: "/integrations" },
+          { text: "Service Worker", link: "/service-worker" },
           { text: "Frontend", link: "/frontend" },
         ],
       },

@@ -1,4 +1,5 @@
 import * as Sentry from "@sentry/nextjs"
+import { getTracesSampleRate } from "@/config/sentry"
 
 /**
  * Browser-side Sentry init, run by Next.js before the app hydrates. Skipped
@@ -12,7 +13,9 @@ if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
 
     integrations: [Sentry.replayIntegration()],
 
-    tracesSampleRate: 1,
+    // Configurable via NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE (inlined at build
+    // time), see src/config/sentry.ts
+    tracesSampleRate: getTracesSampleRate(),
 
     // Session replays: 10% of sessions, 100% of sessions with an error.
     replaysSessionSampleRate: 0.1,

@@ -96,19 +96,20 @@ Optional. The template ships the [Sentry](https://sentry.io) wiring for Next.js,
 **Things to know:**
 
 - `NEXT_PUBLIC_SENTRY_DSN` is inlined into the browser bundle at **build time**. With Docker it is passed as a build arg - see [Deployment](./deployment.md#error-tracking-sentry-build-args).
-- Tune `tracesSampleRate` (default `1`, i.e. every request) down for production traffic.
-- `vercelAIIntegration` records prompts and model outputs. Remove it from `sentry.server.config.ts` (or set `recordInputs`/`recordOutputs` to `false`) if they can contain sensitive data.
+- `tracesSampleRate` comes from one helper, `getTracesSampleRate()` in `src/config/sentry.ts`, used by the browser, server and edge inits. Set `NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE` (`0` to `1`) to change it; without it the default is `1` (every request) in development and `0.1` in production. The value is inlined into the browser bundle at build time, so with Docker it is a build arg (like the DSN). Use `tracesSampler` if you need finer control.
+- `vercelAIIntegration` records AI prompts and model outputs only when `SENTRY_RECORD_AI_DATA=1` is set (off by default, because they can contain personal data). Token counts, timings and errors are traced either way.
+- `sentry.edge.config.ts` is dormant: the template has no Edge code (middleware/proxy or `runtime = "edge"` routes). It is kept so Edge errors get reported as soon as you add some.
 - The `@sentry/nextjs` v11 import for the build wrapper is `@sentry/nextjs/config` (see `next.config.ts`).
 
 ## PWA (installable app)
 
-The app is installable ("Add to home screen") and already-visited pages keep opening offline.
+The app is installable ("Add to home screen") and already-visited pages keep opening offline. The service worker has its own page with the details (strategies, updates, privacy, debugging): [Service Worker](./service-worker.md).
 
 | Piece | Role |
 |---|---|
 | `src/app/manifest.ts` | Web app manifest (name from `APP_NAME`, `start_url: /dashboard`, standalone display, theme color) |
 | `src/app/api/pwa-icon/route.tsx` | Generates placeholder icons (first letter of `APP_NAME` on the brand color) at the sizes the manifest asks for |
-| `public/sw.js` | Hand-written service worker: cache-first for `/_next/static/*`, network-first with offline fallback for page navigations, never touches `/api/*` |
+| `public/sw.js` | Hand-written service worker: cache-first for `/_next/static/*`, network-first with offline fallback for page navigations (the cached copy is used after a 4 s network timeout, so a hanging connection does not block the page), never touches `/api/*`. Both caches are capped (150 static files, 30 pages, oldest evicted first) so they cannot grow without bound across deployments |
 | `src/components/pwa-register.tsx` | Registers the service worker, in production only (a service worker in `next dev` serves stale bundles) |
 | `src/lib/pwa.ts` | `clearPwaPageCache()`, called on sign-out |
 
