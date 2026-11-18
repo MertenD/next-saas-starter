@@ -66,6 +66,7 @@ src/
 │   │   ├── auth/[...all]/route.ts    # Better Auth catch-all (sign-in/up/out, OAuth, Polar checkout/portal)
 │   │   ├── chat/route.ts             # POST - AI SDK streamText via OpenRouter (resumable)
 │   │   ├── chat/[id]/stream/route.ts # GET - resumes an in-flight/completed chat stream
+│   │   ├── chat/[id]/stop/route.ts   # POST - aborts the running model generation of a chat
 │   │   ├── inngest/route.ts          # Inngest's Next.js serve handler - registers all functions
 │   │   ├── pwa-icon/route.tsx        # Generated placeholder PWA icons
 │   │   └── trpc/[trpc]/route.ts      # tRPC fetch adapter for the whole appRouter

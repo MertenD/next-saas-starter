@@ -227,3 +227,41 @@
     cursor: pointer;
   }
 }
+
+/* Syntax highlighting for Markdown code blocks (rehype-highlight / highlight.js
+   class names). DESIGN.md has no syntax palette, so this only uses existing
+   tokens: primary for keywords, muted for comments, weight for names. */
+.hljs-comment,
+.hljs-quote {
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-doctag,
+.hljs-meta .hljs-keyword {
+  color: var(--primary);
+}
+.hljs-title,
+.hljs-section,
+.hljs-name,
+.hljs-built_in,
+.hljs-type,
+.hljs-attr,
+.hljs-attribute {
+  font-weight: 600;
+}
+.hljs-string,
+.hljs-number,
+.hljs-regexp,
+.hljs-symbol,
+.hljs-addition {
+  color: var(--muted-foreground);
+}
+.hljs-emphasis {
+  font-style: italic;
+}
+.hljs-strong {
+  font-weight: 700;
+}

@@ -2,7 +2,7 @@
 
 import { PlusIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -16,7 +16,7 @@ import {
   loadChatSession,
 } from "@/features/demo/ai/model/chat-session"
 
-/** One chat. Remounted (via `key`) for every new chat id, which creates a fresh `Chat` instance. */
+/** One chat. Remounted (via `key`) for every new chat id; `useAiChat` then gets the `Chat` of that id. */
 function ChatSessionView({
   session,
   model,
@@ -27,7 +27,24 @@ function ChatSessionView({
   onNewChat: () => void
 }) {
   const t = useTranslations("demo.ai")
-  const { messages, sendMessage, stop, isLoading, error } = useAiChat(session)
+  const {
+    messages,
+    sendMessage,
+    stop,
+    regenerate,
+    retry,
+    edit,
+    isLoading,
+    error,
+  } = useAiChat(session)
+  const inputRef = useRef<HTMLTextAreaElement>(null)
+  // Id of the user message being edited inline (ArrowUp in the empty composer or the pencil button).
+  const [editingId, setEditingId] = useState<string | null>(null)
+
+  const startEditLast = () => {
+    const last = messages.findLast((m) => m.role === "user")
+    if (last) setEditingId(last.id)
+  }
 
   return (
     <div className="flex h-full w-full flex-col bg-background">
@@ -58,11 +75,30 @@ function ChatSessionView({
         </div>
       </div>
 
-      <ChatMessages messages={messages} isLoading={isLoading} error={error} />
+      <ChatMessages
+        messages={messages}
+        isLoading={isLoading}
+        error={error}
+        editingId={editingId}
+        onStartEdit={setEditingId}
+        onCancelEdit={() => setEditingId(null)}
+        onEdit={(messageId, text) => {
+          setEditingId(null)
+          edit(messageId, text)
+        }}
+        onRegenerate={regenerate}
+        onRetry={retry}
+        onSuggestion={(text) => {
+          sendMessage({ text })
+          inputRef.current?.focus()
+        }}
+      />
       <ChatInput
         onSend={(text) => sendMessage({ text })}
         onStop={stop}
+        onEditLast={startEditLast}
         isLoading={isLoading}
+        textareaRef={inputRef}
       />
     </div>
   )

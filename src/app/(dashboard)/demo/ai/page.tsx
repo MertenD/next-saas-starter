@@ -1,5 +1,4 @@
 import { getTranslations } from "next-intl/server"
-import { Badge } from "@/components/ui/badge"
 import {
   Card,
   CardDescription,
@@ -33,9 +32,6 @@ export default async function AiDemoPage() {
             })}
           </p>
         </div>
-        <Badge variant="outline" className="font-mono text-xs">
-          {AI_MODEL}
-        </Badge>
       </div>
 
       {!env.OPENROUTER_API_KEY ? (

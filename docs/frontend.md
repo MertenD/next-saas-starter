@@ -84,7 +84,7 @@ They are deliberately data-agnostic: you bring the query and the params hook. Se
 
 ## Markdown
 
-`MarkdownContent` (`src/components/markdown-content.tsx`) renders Markdown with the design tokens. It lazy-loads the actual renderer (`markdown-renderer.tsx`, `react-markdown` + `remark-gfm`) via `next/dynamic`, so the parser stays out of the main bundle. Use it for LLM output; raw HTML in the source is escaped, so untrusted model output is safe. The AI chat demo uses it for assistant messages and asks the model to answer in Markdown through `AI_SYSTEM_PROMPT`.
+`MarkdownContent` (`src/components/markdown-content.tsx`) renders Markdown with the design tokens. It lazy-loads the actual renderer (`markdown-renderer.tsx`, `react-markdown` + `remark-gfm` + `rehype-highlight`) via `next/dynamic`, so the parser stays out of the main bundle. Fenced code blocks get syntax highlighting (token colors in `globals.css`), a language label and a copy button (`CopyButton`). Use it for LLM output; raw HTML in the source is escaped, so untrusted model output is safe. The AI chat demo uses it for assistant messages and asks the model to answer in Markdown through `AI_SYSTEM_PROMPT`.
 
 ## State management
 

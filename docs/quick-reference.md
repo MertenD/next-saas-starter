@@ -97,7 +97,8 @@ Non-`ui/` components in `src/components/` - see [Frontend](./frontend.md) for th
 | `LocaleSync` | Mounted in the dashboard layout: applies the saved `user.locale` to the cookie on a new device, or saves the active locale when the user has none yet. |
 | `EntityHeader`, `EntityContainer`, `EntitySearch`, `EntityPagination` | Building blocks for list pages (title + "new" button, page layout, search input, prev/next pagination with result count). See [Pagination demo](./demos/pagination.md). |
 | `EmptyView`, `ErrorView` | Empty (with call to action) and error (with retry) states for list pages. |
-| `MarkdownContent` | Renders Markdown (GitHub-flavored) with design tokens; used for AI chat replies. |
+| `MarkdownContent` | Renders Markdown (GitHub-flavored) with design tokens; code blocks get syntax highlighting, a language label and a copy button. Used for AI chat replies. |
+| `CopyButton`, `IconActionButton` | Copy-to-clipboard icon button (check mark feedback, error toast) and the small circular icon button it is built on. |
 | `PwaRegister` | Registers the service worker (`public/sw.js`) in production. Mounted once in the root layout. |
 
 Details on the four required UI states (loading/empty/error/content) and confirm-dialog wiring: [Frontend](./frontend.md).

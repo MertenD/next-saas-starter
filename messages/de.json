@@ -17,6 +17,11 @@
       "title": "Bitte bestätige deine E-Mail-Adresse",
       "description": "Schau in dein Postfach nach dem Bestätigungslink. Manche Funktionen, wie das Upgrade auf Pro, erfordern eine bestätigte E-Mail-Adresse.",
       "resendButton": "Bestätigungs-E-Mail erneut senden"
+    },
+    "copyButton": {
+      "copy": "Kopieren",
+      "copied": "Kopiert",
+      "failed": "Kopieren in die Zwischenablage nicht möglich."
     }
   },
   "sidebar": {
@@ -333,10 +338,22 @@
       "thinking": "Der Assistent denkt nach",
       "apiKeyMissingChatError": "OPENROUTER_API_KEY ist nicht konfiguriert. Füge sie deiner .env-Datei hinzu.",
       "genericError": "Fehler: {message}",
+      "streamInterruptedError": "Die Antwort wurde unterbrochen, zum Beispiel weil der Server neu gestartet wurde. Versuche es erneut, um sie neu zu erzeugen.",
       "inputPlaceholder": "Nachricht eingeben...",
       "inputHint": "Enter zum Senden, Shift+Enter für eine neue Zeile",
       "sendLabel": "Nachricht senden",
-      "stopLabel": "Antwort stoppen"
+      "stopLabel": "Antwort stoppen",
+      "retry": "Erneut versuchen",
+      "errorHint": "Die Antwort konnte nicht erzeugt werden.",
+      "regenerate": "Antwort neu generieren",
+      "editMessage": "Nachricht bearbeiten",
+      "saveEdit": "Speichern und erneut senden",
+      "cancelEdit": "Abbrechen",
+      "editLabel": "Nachricht bearbeiten",
+      "scrollToBottom": "Zur neuesten Nachricht scrollen",
+      "suggestion1": "Erkläre fortsetzbare Streams in einfachen Worten",
+      "suggestion2": "Schreibe eine TypeScript-Funktion, die eine andere Funktion entprellt (debounce)",
+      "suggestion3": "Gib mir eine kurze Checkliste für den Launch eines SaaS-Produkts"
     },
     "inngest": {
       "heading": "Hintergrundjobs - Inngest",

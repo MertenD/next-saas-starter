@@ -1,5 +1,5 @@
-import type { UIMessage } from "ai"
-import { generateId } from "ai"
+import { generateId, type UIMessage } from "ai"
+import { clearLiveChat } from "@/features/demo/ai/model/live-chat"
 
 /** `sessionStorage` key holding the current chat (id + messages) of this tab. */
 const STORAGE_KEY = "ai-chat-session"
@@ -12,15 +12,6 @@ export type ChatSession = {
 /** Creates an empty chat with a fresh id (the "New chat" action). */
 export function createChatSession(): ChatSession {
   return { id: generateId(), messages: [] }
-}
-
-/**
- * Number of user messages, i.e. the index of the current turn. The server keys
- * each resumable stream by chat id AND turn, so resuming turn 2 never replays
- * the answer of turn 1 when the chat id stays the same.
- */
-export function countTurns(messages: UIMessage[]) {
-  return messages.filter((message) => message.role === "user").length
 }
 
 /**
@@ -59,8 +50,13 @@ export function saveChatSession(session: ChatSession) {
   }
 }
 
-/** Removes the stored chat. Also called on sign-out so the next user starts clean. */
+/**
+ * Removes the stored chat and forgets the live `Chat` object (see
+ * `model/live-chat.ts`). Called on "New chat" and on sign-out, so the next user
+ * of this tab starts clean.
+ */
 export function clearChatSession() {
+  clearLiveChat()
   try {
     sessionStorage.removeItem(STORAGE_KEY)
   } catch {

@@ -23,7 +23,7 @@ Everything under `/demo/*` exists to demonstrate a technique (see [Features](./f
 4. **Remove the sidebar entry** in `src/components/app-sidebar.tsx` - delete the item from `demoItems`, and once all demos are gone, remove the whole "Demo" section (`demoSection` in `messages/*.json`) and its `nav.*` translation keys.
 5. **Delete the docs page** under `docs/demos/<name>.md` and its entry in `docs/README.md` and `docs/.vitepress/config.mts` (sidebar).
 
-`demo/ai` also owns `src/app/api/chat/` and `src/lib/stream-context.ts` (Redis-backed resumable streams) - remove those too if you don't keep AI chat. `demo/posts` owns the `Post` model in `prisma/schema.prisma` - drop it (and migrate) once you've copied the pattern into your own feature and no longer need it as a live reference.
+`demo/ai` also owns `src/app/api/chat/` and `src/lib/stream-context.ts` (Redis-backed resumable streams) - remove those too if you don't keep AI chat. `useSignOut` (`src/features/auth/hooks/use-sign-out.ts`) imports `clearChatSession` from `demo/ai` to wipe the stored chat on sign-out, so remove that import and call as well. `demo/posts` owns the `Post` model in `prisma/schema.prisma` - drop it (and migrate) once you've copied the pattern into your own feature and no longer need it as a live reference.
 
 ## 3. Decide what you're actually using, and remove the rest
 

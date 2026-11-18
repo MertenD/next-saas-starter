@@ -23,7 +23,7 @@ Login/register/logout UI, forgot/reset-password forms, and a user-info card, bac
 
 ### `demo/ai/` - streaming + resumable AI chat
 
-Streaming AI chat demo using the Vercel AI SDK against OpenRouter. What it's specifically built to show off: **resumable streams** - refresh the page mid-response and it keeps going instead of restarting or losing the reply.
+Streaming AI chat demo using the Vercel AI SDK against OpenRouter. What it's specifically built to show off: **resumable streams** - refresh the page mid-response and it keeps going instead of restarting or losing the reply. Around that it behaves like the well-known chat apps: stop button, retry on errors, copy, regenerate and edit for messages, a stable chat id with a "New chat" button, and an answer that keeps generating while you visit another page.
 
 **Full walkthrough: [demos/ai.md](./demos/ai.md)**
 

@@ -17,6 +17,11 @@
       "title": "Please verify your email address",
       "description": "Check your inbox for a verification link. Some features, like upgrading to Pro, require a verified email.",
       "resendButton": "Resend verification email"
+    },
+    "copyButton": {
+      "copy": "Copy",
+      "copied": "Copied",
+      "failed": "Could not copy to the clipboard."
     }
   },
   "sidebar": {
@@ -333,10 +338,22 @@
       "thinking": "The assistant is thinking",
       "apiKeyMissingChatError": "OPENROUTER_API_KEY is not configured. Add it to your .env file.",
       "genericError": "Error: {message}",
+      "streamInterruptedError": "The answer was interrupted, for example because the server restarted. Try again to generate it anew.",
       "inputPlaceholder": "Type a message...",
       "inputHint": "Enter to send, Shift+Enter for a new line",
       "sendLabel": "Send message",
-      "stopLabel": "Stop generating"
+      "stopLabel": "Stop generating",
+      "retry": "Try again",
+      "errorHint": "The answer could not be generated.",
+      "regenerate": "Regenerate answer",
+      "editMessage": "Edit message",
+      "saveEdit": "Save and resend",
+      "cancelEdit": "Cancel",
+      "editLabel": "Edit your message",
+      "scrollToBottom": "Scroll to latest message",
+      "suggestion1": "Explain resumable streams in simple terms",
+      "suggestion2": "Write a TypeScript function that debounces another function",
+      "suggestion3": "Give me a short checklist for launching a SaaS product"
     },
     "inngest": {
       "heading": "Background Jobs - Inngest",

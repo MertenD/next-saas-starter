@@ -17,8 +17,11 @@ function isUIMessage(value: unknown): value is UIMessage {
   )
 }
 
+/** A chat id. Chosen by the client, so it is bounded: it ends up in Redis keys. */
+export const chatIdSchema = z.string().min(1).max(128)
+
 export const chatRequestSchema = z.object({
-  id: z.string().min(1).max(128),
+  id: chatIdSchema,
   messages: z.array(z.custom<UIMessage>(isUIMessage)).max(MAX_MESSAGES),
 })
 
