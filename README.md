@@ -30,38 +30,38 @@ A production-ready Next.js SaaS template with everything you need to build and s
 <table>
   <tr>
     <td width="50%" valign="top">
+      <b>Sign in</b><br>
+      Email and password plus Google and GitHub, powered by Better Auth.<br>
+      <img src="docs/public/screenshots/login.png" alt="Sign-in form with GitHub and Google buttons">
+    </td>
+    <td width="50%" valign="top">
       <b>Dashboard</b><br>
       Collapsible sidebar and getting-started cards, rendered on the server.<br>
       <img src="docs/public/screenshots/dashboard.png" alt="Dashboard with sidebar navigation and getting-started cards">
     </td>
+  </tr>
+  <tr>
     <td width="50%" valign="top">
       <b>Posts (CRUD)</b><br>
       Create, edit and delete with Prisma, tRPC and automatic cache updates.<br>
       <img src="docs/public/screenshots/posts.png" alt="Posts demo: a CRUD list backed by Prisma and tRPC">
     </td>
-  </tr>
-  <tr>
     <td width="50%" valign="top">
       <b>AI chat</b><br>
       Streaming answers with Markdown, stop, retry and edit; refreshing mid-stream resumes the reply.<br>
       <img src="docs/public/screenshots/ai-chat.png" alt="AI chat demo with a streamed Markdown answer">
     </td>
+  </tr>
+  <tr>
     <td width="50%" valign="top">
       <b>Background jobs</b><br>
       Durable multi-step Inngest jobs with live run status streamed to the page, no polling.<br>
       <img src="docs/public/screenshots/background-jobs.png" alt="Background jobs demo with a completed and a running Inngest run">
     </td>
-  </tr>
-  <tr>
     <td width="50%" valign="top">
       <b>Pagination</b><br>
       Searchable, sortable and filterable table with its state kept in the URL.<br>
       <img src="docs/public/screenshots/pagination.png" alt="Paginated, sortable table of users">
-    </td>
-    <td width="50%" valign="top">
-      <b>Sign in</b><br>
-      Email and password plus Google and GitHub, powered by Better Auth.<br>
-      <img src="docs/public/screenshots/login.png" alt="Sign-in form">
     </td>
   </tr>
   <tr>
