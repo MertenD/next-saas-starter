@@ -8,20 +8,20 @@ A production-ready Next.js SaaS template with everything you need to build and s
 |-------------------------------|---|
 | **Framework**                 | <img src="docs/public/icons/nextdotjs.svg" alt="" width="18" height="18" align="top">&nbsp;Next.js 16 (App Router, Turbopack) |
 | **Language**                  | <img src="docs/public/icons/typescript.svg" alt="" width="18" height="18" align="top">&nbsp;TypeScript (strict mode) |
-| **API Layer**                 | <img src="docs/public/icons/trpc.svg" alt="" width="18" height="18" align="top">&nbsp;tRPC v11 + TanStack Query v5 |
-| **Database**                  | <img src="docs/public/icons/postgresql.svg" alt="" width="18" height="18" align="top">&nbsp;PostgreSQL + Prisma ORM |
-| **Auth**                      | <img src="docs/public/icons/betterauth.svg" alt="" width="18" height="18" align="top">&nbsp;Better Auth (email/password + Google + GitHub OAuth) |
+| **API Layer**                 | <img src="docs/public/icons/trpc.svg" alt="" width="18" height="18" align="top">&nbsp;tRPC v11 + <img src="docs/public/icons/reactquery.svg" alt="" width="18" height="18" align="top">&nbsp;TanStack Query v5 |
+| **Database**                  | <img src="docs/public/icons/postgresql.svg" alt="" width="18" height="18" align="top">&nbsp;PostgreSQL + <img src="docs/public/icons/prisma.svg" alt="" width="18" height="18" align="top">&nbsp;Prisma ORM |
+| **Auth**                      | <img src="docs/public/icons/betterauth.svg" alt="" width="18" height="18" align="top">&nbsp;Better Auth (email/password + <img src="docs/public/icons/google.svg" alt="" width="18" height="18" align="top">&nbsp;Google + <img src="docs/public/icons/github.svg" alt="" width="18" height="18" align="top">&nbsp;GitHub OAuth) |
 | **Payments**                  | <img src="docs/public/icons/credit-card.svg" alt="" width="18" height="18" align="top">&nbsp;Polar.sh (subscriptions + customer portal) |
 | **Background Jobs**           | <img src="docs/public/icons/workflow.svg" alt="" width="18" height="18" align="top">&nbsp;Inngest |
-| **AI**                        | <img src="docs/public/icons/vercel.svg" alt="" width="18" height="18" align="top">&nbsp;Vercel AI SDK + OpenRouter |
+| **AI**                        | <img src="docs/public/icons/vercel.svg" alt="" width="18" height="18" align="top">&nbsp;Vercel AI SDK + <img src="docs/public/icons/openrouter.svg" alt="" width="18" height="18" align="top">&nbsp;OpenRouter |
 | **Cache**                     | <img src="docs/public/icons/redis.svg" alt="" width="18" height="18" align="top">&nbsp;Redis |
 | **Analytics**                 | <img src="docs/public/icons/plausibleanalytics.svg" alt="" width="18" height="18" align="top">&nbsp;Plausible (self-hosted or cloud, optional) |
 | **Error tracking**            | <img src="docs/public/icons/sentry.svg" alt="" width="18" height="18" align="top">&nbsp;Sentry (optional) |
-| **UI**                        | <img src="docs/public/icons/tailwindcss.svg" alt="" width="18" height="18" align="top">&nbsp;shadcn/ui + Tailwind CSS v4 |
+| **UI**                        | <img src="docs/public/icons/shadcnui.svg" alt="" width="18" height="18" align="top">&nbsp;shadcn/ui + <img src="docs/public/icons/tailwindcss.svg" alt="" width="18" height="18" align="top">&nbsp;Tailwind CSS v4 |
 | **i18n**                      | <img src="docs/public/icons/languages.svg" alt="" width="18" height="18" align="top">&nbsp;next-intl (en + de) |
-| **State**                     | <img src="docs/public/icons/tanstack.svg" alt="" width="18" height="18" align="top">&nbsp;Zustand (client) + TanStack Query (server) |
+| **State**                     | <img src="docs/public/icons/layers.svg" alt="" width="18" height="18" align="top">&nbsp;Zustand (client) + <img src="docs/public/icons/reactquery.svg" alt="" width="18" height="18" align="top">&nbsp;TanStack Query (server) |
 | **Input Validation**          | <img src="docs/public/icons/zod.svg" alt="" width="18" height="18" align="top">&nbsp;Zod |
-| **Forms**                     | <img src="docs/public/icons/reacthookform.svg" alt="" width="18" height="18" align="top">&nbsp;React Hook Form + Zod |
+| **Forms**                     | <img src="docs/public/icons/reacthookform.svg" alt="" width="18" height="18" align="top">&nbsp;React Hook Form + <img src="docs/public/icons/zod.svg" alt="" width="18" height="18" align="top">&nbsp;Zod |
 | **Linting/Formatting**        | <img src="docs/public/icons/biome.svg" alt="" width="18" height="18" align="top">&nbsp;Biome (not ESLint/Prettier) |
 | **Package manager / runtime** | <img src="docs/public/icons/bun.svg" alt="" width="18" height="18" align="top">&nbsp;Bun |
 
