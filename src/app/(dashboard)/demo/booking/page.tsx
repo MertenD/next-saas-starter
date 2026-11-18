@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server"
 import { BookingContainer } from "@/features/demo/booking/components/booking-container"
+import { navTitle } from "@/lib/page-metadata"
 
 export default async function BookingPage() {
   const t = await getTranslations("booking")
@@ -16,3 +17,5 @@ export default async function BookingPage() {
     </div>
   )
 }
+
+export const generateMetadata = () => navTitle("booking")

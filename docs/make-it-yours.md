@@ -8,6 +8,7 @@
 - **`messages/en.json` / `messages/de.json`** - `auth.layout.brand` and any other hardcoded "SaaS Starter" strings.
 - **`package.json`** - `name`, `version`, and add a `description` if you want one.
 - **`src/app/favicon.ico`** - replace with your own icon.
+- **`src/app/opengraph-image.tsx`** - the social preview image (link previews on Slack, X, LinkedIn and others). It is a placeholder (red circle, `APP_NAME`, `APP_DESCRIPTION`); restyle it with your brand or replace the file with a static `opengraph-image.png` (1200x630).
 - **Root `README.md`** - replace the template description/tech-stack table with your own project's, once it stops matching reality.
 - **`docs/`** - don't feel obligated to rebrand it. If you don't need the doc site, just delete the whole `docs/` folder, the `vitepress` devDependency in `package.json`, the `docs:dev`/`docs:build`/`docs:preview` scripts, and `.github/workflows/docs.yml`. If you're keeping it, rebrand `title` and the `base` path in `docs/.vitepress/config.mts` instead (`base` must match your repo's name for GitHub Pages - see [Deployment](./deployment.md)).
 - **Git remote** - point it at your own repository (`git remote set-url origin <your-repo-url>`) instead of pushing back to the template.
@@ -61,7 +62,7 @@ If you kept `docs/` (see step 1), sweep it for template-specific language that n
 
 ## Checklist
 
-- [ ] Renamed the app (`APP_NAME`, `package.json`, docs title, favicon)
+- [ ] Renamed the app (`APP_NAME`, `package.json`, docs title, favicon, social preview image)
 - [ ] Removed unused demo features (module, page, router registration, sidebar entry, docs page)
 - [ ] Configured or removed OAuth, Polar, Resend, AI, analytics, Sentry and PWA (replaced the placeholder icons)
 - [ ] Generated a fresh `BETTER_AUTH_SECRET` and pointed URLs at your real domain

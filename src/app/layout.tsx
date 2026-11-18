@@ -29,7 +29,7 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  title: APP_NAME,
+  title: { default: APP_NAME, template: `%s | ${APP_NAME}` },
   description: APP_DESCRIPTION,
   appleWebApp: {
     capable: true,
@@ -58,11 +58,8 @@ export default async function RootLayout({
   )
 
   return (
-    <html lang={locale}>
-      <body
-        className={`${inter.variable} ${geistMono.variable} antialiased`}
-        suppressHydrationWarning
-      >
+    <html lang={locale} className={`${inter.variable} ${geistMono.variable}`}>
+      <body className="font-sans antialiased" suppressHydrationWarning>
         <NextIntlClientProvider locale={locale} messages={messages}>
           {plausibleSrc ? (
             <PlausibleProvider src={plausibleSrc}>{app}</PlausibleProvider>

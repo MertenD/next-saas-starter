@@ -90,8 +90,9 @@ Non-`ui/` components in `src/components/` - see [Frontend](./frontend.md) for th
 | `ConfirmDialog` | Standard "Are you sure?" dialog for ordinary, low-stakes deletes. Never wire a delete straight to a click. |
 | `CriticalConfirmDialog` | Destructive/hard-to-reverse deletes - user must retype a confirmation string before confirming. |
 | `DashboardProvider` / `useDashboard()` | Server-resolved current user (`id`, `name`, `email`, `image`, `emailVerified`) and `polarEnabled`, provided by the `(dashboard)` layout (`src/components/dashboard-context.tsx`). Use it instead of `authClient.useSession()` or a billing-flag query in dashboard client components. |
-| `AppShell` | Dashboard layout shell: sidebar + `EmailVerificationBanner` + content area. Wraps every `(dashboard)` page. Takes `defaultOpen` (from the `sidebar_state` cookie, read in the layout). |
+| `AppShell` | Dashboard layout shell: sidebar + mobile-only top bar with the menu button + `EmailVerificationBanner` + content area. Wraps every `(dashboard)` page. Takes `defaultOpen` (from the `sidebar_state` cookie, read in the layout). |
 | `AppSidebar` | Sidebar nav content rendered inside `AppShell`. |
+| `navTitle()` / `authTitle()` | `src/lib/page-metadata.ts`: translated page `<title>` for `generateMetadata` (dashboard pages use `sidebar.nav.*`, auth pages `auth.<page>.title`). Every page exports one; the root layout adds the app name as a suffix. |
 | `EmailVerificationBanner` | Dismissible-by-verification banner shown while the signed-in user's email is unverified. |
 | `LanguageToggle` | Locale switcher (`en`/`de`); persists the choice in the `ui-locale` cookie (Server Action) and on the user profile (`user.locale`). |
 | `LocaleSync` | Mounted in the dashboard layout: applies the saved `user.locale` to the cookie on a new device, or saves the active locale when the user has none yet. |

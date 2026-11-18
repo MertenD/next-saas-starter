@@ -28,7 +28,7 @@ export default function EmailVerificationBanner() {
       <MailWarningIcon />
       <AlertTitle>{t("title")}</AlertTitle>
       <AlertDescription>
-        <p>{t("description")}</p>
+        <p className="line-clamp-2 md:line-clamp-none">{t("description")}</p>
       </AlertDescription>
       <Button
         type="button"

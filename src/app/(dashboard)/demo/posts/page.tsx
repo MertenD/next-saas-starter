@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server"
 import { PostsContainer } from "@/features/demo/posts/components/posts-container"
+import { navTitle } from "@/lib/page-metadata"
 import { HydrateClient, prefetch, trpc } from "@/trpc/server"
 
 export default async function PostsPage() {
@@ -23,3 +24,5 @@ export default async function PostsPage() {
     </div>
   )
 }
+
+export const generateMetadata = () => navTitle("posts")

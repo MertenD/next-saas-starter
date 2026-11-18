@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server"
 import SettingsTabs from "@/features/settings/components/settings-tabs"
+import { navTitle } from "@/lib/page-metadata"
 import { HydrateClient, prefetch, trpc } from "@/trpc/server"
 
 export default async function SettingsPage() {
@@ -22,3 +23,5 @@ export default async function SettingsPage() {
     </div>
   )
 }
+
+export const generateMetadata = () => navTitle("settings")

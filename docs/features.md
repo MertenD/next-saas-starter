@@ -219,3 +219,5 @@ export default function ProjectsPage() {
 ```
 
 The `(dashboard)` route group's `layout.tsx` already calls `requireAuth()` and wraps every page in `AppShell` - a new page under `src/app/(dashboard)/<feature>/page.tsx` gets auth protection and the sidebar shell for free, no extra wiring needed. Add the page's copy to `messages/en.json` and `messages/de.json` per [Frontend - Internationalization](./frontend.md#internationalization-next-intl) rather than hardcoding English strings.
+
+Give every new page a translated browser tab title: add the sidebar label under `sidebar.nav.*` in both message files, extend the key union of `navTitle()` in `src/lib/page-metadata.ts`, and export `export const generateMetadata = () => navTitle("<key>")` from the page. The root layout appends the app name (`Posts | SaaS Starter`). Without it the page falls back to the plain app name. Auth pages use `authTitle()` the same way.

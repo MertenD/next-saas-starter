@@ -111,7 +111,7 @@ export default function AppSidebar() {
           <SidebarTrigger />
         </SidebarMenuItem>
       </SidebarHeader>
-      <SidebarContent className="bg-card p-1">
+      <SidebarContent className="bg-card p-1 group-data-[collapsible=icon]:p-0">
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>

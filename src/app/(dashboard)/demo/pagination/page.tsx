@@ -4,6 +4,7 @@ import { EntityContainer, EntityHeader } from "@/components/entity-components"
 import { CustomersContainer } from "@/features/demo/pagination/components/customers-container"
 import { customersParamsLoader } from "@/features/demo/pagination/server/params-loader"
 import { prefetchCustomers } from "@/features/demo/pagination/server/prefetch"
+import { navTitle } from "@/lib/page-metadata"
 import { HydrateClient } from "@/trpc/server"
 
 type PaginationDemoPageProps = {
@@ -39,3 +40,5 @@ export default async function PaginationDemoPage({
     </HydrateClient>
   )
 }
+
+export const generateMetadata = () => navTitle("pagination")

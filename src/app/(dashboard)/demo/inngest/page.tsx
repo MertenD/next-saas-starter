@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server"
 import { HowItWorksCard } from "@/features/demo/inngest/components/how-it-works-card"
 import { InngestDemoContainer } from "@/features/demo/inngest/components/inngest-demo-container"
+import { navTitle } from "@/lib/page-metadata"
 
 export default async function InngestDemoPage() {
   const t = await getTranslations("demo.inngest")
@@ -16,3 +17,5 @@ export default async function InngestDemoPage() {
     </div>
   )
 }
+
+export const generateMetadata = () => navTitle("inngest")

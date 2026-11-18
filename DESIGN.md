@@ -4,8 +4,8 @@ name: Airbnb-design-analysis
 description: A warm, generous consumer marketplace anchored on a clean white canvas and Airbnb Rausch (#ff385c), the single brand voltage that carries every primary CTA, search-button orb, and rating dot. Type runs Airbnb Cereal VF at modest weights - display sits at 22–28px in weight 500/600 rather than the heavy 700+ that fintech and enterprise systems use; the brand trusts photography and generous whitespace over typographic muscle. Three product entries (Homes, Experiences, Services) sit in the top nav with hand-illustrated 32-icon glyphs and "NEW" badges, signaling a marketplace expansion rather than a feature dump. Pill-shaped search bars (`{rounded.full}`), softly rounded property cards (`{rounded.lg}` ~14px), and 32px button radii read as friendly and human - there is no hard corner anywhere except the body grid.
 
 colors:
-  primary: "#ff385c"
-  primary-active: "#e00b41"
+  primary: "#e00b41"
+  primary-active: "#b9093a"
   primary-disabled: "#ffd1da"
   primary-error-text: "#c13515"
   primary-error-text-hover: "#b32505"
@@ -347,8 +347,8 @@ The shape language is **soft**. Buttons are 8px radius (`{rounded.sm}`), propert
 ## Colors
 
 ### Brand & Accent
-- **Rausch** (`{colors.primary}` - #ff385c): The single brand color. Used for primary CTA backgrounds (Reserve, Continue), the search orb, the heart save state on property cards, and inline brand links. The most recognizable color in consumer travel.
-- **Rausch Active** (`{colors.primary-active}` - #e00b41): The press / pointer-down variant - slightly more saturated. Used on `{component.button-primary-active}`.
+- **Rausch** (`{colors.primary}` - #e00b41, with #ff385c as the lighter brand tone for text-free uses): The single brand color. Used for primary CTA backgrounds (Reserve, Continue), the search orb, the heart save state on property cards, and inline brand links. The most recognizable color in consumer travel.
+- **Rausch Active** (`{colors.primary-active}` - #b9093a): The press / pointer-down variant - slightly more saturated. Used on `{component.button-primary-active}`.
 - **Rausch Disabled** (`{colors.primary-disabled}` - #ffd1da): A pale tint used on disabled CTAs.
 - **Luxe Purple** (`{colors.luxe}` - #460479): Sub-brand accent for Airbnb Luxe. Only appears inside Luxe-branded surfaces - never in mainline marketing.
 - **Plus Magenta** (`{colors.plus}` - #92174d): Sub-brand accent for Airbnb Plus. Same scoping as Luxe - sub-product only.
@@ -369,7 +369,7 @@ The shape language is **soft**. Buttons are 8px radius (`{rounded.sm}`), propert
 - **Muted** (`{colors.muted}` - #6a6a6a): Sub-titles inside city link blocks ("Cottage rentals", "Villa rentals"), inactive product-tab labels, footer category sub-labels, "View all" links.
 - **Muted Soft** (`{colors.muted-soft}` - #929292): Disabled link text. Used very sparingly.
 - **Star Rating** (`{colors.star-rating}` - #222222): The same ink token - Airbnb's star icon and "4.81" rating numbers all render in ink rather than a yellow/gold color, which is a deliberate brand choice (yellow stars feel cheap in travel context).
-- **On Primary** (`{colors.on-primary}` - #ffffff): White text on Rausch CTAs.
+- **On Primary** (`{colors.on-primary}` - #ffffff): White text on Rausch CTAs and the active sidebar item. The solid fill is `{colors.primary}` #e00b41, which gives 4.9:1 with white (AA). The lighter brand tone #ff385c (only 3.5:1 with white) is for text-free uses: logo, ring, charts, icon and theme color.
 
 ### Semantic
 - **Error** (`{colors.primary-error-text}` - #c13515): Inline error text for form validation. Distinct from Rausch - slightly darker, more saturated red.

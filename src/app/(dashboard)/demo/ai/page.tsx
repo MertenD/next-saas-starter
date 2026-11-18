@@ -8,6 +8,7 @@ import {
 import { env } from "@/config/env"
 import { AiChat } from "@/features/demo/ai/components/ai-chat"
 import { AI_MODEL } from "@/lib/ai"
+import { navTitle } from "@/lib/page-metadata"
 
 export default async function AiDemoPage() {
   const t = await getTranslations("demo.ai")
@@ -72,3 +73,5 @@ export default async function AiDemoPage() {
     </div>
   )
 }
+
+export const generateMetadata = () => navTitle("ai")

@@ -1,12 +1,6 @@
 "use client"
 
-import {
-  CreditCardIcon,
-  LogOutIcon,
-  SettingsIcon,
-  StarIcon,
-} from "lucide-react"
-import Link from "next/link"
+import { CreditCardIcon, LogOutIcon, StarIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { usePlausible } from "next-plausible"
 import { useState } from "react"
@@ -61,17 +55,6 @@ export default function UserInfoCard() {
           >
             <CreditCardIcon className="h-4 w-4" />
             {t("billingLabel")}
-          </Button>
-          <Button
-            asChild
-            variant="ghost"
-            size="sm"
-            className="h-8 w-full justify-start gap-2 px-2 text-xs font-medium"
-          >
-            <Link href="/settings">
-              <SettingsIcon className="h-4 w-4" />
-              {t("settingsLabel")}
-            </Link>
           </Button>
           <Button
             variant="ghost"

@@ -2,6 +2,7 @@ import { Suspense } from "react"
 import { Spinner } from "@/components/ui/spinner"
 import ResetPasswordForm from "@/features/auth/reset-password-form"
 import { requireUnauth } from "@/lib/auth-utils"
+import { authTitle } from "@/lib/page-metadata"
 
 export default async function ResetPasswordPage() {
   await requireUnauth()
@@ -11,3 +12,5 @@ export default async function ResetPasswordPage() {
     </Suspense>
   )
 }
+
+export const generateMetadata = () => authTitle("resetPassword")

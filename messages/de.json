@@ -113,7 +113,6 @@
     "userInfo": {
       "upgradeLabel": "Auf Pro upgraden",
       "billingLabel": "Abrechnung",
-      "settingsLabel": "Einstellungen",
       "logoutLabel": "Abmelden",
       "plan": "Kostenloser Plan",
       "verifyDialog": {
@@ -126,8 +125,22 @@
   },
   "dashboard": {
     "title": "Dashboard",
-    "welcome": "Willkommen zurück!",
-    "placeholderBody": "Hier kommt der Inhalt deines Dashboards hin. Füge Widgets, Diagramme und Statistiken hinzu, um Nutzern einen Überblick über ihre Daten zu geben."
+    "welcome": "Willkommen zurück, {name}!",
+    "nextStepsTitle": "Hier kannst du starten",
+    "nextSteps": {
+      "posts": {
+        "title": "Erstelle deinen ersten Beitrag",
+        "description": "Der komplette CRUD-Ablauf: Datenbank, tRPC und Cache-Updates."
+      },
+      "ai": {
+        "title": "Chatte mit der KI-Demo",
+        "description": "Streaming-Antworten mit Stopp, Wiederholen und Bearbeiten."
+      },
+      "settings": {
+        "title": "Vervollständige dein Profil",
+        "description": "Füge Namen und Bild hinzu oder ändere dein Passwort."
+      }
+    }
   },
   "posts": {
     "title": "Beiträge",

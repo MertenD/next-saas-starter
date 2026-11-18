@@ -18,9 +18,9 @@
   --popover-foreground: #222222;
 
   /* Brand - {colors.primary} "Rausch" */
-  --primary: #ff385c;
+  --primary: #e00b41;
   --primary-foreground: #ffffff;
-  --primary-active: #e00b41;
+  --primary-active: #b9093a;
   --primary-disabled: #ffd1da;
 
   /* Secondary / muted / accent - {colors.surface-strong} / {colors.surface-soft} / {colors.muted} */
@@ -52,7 +52,7 @@
 
   --sidebar: #ffffff;
   --sidebar-foreground: #222222;
-  --sidebar-primary: #ff385c;
+  --sidebar-primary: #e00b41;
   --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: #f7f7f7;
   --sidebar-accent-foreground: #222222;
@@ -68,9 +68,9 @@
   --popover: #1f1f1f;
   --popover-foreground: #f2f2f2;
 
-  --primary: #ff385c;
+  --primary: #e00b41;
   --primary-foreground: #ffffff;
-  --primary-active: #ff5876;
+  --primary-active: #c20a3b;
   --primary-disabled: #5c2430;
 
   --secondary: #262626;
@@ -95,7 +95,7 @@
 
   --sidebar: #171717;
   --sidebar-foreground: #f2f2f2;
-  --sidebar-primary: #ff385c;
+  --sidebar-primary: #e00b41;
   --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: #262626;
   --sidebar-accent-foreground: #f2f2f2;

@@ -113,7 +113,6 @@
     "userInfo": {
       "upgradeLabel": "Upgrade to Pro",
       "billingLabel": "Billing",
-      "settingsLabel": "Settings",
       "logoutLabel": "Sign out",
       "plan": "Free plan",
       "verifyDialog": {
@@ -126,8 +125,22 @@
   },
   "dashboard": {
     "title": "Dashboard",
-    "welcome": "Welcome back!",
-    "placeholderBody": "Your dashboard content goes here. Add widgets, charts, and stats to give users an overview of their data."
+    "welcome": "Welcome back, {name}!",
+    "nextStepsTitle": "Where to start",
+    "nextSteps": {
+      "posts": {
+        "title": "Create your first post",
+        "description": "See the full CRUD flow: database, tRPC and cache updates."
+      },
+      "ai": {
+        "title": "Chat with the AI demo",
+        "description": "Streaming replies with stop, retry and edit."
+      },
+      "settings": {
+        "title": "Finish your profile",
+        "description": "Add a name and picture, or change your password."
+      }
+    }
   },
   "posts": {
     "title": "Posts",
