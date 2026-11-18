@@ -2,6 +2,29 @@
 
 A production-ready Next.js SaaS template with everything you need to build and ship a modern SaaS application.
 
+## Tech Stack
+
+| Category                      | Technology |
+|-------------------------------|---|
+| **Framework**                 | <img src="docs/public/icons/nextdotjs.svg" alt="" width="18" height="18" align="top">&nbsp;Next.js 16 (App Router, Turbopack) |
+| **Language**                  | <img src="docs/public/icons/typescript.svg" alt="" width="18" height="18" align="top">&nbsp;TypeScript (strict mode) |
+| **API Layer**                 | <img src="docs/public/icons/trpc.svg" alt="" width="18" height="18" align="top">&nbsp;tRPC v11 + TanStack Query v5 |
+| **Database**                  | <img src="docs/public/icons/postgresql.svg" alt="" width="18" height="18" align="top">&nbsp;PostgreSQL + Prisma ORM |
+| **Auth**                      | <img src="docs/public/icons/betterauth.svg" alt="" width="18" height="18" align="top">&nbsp;Better Auth (email/password + Google + GitHub OAuth) |
+| **Payments**                  | <img src="docs/public/icons/credit-card.svg" alt="" width="18" height="18" align="top">&nbsp;Polar.sh (subscriptions + customer portal) |
+| **Background Jobs**           | <img src="docs/public/icons/workflow.svg" alt="" width="18" height="18" align="top">&nbsp;Inngest |
+| **AI**                        | <img src="docs/public/icons/vercel.svg" alt="" width="18" height="18" align="top">&nbsp;Vercel AI SDK + OpenRouter |
+| **Cache**                     | <img src="docs/public/icons/redis.svg" alt="" width="18" height="18" align="top">&nbsp;Redis |
+| **Analytics**                 | <img src="docs/public/icons/plausibleanalytics.svg" alt="" width="18" height="18" align="top">&nbsp;Plausible (self-hosted or cloud, optional) |
+| **Error tracking**            | <img src="docs/public/icons/sentry.svg" alt="" width="18" height="18" align="top">&nbsp;Sentry (optional) |
+| **UI**                        | <img src="docs/public/icons/tailwindcss.svg" alt="" width="18" height="18" align="top">&nbsp;shadcn/ui + Tailwind CSS v4 |
+| **i18n**                      | <img src="docs/public/icons/languages.svg" alt="" width="18" height="18" align="top">&nbsp;next-intl (en + de) |
+| **State**                     | <img src="docs/public/icons/tanstack.svg" alt="" width="18" height="18" align="top">&nbsp;Zustand (client) + TanStack Query (server) |
+| **Input Validation**          | <img src="docs/public/icons/zod.svg" alt="" width="18" height="18" align="top">&nbsp;Zod |
+| **Forms**                     | <img src="docs/public/icons/reacthookform.svg" alt="" width="18" height="18" align="top">&nbsp;React Hook Form + Zod |
+| **Linting/Formatting**        | <img src="docs/public/icons/biome.svg" alt="" width="18" height="18" align="top">&nbsp;Biome (not ESLint/Prettier) |
+| **Package manager / runtime** | <img src="docs/public/icons/bun.svg" alt="" width="18" height="18" align="top">&nbsp;Bun |
+
 ## Screenshots
 
 <table>
@@ -47,36 +70,8 @@ A production-ready Next.js SaaS template with everything you need to build and s
       Edit your profile, verify your email and change your password.<br>
       <img src="docs/public/screenshots/settings.png" alt="Account settings with profile and password forms">
     </td>
-    <td width="50%" valign="top">
-      <b>Mobile</b><br>
-      The sidebar becomes a menu sheet behind a top bar button on phones.<br>
-      <img src="docs/public/screenshots/mobile.png" alt="Dashboard on a phone with the menu button in the top bar" width="220">
-    </td>
   </tr>
 </table>
-
-## Tech Stack
-
-| Category                      | Technology |
-|-------------------------------|---|
-| **Framework**                 | Next.js 16 (App Router, Turbopack) |
-| **Language**                  | TypeScript (strict mode) |
-| **API Layer**                 | tRPC v11 + TanStack Query v5 |
-| **Database**                  | PostgreSQL + Prisma ORM |
-| **Auth**                      | Better Auth (email/password + Google + GitHub OAuth) |
-| **Payments**                  | Polar.sh (subscriptions + customer portal) |
-| **Background Jobs**           | Inngest |
-| **AI**                        | Vercel AI SDK + OpenRouter |
-| **Cache**                     | Redis |
-| **Analytics**                 | Plausible (self-hosted or cloud, optional) |
-| **Error tracking**            | Sentry (optional) |
-| **UI**                        | shadcn/ui + Tailwind CSS v4 |
-| **i18n**                      | next-intl (en + de) |
-| **State**                     | Zustand (client) + TanStack Query (server) |
-| **Input Validation**          | Zod |
-| **Forms**                     | React Hook Form + Zod |
-| **Linting/Formatting**        | Biome (not ESLint/Prettier) |
-| **Package manager / runtime** | Bun |
 
 ## Quick Start
 
