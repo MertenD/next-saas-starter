@@ -59,10 +59,11 @@ Both providers are wired conditionally in `src/lib/auth.ts` - a provider block i
 | Variable | Required | Default | Description |
 |---|---|---|---|
 | `POLAR_ACCESS_TOKEN` | No | - | From your Polar dashboard. |
+| `POLAR_PRODUCT_ID` | No | - | ID of the product users check out (the "pro" plan), from the product page in your Polar dashboard. |
 | `POLAR_SUCCESS_URL` | No | - | Redirect URL after a successful checkout (e.g. `http://localhost:3000/dashboard`). |
 | `POLAR_SERVER` | No | - | `sandbox` for testing, `production` for live. |
 
-All three must be set together - `src/lib/polar.ts` derives `isPolarEnabled = !!(POLAR_ACCESS_TOKEN && POLAR_SERVER && POLAR_SUCCESS_URL)`. Leave all three unset to disable billing entirely: the Polar plugin is never registered with Better Auth, and `premiumProcedure` / `useHasActiveSubscription()` both grant everyone premium access as a local dev/mock mode. See [`auth-and-billing.md`](./auth-and-billing.md).
+All four must be set together - `src/lib/polar.ts` derives `isPolarEnabled = !!(POLAR_ACCESS_TOKEN && POLAR_SERVER && POLAR_SUCCESS_URL && POLAR_PRODUCT_ID)`. Leave all four unset to disable billing entirely: the Polar plugin is never registered with Better Auth, and `premiumProcedure` / `useHasActiveSubscription()` both grant everyone premium access as a local dev/mock mode. See [`auth-and-billing.md`](./auth-and-billing.md).
 
 ## Resend (email, optional)
 

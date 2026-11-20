@@ -33,7 +33,7 @@ Every integration in this template is opt-in and degrades gracefully when unconf
 | Integration | Keep it by... | Remove it by... |
 |---|---|---|
 | **OAuth (Google/GitHub)** | Setting the client id/secret pair in `.env` (see [Auth & Billing](./auth-and-billing.md#oauth-providers)) | Deleting the unused provider block in `src/lib/auth.ts` and its buttons in the login/signup UI |
-| **Polar billing** | Replacing `YOUR_PRODUCT_ID` in `src/lib/auth.ts` with your real product id and setting the three `POLAR_*` vars | Leaving all three `POLAR_*` vars unset - `isPolarEnabled` (`src/lib/polar.ts`) turns off the plugin and premium gating automatically, no code changes needed |
+| **Polar billing** | Setting the four `POLAR_*` vars (including `POLAR_PRODUCT_ID`) | Leaving all four `POLAR_*` vars unset - `isPolarEnabled` (`src/lib/polar.ts`) turns off the plugin and premium gating automatically, no code changes needed |
 | **Resend (email)** | Setting `RESEND_API_KEY` + `EMAIL_FROM` | Leaving unset - emails log to the console instead, fine for a while but not for production |
 | **AI / OpenRouter** | Setting `OPENROUTER_API_KEY` and keeping `demo/ai` (renamed into a real feature) | Deleting `demo/ai` per step 2 above |
 | **Sentry** | Setting `NEXT_PUBLIC_SENTRY_DSN` (plus the source map vars for CI/Docker builds) | Leaving the DSN unset keeps it off. To remove the code: `bun remove @sentry/nextjs`, delete `sentry.*.config.ts`, `src/instrumentation.ts`, `src/instrumentation-client.ts`, `src/app/global-error.tsx` (or reduce it to a plain error page) and the `withSentryConfig` wrapper in `next.config.ts` |

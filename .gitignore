@@ -37,6 +37,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# mprocs (bun run dev:all)
+mprocs.log
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

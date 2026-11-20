@@ -50,7 +50,10 @@ Then set the corresponding env vars - see [`environment-variables.md`](./environ
 
 ```typescript
 export const isPolarEnabled = !!(
-  env.POLAR_ACCESS_TOKEN && env.POLAR_SERVER && env.POLAR_SUCCESS_URL
+  env.POLAR_ACCESS_TOKEN &&
+  env.POLAR_SERVER &&
+  env.POLAR_SUCCESS_URL &&
+  env.POLAR_PRODUCT_ID
 )
 export const polarClient = isPolarEnabled ? new Polar({ ... }) : null
 ```
@@ -61,7 +64,7 @@ Every place that checks subscription status (`premiumProcedure`, `requireAuthAnd
 
 1. Create an account at [polar.sh](https://polar.sh)
 2. Create a product (e.g. "Pro Plan")
-3. Copy its **Product ID** and replace `YOUR_PRODUCT_ID` in `src/lib/auth.ts` (`checkout({ products: [{ productId: "YOUR_PRODUCT_ID", slug: "pro" }] })`)
+3. Copy its **Product ID** into `POLAR_PRODUCT_ID` (used by `checkout({ products: [...] })` in `src/lib/auth.ts`)
 4. Set `POLAR_ACCESS_TOKEN`, `POLAR_SUCCESS_URL`, and `POLAR_SERVER` (`sandbox` while testing) in `.env`
 
 ## Subscription settings tab

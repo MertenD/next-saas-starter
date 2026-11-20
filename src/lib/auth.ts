@@ -118,8 +118,9 @@ export const auth = betterAuth({
             createCustomerOnSignUp: false,
             use: [
               checkout({
-                // TODO: Replace with your Polar product IDs from polar.sh
-                products: [{ productId: "YOUR_PRODUCT_ID", slug: "pro" }],
+                // The product id comes from POLAR_PRODUCT_ID (polar.sh dashboard)
+                // biome-ignore lint/style/noNonNullAssertion: guaranteed non-null when isPolarEnabled is true
+                products: [{ productId: env.POLAR_PRODUCT_ID!, slug: "pro" }],
                 // biome-ignore lint/style/noNonNullAssertion: guaranteed non-null when isPolarEnabled is true
                 successUrl: env.POLAR_SUCCESS_URL!,
                 authenticatedUsersOnly: true,

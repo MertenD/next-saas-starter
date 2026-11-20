@@ -64,7 +64,7 @@ Skip this to run without payments - see [`auth-and-billing.md`](./auth-and-billi
 
 1. Create an account at [polar.sh](https://polar.sh)
 2. Create a product (e.g. "Pro Plan")
-3. Copy your **Product ID** and replace `YOUR_PRODUCT_ID` in `src/lib/auth.ts`
+3. Copy your **Product ID** into `POLAR_PRODUCT_ID` in `.env`
 4. Set `POLAR_ACCESS_TOKEN`, `POLAR_SUCCESS_URL`, and `POLAR_SERVER=sandbox` in `.env`
 
 ## 6. Configure OAuth providers (optional)

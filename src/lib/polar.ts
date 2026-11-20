@@ -10,7 +10,8 @@ import { env } from "@/config/env"
 export const isPolarEnabled = !!(
   env.POLAR_ACCESS_TOKEN &&
   env.POLAR_SERVER &&
-  env.POLAR_SUCCESS_URL
+  env.POLAR_SUCCESS_URL &&
+  env.POLAR_PRODUCT_ID
 )
 
 /** The Polar SDK client, or `null` when billing isn't configured (see {@link isPolarEnabled}). */

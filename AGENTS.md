@@ -70,6 +70,7 @@ bun run dev:all       # Start Next.js + Inngest in parallel (via mprocs) - alter
 bun run build         # Production build
 bun run lint          # Run Biome linter
 bun run format        # Format code with Biome
+bun run typecheck     # TypeScript check (tsc --noEmit)
 
 bun run prisma:migrate        # Run DB migrations (dev)
 bun run prisma:migrate-deploy # Deploy migrations (prod)
@@ -85,7 +86,9 @@ bun run docs:build    # Build the docs site to docs/.vitepress/dist
 
 Docs auto-deploy to GitHub Pages via `.github/workflows/docs.yml` on every push to `main` that touches `docs/**` (see `docs/.vitepress/config.mts` for the `base` path, which must match the repo name).
 
-There are no automated tests in this project.
+`.github/workflows/ci.yml` runs `lint`, `typecheck` and `build` on every push to `main` and every pull request; run the same three locally before committing. There are no automated tests in this project.
+
+Package hygiene: never add platform-specific packages (e.g. `@esbuild/win32-x64`, `@parcel/watcher-win32-*`) to `package.json`; they arrive through their parents' optional dependencies and break `bun install --frozen-lockfile` on Linux/Docker. `mprocs.log` is git-ignored.
 
 ## Architecture
 

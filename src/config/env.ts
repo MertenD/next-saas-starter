@@ -33,9 +33,10 @@ const envSchema = z.object({
   // Redis
   REDIS_URL: z.string().default("redis://localhost:6379"),
 
-  // Polar (optional - leave unset to disable payments and mock premium access locally)
+  // Polar (optional - leave all four unset to disable payments and mock premium access locally)
   POLAR_ACCESS_TOKEN: z.string().optional(),
   POLAR_SUCCESS_URL: z.string().optional(),
+  POLAR_PRODUCT_ID: z.string().optional(),
   POLAR_SERVER: z.enum(["sandbox", "production"]).optional(),
 
   // Resend (optional - leave unset to log emails to the console instead of sending them)

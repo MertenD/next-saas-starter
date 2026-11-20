@@ -53,7 +53,7 @@ export function resetPasswordEmailHtml({ url }: { url: string }) {
     <p style="font-size: 14px; color: #3f3f3f; margin-bottom: 24px;">
       Click the link below to choose a new password. If you didn't request this, you can safely ignore this email.
     </p>
-    <a href="${url}" style="display: inline-block; background: #ff385c; color: #ffffff; padding: 12px 20px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 500;">
+    <a href="${url}" style="display: inline-block; background: #e00b41; color: #ffffff; padding: 12px 20px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 500;">
       Reset password
     </a>
   `)
@@ -65,7 +65,7 @@ export function verifyEmailHtml({ url }: { url: string }) {
     <p style="font-size: 14px; color: #3f3f3f; margin-bottom: 24px;">
       Click the link below to confirm this is your email address.
     </p>
-    <a href="${url}" style="display: inline-block; background: #ff385c; color: #ffffff; padding: 12px 20px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 500;">
+    <a href="${url}" style="display: inline-block; background: #e00b41; color: #ffffff; padding: 12px 20px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 500;">
       Verify email
     </a>
   `)
