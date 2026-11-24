@@ -1,5 +1,6 @@
 import { TRPCError } from "@trpc/server"
 import { headers } from "next/headers"
+import { isOwnerRole } from "@/config/constants"
 import {
   adminUserIdSchema,
   adminUsersQuerySchema,
@@ -27,6 +28,25 @@ function assertNotSelf(currentUserId: string, userId: string) {
     throw new TRPCError({
       code: "BAD_REQUEST",
       message: "You cannot do this to your own account.",
+    })
+  }
+}
+
+/**
+ * Throws when the target is an owner. Owners are managed through `OWNER_EMAILS`
+ * only, so the admin UI never changes, bans or deletes them (otherwise an admin
+ * could lock the owners out).
+ */
+async function assertNotOwner(userId: string) {
+  const target = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { role: true },
+  })
+
+  if (isOwnerRole(target?.role)) {
+    throw new TRPCError({
+      code: "FORBIDDEN",
+      message: "Owners are managed through OWNER_EMAILS.",
     })
   }
 }
@@ -144,6 +164,7 @@ export const adminRouter = createTRPCRouter({
     .input(setUserRoleSchema)
     .mutation(async ({ ctx, input }) => {
       assertNotSelf(ctx.auth.user.id, input.userId)
+      await assertNotOwner(input.userId)
       await auth.api.setRole({
         body: { userId: input.userId, role: input.role },
         headers: await headers(),
@@ -155,6 +176,7 @@ export const adminRouter = createTRPCRouter({
     .input(adminUserIdSchema)
     .mutation(async ({ ctx, input }) => {
       assertNotSelf(ctx.auth.user.id, input.userId)
+      await assertNotOwner(input.userId)
       await auth.api.banUser({
         body: { userId: input.userId },
         headers: await headers(),
@@ -162,6 +184,7 @@ export const adminRouter = createTRPCRouter({
     }),
 
   unban: adminProcedure.input(adminUserIdSchema).mutation(async ({ input }) => {
+    await assertNotOwner(input.userId)
     await auth.api.unbanUser({
       body: { userId: input.userId },
       headers: await headers(),
@@ -173,6 +196,7 @@ export const adminRouter = createTRPCRouter({
     .input(adminUserIdSchema)
     .mutation(async ({ ctx, input }) => {
       assertNotSelf(ctx.auth.user.id, input.userId)
+      await assertNotOwner(input.userId)
       await deletePolarCustomer(input.userId)
       await auth.api.removeUser({
         body: { userId: input.userId },

@@ -440,7 +440,7 @@
         "createdAt": "Registriert",
         "actions": "Aktionen"
       },
-      "role": { "user": "Nutzer", "admin": "Admin" },
+      "role": { "user": "Nutzer", "admin": "Admin", "owner": "Owner" },
       "status": {
         "verified": "Verifiziert",
         "unverified": "Nicht verifiziert",

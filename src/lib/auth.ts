@@ -2,11 +2,12 @@ import { checkout, polar, portal } from "@polar-sh/better-auth"
 import { betterAuth } from "better-auth"
 import { prismaAdapter } from "better-auth/adapters/prisma"
 import { admin } from "better-auth/plugins"
-import { ADMIN_ROLE, isAdminRole } from "@/config/constants"
+import { adminAc, defaultRoles } from "better-auth/plugins/admin/access"
+import { ADMIN_ROLE, isOwnerRole, OWNER_ROLE } from "@/config/constants"
 import { env } from "@/config/env"
 import { inngest } from "@/inngest/client"
 import { InngestEvents } from "@/inngest/functions"
-import { isAdminEmail } from "@/lib/admin"
+import { isOwnerEmail } from "@/lib/admin"
 import prisma from "@/lib/db"
 import {
   resetPasswordEmailHtml,
@@ -52,22 +53,36 @@ async function mirrorUserToPolar(user: {
 }
 
 /**
- * Makes a user admin when their email is listed in `ADMIN_EMAILS` AND
- * verified. Without the verification check, whoever registers an admin address
- * first (before its owner does) would take over the admin area.
+ * Keeps the owner role in line with `OWNER_EMAILS` at sign-in:
+ * - A user whose email is listed AND verified becomes owner (without the
+ *   verification check, whoever registers a listed address first would take
+ *   over the admin area).
+ * - An owner whose email is no longer listed falls back to a plain user. Admins
+ *   appointed in the admin UI are never touched here.
+ * A demoted owner is promoted again at the next sign-in if the email returns to
+ * the list, so a forgotten env variable on one deploy heals itself.
  */
-async function promoteConfiguredAdmin(userId: string) {
+async function syncOwnerRole(userId: string) {
   const user = await prisma.user.findUnique({
     where: { id: userId },
     select: { email: true, emailVerified: true, role: true },
   })
-  if (!user || !user.emailVerified || isAdminRole(user.role)) return
-  if (!isAdminEmail(user.email)) return
+  if (!user) return
 
-  await prisma.user.update({
-    where: { id: userId },
-    data: { role: ADMIN_ROLE },
-  })
+  const isOwner = isOwnerRole(user.role)
+  const isListed = isOwnerEmail(user.email)
+
+  if (isListed && user.emailVerified && !isOwner) {
+    await prisma.user.update({
+      where: { id: userId },
+      data: { role: OWNER_ROLE },
+    })
+  } else if (!isListed && isOwner) {
+    await prisma.user.update({
+      where: { id: userId },
+      data: { role: "user" },
+    })
+  }
 }
 
 /**
@@ -135,7 +150,13 @@ export const auth = betterAuth({
   plugins: [
     // Roles, banning and user management. The admin UI (`src/features/admin`)
     // calls its endpoints from tRPC procedures behind `adminProcedure`.
-    admin({ defaultRole: "user", adminRoles: [ADMIN_ROLE] }),
+    admin({
+      defaultRole: "user",
+      // Owners get exactly the admin permissions; they differ only in where
+      // the role is managed (env list vs. admin UI).
+      roles: { ...defaultRoles, [OWNER_ROLE]: adminAc },
+      adminRoles: [ADMIN_ROLE, OWNER_ROLE],
+    }),
     ...(isPolarEnabled && polarClient
       ? [
           polar({
@@ -180,11 +201,12 @@ export const auth = betterAuth({
     },
     session: {
       create: {
-        // Grants the admin role to verified addresses listed in ADMIN_EMAILS
-        // at sign-in. Checked at sign-in (not sign-up) so an address that is
-        // verified later, e.g. through the email link, still gets promoted.
+        // Promotes verified addresses listed in OWNER_EMAILS and demotes
+        // owners that were removed from it. Checked at sign-in (not sign-up)
+        // so an address that is verified later, e.g. through the email link,
+        // still gets promoted.
         before: async (session) => {
-          await promoteConfiguredAdmin(session.userId)
+          await syncOwnerRole(session.userId)
         },
       },
     },

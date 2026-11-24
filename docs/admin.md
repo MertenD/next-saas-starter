@@ -4,7 +4,17 @@ Roles, an admin overview with user and revenue numbers, and user management (`/a
 
 ## Roles and access
 
-Every user has a `role` (`"user"` by default, or `"admin"`), stored on the `User` row (`USER_ROLES`, `isAdminRole()` in `src/config/constants.ts`). The role is checked in three places, and all of them must agree:
+Every user has a `role`, stored on the `User` row (`USER_ROLES`, `isAdminRole()`, `isOwnerRole()` in `src/config/constants.ts`):
+
+| Role | Where it is managed | Can open `/admin` |
+|---|---|---|
+| `user` (default) | - | no |
+| `admin` | In the admin UI (users table) | yes |
+| `owner` | Only through `OWNER_EMAILS` in `.env` | yes |
+
+Owners and admins have the **same permissions** for now (the owner role is registered in the Better Auth admin plugin with the admin permissions). The difference is where the role comes from: owners are defined in the environment and cannot be changed, banned or deleted in the admin UI, so nobody can lock the owners out. Admins are appointed and removed by any admin or owner in the users table. `isAdminRole()` is true for both, so every admin check also lets owners in.
+
+The role is checked in three places, and all of them must agree:
 
 | Layer | Guard | What happens to a non-admin |
 |---|---|---|
@@ -14,13 +24,15 @@ Every user has a `role` (`"user"` by default, or `"admin"`), stored on the `User
 
 The role is read from the session on each request, so a demoted admin loses access with the next request.
 
-## Creating the first admin
+## Setting the owners
 
-Set `ADMIN_EMAILS` (comma-separated) in `.env`. A user whose email is in that list becomes admin at their next sign-in, **but only once the address is verified** (email link, or an OAuth provider that reports it as verified). Without the verification rule, whoever registered an admin address first would take over the admin area.
+Set `OWNER_EMAILS` (comma-separated, several owners are fine) in `.env`. A user whose email is in that list becomes owner at their next sign-in, **but only once the address is verified** (email link, or an OAuth provider that reports it as verified). Without the verification rule, whoever registered a listed address first would take over the admin area.
 
 - Without Resend the verification link is printed to the server log (see [Auth & Billing](./auth-and-billing.md#password-reset--email-verification)), copy it from there.
-- Removing an email from `ADMIN_EMAILS` does not demote anyone. Change the role in the users table instead.
-- Roles of other users are managed in the UI afterwards, so `ADMIN_EMAILS` only needs the first one or two addresses.
+- **Removing an email demotes it at the next sign-in**: the owner becomes a plain user (admins appointed in the UI are never touched by this). If the address returns to the list, the owner role comes back at the next sign-in, so a forgotten variable on one deploy heals itself. To hand over ownership, change the list.
+- The sync runs at sign-in, not on every request: a removed owner keeps access in their current session until it ends or they sign in again. To cut access immediately, ban them in the users table (that ends all sessions) after removing the email, or just remove them from the list and have them sign out.
+- Everyone else is appointed in the users table: "Make admin" / "Remove admin role" (any owner or admin can do it). The owner role cannot be assigned there.
+- Upgrading from the earlier `ADMIN_EMAILS` variable: rename it to `OWNER_EMAILS`. Existing admins keep their role until you change it in the UI.
 
 ## Overview (`/admin`)
 
@@ -39,7 +51,7 @@ Searchable, paginated table (URL state via nuqs, same pattern as the [pagination
 | Ban / unban | `ConfirmDialog` (ban only) | Blocks sign-in and ends all sessions |
 | Delete | `CriticalConfirmDialog` (retype the email) | Deletes the user with all data |
 
-Admins cannot ban, delete or demote themselves (their own row has no menu, and the server refuses it as well).
+Nobody can ban, delete or demote themselves, and owners cannot be touched at all in the UI (their rows have no menu, and the server refuses it with `FORBIDDEN`): owners are managed through `OWNER_EMAILS`.
 
 ## What ban and delete do to Polar subscriptions
 

@@ -14,7 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { isAdminRole } from "@/config/constants"
+import { isAdminRole, isOwnerRole } from "@/config/constants"
 import { UserBillingNotice } from "@/features/admin/components/user-billing-notice"
 import { useAdminUserActions } from "@/features/admin/hooks/use-admin-user-actions"
 import type { AdminUser } from "@/features/admin/model/admin-user"
@@ -33,7 +33,8 @@ export function UserActions({ user }: { user: AdminUser }) {
   const { setRole, ban, unban, remove } = useAdminUserActions()
   const [dialog, setDialog] = useState<Dialog>(null)
 
-  if (user.id === currentUser.id) return null
+  // Yourself and owners (managed through OWNER_EMAILS) have no actions
+  if (user.id === currentUser.id || isOwnerRole(user.role)) return null
 
   const isAdmin = isAdminRole(user.role)
   const close = () => setDialog(null)

@@ -46,7 +46,7 @@ Every integration in this template is opt-in and degrades gracefully when unconf
 
 - `BETTER_AUTH_SECRET` is a freshly generated secret (`openssl rand -base64 32`), not the one from `.env.example`.
 - `BETTER_AUTH_URL` and `POLAR_SUCCESS_URL` point at your real domain, not `localhost`.
-- `ADMIN_EMAILS` lists the real admin addresses (or is empty if you promote admins by hand in the database), not a test address.
+- `OWNER_EMAILS` lists the real owner addresses (or is empty if nobody should be owner yet), not a test address.
 - `DATABASE_URL` / `REDIS_URL` point at your production instances, not the Docker Compose defaults.
 
 ## 5. i18n

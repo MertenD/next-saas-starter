@@ -12,7 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { isAdminRole } from "@/config/constants"
+import { isAdminRole, isOwnerRole } from "@/config/constants"
 import { UserActions } from "@/features/admin/components/user-actions"
 import { useAdminUsers } from "@/features/admin/hooks/use-admin-users"
 import { useAdminUsersParams } from "@/features/admin/hooks/use-admin-users-params"
@@ -80,7 +80,11 @@ export function UsersTable() {
               </TableCell>
               <TableCell>
                 <Badge variant={isAdminRole(user.role) ? "default" : "outline"}>
-                  {isAdminRole(user.role) ? t("role.admin") : t("role.user")}
+                  {isOwnerRole(user.role)
+                    ? t("role.owner")
+                    : isAdminRole(user.role)
+                      ? t("role.admin")
+                      : t("role.user")}
                 </Badge>
               </TableCell>
               <TableCell>
@@ -98,7 +102,10 @@ export function UsersTable() {
                 {format.dateTime(user.createdAt, { dateStyle: "medium" })}
               </TableCell>
               <TableCell>
-                <UserActions user={user} />
+                {/* Reserves the height of the 48px icon button, so rows without actions (yourself, owners) are not shorter */}
+                <div className="flex h-12 items-center justify-end">
+                  <UserActions user={user} />
+                </div>
               </TableCell>
             </TableRow>
           ))}

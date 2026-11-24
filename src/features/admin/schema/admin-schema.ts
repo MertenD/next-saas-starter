@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { PAGINATION, USER_ROLES } from "@/config/constants"
+import { ASSIGNABLE_ROLES, PAGINATION } from "@/config/constants"
 
 export const adminUsersQuerySchema = z.object({
   page: z.number().min(1).default(PAGINATION.DEFAULT_PAGE),
@@ -17,5 +17,5 @@ export const adminUserIdSchema = z.object({ userId: z.string().min(1) })
 
 export const setUserRoleSchema = z.object({
   userId: z.string().min(1),
-  role: z.enum(USER_ROLES),
+  role: z.enum(ASSIGNABLE_ROLES),
 })

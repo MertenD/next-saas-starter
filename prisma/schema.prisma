@@ -72,7 +72,8 @@ model User {
   image         String?
   // Preferred UI language ("en" | "de"), synced with the ui-locale cookie by LocaleSync
   locale        String?
-  // Access role ("user" | "admin"), managed by the Better Auth admin plugin
+  // Access role ("user" | "admin" | "owner"), managed by the Better Auth admin plugin.
+  // "owner" is set from OWNER_EMAILS at sign-in, never from the admin UI.
   role          String    @default("user")
   banned        Boolean   @default(false)
   banReason     String?

@@ -12,7 +12,7 @@ PostgreSQL via Prisma ORM. Schema lives at `prisma/schema.prisma`; the generated
 
 **Application user** (also managed by Better Auth, via its Prisma adapter):
 
-- **`User`** - `id`, `name`, `email` (unique), `emailVerified`, `image?`, `locale?` (preferred UI language, registered as a Better Auth additional field and synced with the `ui-locale` cookie by `LocaleSync`), `role` (`"user"` | `"admin"`, default `"user"`), `banned` (default `false`), `banReason?`, `banExpires?` (the last four belong to the Better Auth admin plugin, see [`admin.md`](./admin.md)), timestamps. Relations: `sessions[]`, `accounts[]`, `posts[]`.
+- **`User`** - `id`, `name`, `email` (unique), `emailVerified`, `image?`, `locale?` (preferred UI language, registered as a Better Auth additional field and synced with the `ui-locale` cookie by `LocaleSync`), `role` (`"user"` | `"admin"` | `"owner"`, default `"user"`; `owner` comes from `OWNER_EMAILS`), `banned` (default `false`), `banReason?`, `banExpires?` (the last four belong to the Better Auth admin plugin, see [`admin.md`](./admin.md)), timestamps. Relations: `sessions[]`, `accounts[]`, `posts[]`.
 
 **Example domain model** (comment says "replace with your own" - this is the one meant to be deleted/extended):
 

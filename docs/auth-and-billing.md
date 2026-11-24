@@ -38,7 +38,7 @@ There's no `middleware.ts` in this project - all route protection goes through t
 
 ## Roles and the admin plugin
 
-The Better Auth `admin` plugin adds a `role` (`user` | `admin`) and ban fields to the user. `requireAdmin()` and `adminProcedure` gate the admin area, `ADMIN_EMAILS` promotes the first admin. See [`admin.md`](./admin.md).
+The Better Auth `admin` plugin adds a `role` (`user` | `admin` | `owner`) and ban fields to the user. `requireAdmin()` and `adminProcedure` gate the admin area (admins and owners alike), `OWNER_EMAILS` defines the owners, admins are appointed in the UI. See [`admin.md`](./admin.md).
 
 ## OAuth providers
 

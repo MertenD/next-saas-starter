@@ -12,7 +12,7 @@ Full documentation for this Next.js SaaS starter template. Start with [Getting S
 | [Data Fetching](./data-fetching.md) | Step-by-step: client-side `useQuery`/`useMutation`, server-side `prefetch()` + hydration, and the direct `caller`. |
 | [Database](./database.md) | Prisma schema, models, and the migration workflow. |
 | [Auth & Billing](./auth-and-billing.md) | Better Auth configuration, OAuth setup, Polar billing, premium feature gating. |
-| [Admin Area](./admin.md) | Roles, the first admin (`ADMIN_EMAILS`), the overview with user and revenue numbers, user management, and what ban/delete do to Polar subscriptions. |
+| [Admin Area](./admin.md) | Roles, owners (`OWNER_EMAILS`) and admins, the overview with user and revenue numbers, user management, and what ban/delete do to Polar subscriptions. |
 | [Background Jobs](./background-jobs.md) | Inngest concepts, existing jobs, adding new jobs, Realtime subscriptions. |
 | [Integrations](./integrations.md) | AI (OpenRouter), Redis, Plausible analytics, Sentry error tracking, and PWA support. |
 | [Service Worker](./service-worker.md) | The hand-written PWA service worker: caching strategies, offline behavior, updates and versions, privacy on sign-out, testing and troubleshooting. |

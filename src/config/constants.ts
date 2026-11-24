@@ -25,18 +25,31 @@ export function isSupportedLocale(value: string | undefined): value is Locale {
   return SUPPORTED_LOCALES.some((locale) => locale === value)
 }
 
-/** Access roles of the Better Auth admin plugin; new users get "user". */
-export const USER_ROLES = ["user", "admin"] as const
+/**
+ * Access roles of the Better Auth admin plugin; new users get "user". "owner"
+ * comes only from `OWNER_EMAILS` (see `syncOwnerRole` in `src/lib/auth.ts`),
+ * "admin" is appointed in the admin UI. Owners and admins have the same
+ * permissions; the difference is where the role is managed.
+ */
+export const USER_ROLES = ["user", "admin", "owner"] as const
 
 /** One of {@link USER_ROLES}. */
 export type UserRole = (typeof USER_ROLES)[number]
 
-/** The role that may open `/admin` and call `adminProcedure` endpoints. */
-export const ADMIN_ROLE: UserRole = "admin"
+/** Roles an admin can hand out in the UI (the owner role is not assignable). */
+export const ASSIGNABLE_ROLES = ["user", "admin"] as const
 
-/** Whether a role string (from the session or the DB) is the admin role. */
+export const ADMIN_ROLE: UserRole = "admin"
+export const OWNER_ROLE: UserRole = "owner"
+
+/** Whether a role may open `/admin` and call `adminProcedure` endpoints: admin or owner. */
 export function isAdminRole(role: string | null | undefined) {
-  return role === ADMIN_ROLE
+  return role === ADMIN_ROLE || role === OWNER_ROLE
+}
+
+/** Whether a role is the env-managed owner role. */
+export function isOwnerRole(role: string | null | undefined) {
+  return role === OWNER_ROLE
 }
 
 /** App-wide display name/description, used in page titles, metadata, and emails. */
