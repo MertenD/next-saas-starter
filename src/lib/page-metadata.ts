@@ -14,7 +14,9 @@ export async function navTitle(
     | "inngest"
     | "ai"
     | "booking"
-    | "pagination",
+    | "pagination"
+    | "adminOverview"
+    | "adminUsers",
 ): Promise<Metadata> {
   const t = await getTranslations("sidebar.nav")
   return { title: t(key) }

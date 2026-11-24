@@ -36,6 +36,10 @@ Authentication is [Better Auth](https://www.better-auth.com); billing is [Polar]
 
 There's no `middleware.ts` in this project - all route protection goes through these functions, called explicitly in layouts/pages/routes.
 
+## Roles and the admin plugin
+
+The Better Auth `admin` plugin adds a `role` (`user` | `admin`) and ban fields to the user. `requireAdmin()` and `adminProcedure` gate the admin area, `ADMIN_EMAILS` promotes the first admin. See [`admin.md`](./admin.md).
+
 ## OAuth providers
 
 **Google:** [Google Cloud Console](https://console.cloud.google.com) → APIs & Services → Credentials → Create OAuth 2.0 Client ID. Set the authorized redirect URI to `http://localhost:3000/api/auth/callback/google` (swap the domain in production).

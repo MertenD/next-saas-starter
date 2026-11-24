@@ -26,6 +26,7 @@
   },
   "sidebar": {
     "demoSection": "Demo",
+    "adminSection": "Admin",
     "nav": {
       "dashboard": "Dashboard",
       "posts": "Beiträge",
@@ -33,7 +34,9 @@
       "inngest": "Hintergrundjobs",
       "ai": "KI-Chat",
       "booking": "Buchung",
-      "pagination": "Paginierung"
+      "pagination": "Paginierung",
+      "adminOverview": "Übersicht",
+      "adminUsers": "Nutzer"
     }
   },
   "auth": {
@@ -394,6 +397,92 @@
       "triggeredAtLabel": "Ausgelöst um {time}",
       "howItWorksLabel": "So funktioniert's:",
       "howItWorksBody": "Der Button „Trigger Job\" ruft eine tRPC-Mutation auf, die ein Inngest-Event sendet. Der Job veröffentlicht bei jedem Schritt eine Statusmeldung über <realtimeLink>Inngest Realtime</realtimeLink> (siehe die <code1>publish()</code1>-Aufrufe in <code2>src/inngest/functions.ts</code2>). Das Badge bei jedem Lauf abonniert den Kanal dieses Laufs über <code3>useInngestSubscription</code3> - kein Polling, Updates kommen live rein. Öffne <dashboardLink>localhost:8288</dashboardLink>, um die vollständige Ausführungs-Trace zu sehen. Der Dev-Server muss laufen (<code4>bun run inngest:dev</code4> oder über <code5>docker compose up -d</code5>)."
+    }
+  },
+  "admin": {
+    "overview": {
+      "title": "Admin-Übersicht",
+      "description": "Nutzer und Umsatz auf einen Blick."
+    },
+    "stats": {
+      "last30Days": "Letzte 30 Tage",
+      "users": {
+        "title": "Nutzer",
+        "total": "Nutzer gesamt",
+        "new": "Neue Nutzer",
+        "verified": "Verifizierte E-Mails"
+      },
+      "billing": {
+        "title": "Umsatz und Abos",
+        "revenue": "Umsatz",
+        "mrr": "Monatlich wiederkehrender Umsatz",
+        "active": "Aktive Abos",
+        "new": "Neue Abos",
+        "canceled": "Gekündigte Abos",
+        "disabledTitle": "Abrechnung ist nicht konfiguriert",
+        "disabledDescription": "Umsatz und Abo-Zahlen kommen live von Polar. Setze die POLAR_*-Variablen, um sie hier zu sehen.",
+        "disabledAction": "Abo-Einstellungen öffnen",
+        "errorDescription": "Die Zahlen konnten nicht von Polar geladen werden. Prüfe die Verbindung und versuche es erneut."
+      }
+    },
+    "users": {
+      "title": "Nutzer",
+      "description": "Nutzer suchen, Rollen ändern, Konten sperren oder löschen.",
+      "searchPlaceholder": "Nach Name oder E-Mail suchen",
+      "emptyTitle": "Keine Nutzer gefunden",
+      "emptyDescription": "Kein Nutzer passt zu deiner Suche.",
+      "clearSearch": "Suche zurücksetzen",
+      "columns": {
+        "name": "Name",
+        "email": "E-Mail",
+        "role": "Rolle",
+        "status": "Status",
+        "createdAt": "Registriert",
+        "actions": "Aktionen"
+      },
+      "role": { "user": "Nutzer", "admin": "Admin" },
+      "status": {
+        "verified": "Verifiziert",
+        "unverified": "Nicht verifiziert",
+        "banned": "Gesperrt"
+      },
+      "actions": {
+        "label": "Aktionen für {name}",
+        "makeAdmin": "Zum Admin machen",
+        "makeUser": "Admin-Rolle entziehen",
+        "ban": "Nutzer sperren",
+        "unban": "Nutzer entsperren",
+        "delete": "Nutzer löschen"
+      },
+      "dialogs": {
+        "role": {
+          "title": "Rolle von {name} ändern?",
+          "descriptionAdmin": "{name} bekommt vollen Zugriff auf den Admin-Bereich, inklusive Nutzer- und Rollenverwaltung.",
+          "descriptionUser": "{name} verliert mit der nächsten Anfrage den Zugriff auf den Admin-Bereich."
+        },
+        "ban": {
+          "title": "{name} sperren?",
+          "description": "{name} kann sich nicht mehr anmelden und alle Sitzungen enden sofort. Du kannst das Konto später wieder entsperren."
+        },
+        "delete": {
+          "title": "{name} löschen?",
+          "description": "Das Konto und alle Daten (Posts, Sitzungen, verknüpfte Konten) werden dauerhaft gelöscht. Das kann nicht rückgängig gemacht werden."
+        }
+      },
+      "toasts": {
+        "roleChanged": "Rolle aktualisiert",
+        "banned": "Nutzer gesperrt",
+        "unbanned": "Nutzer entsperrt",
+        "deleted": "Nutzer gelöscht",
+        "error": "Die Aktion ist fehlgeschlagen"
+      }
+    },
+    "billing": {
+      "checking": "Abo wird bei Polar geprüft...",
+      "error": "Das Abo konnte bei Polar nicht geprüft werden. Sieh dir den Kunden im Polar-Dashboard an, bevor du fortfährst.",
+      "noSubscription": "Dieser Nutzer hat kein aktives Abo.",
+      "activeBan": "{count, plural, one {Dieser Nutzer hat # aktives Abo.} other {Dieser Nutzer hat # aktive Abos.}} Das Sperren kündigt es bei Polar nicht: Es läuft weiter, der Kunde wird weiter belastet und nichts wird erstattet. Kündige es vorher im Polar-Dashboard, falls das nicht gewollt ist.",
+      "activeDelete": "{count, plural, one {Dieser Nutzer hat # aktives Abo.} other {Dieser Nutzer hat # aktive Abos.}} Beim Löschen wird zuerst der Polar-Kunde gelöscht. Das kündigt das Abo sofort und entzieht die Leistungen. Polar erstattet nichts automatisch: Falls eine Erstattung fällig ist, veranlasse sie vor dem Löschen im Polar-Dashboard."
     }
   },
   "globalError": {

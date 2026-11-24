@@ -1,9 +1,12 @@
 import { checkout, polar, portal } from "@polar-sh/better-auth"
 import { betterAuth } from "better-auth"
 import { prismaAdapter } from "better-auth/adapters/prisma"
+import { admin } from "better-auth/plugins"
+import { ADMIN_ROLE, isAdminRole } from "@/config/constants"
 import { env } from "@/config/env"
 import { inngest } from "@/inngest/client"
 import { InngestEvents } from "@/inngest/functions"
+import { isAdminEmail } from "@/lib/admin"
 import prisma from "@/lib/db"
 import {
   resetPasswordEmailHtml,
@@ -46,6 +49,25 @@ async function mirrorUserToPolar(user: {
     await prisma.user.delete({ where: { id: user.id } })
     throw error
   }
+}
+
+/**
+ * Makes a user admin when their email is listed in `ADMIN_EMAILS` AND
+ * verified. Without the verification check, whoever registers an admin address
+ * first (before its owner does) would take over the admin area.
+ */
+async function promoteConfiguredAdmin(userId: string) {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { email: true, emailVerified: true, role: true },
+  })
+  if (!user || !user.emailVerified || isAdminRole(user.role)) return
+  if (!isAdminEmail(user.email)) return
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: { role: ADMIN_ROLE },
+  })
 }
 
 /**
@@ -111,6 +133,9 @@ export const auth = betterAuth({
       : {}),
   },
   plugins: [
+    // Roles, banning and user management. The admin UI (`src/features/admin`)
+    // calls its endpoints from tRPC procedures behind `adminProcedure`.
+    admin({ defaultRole: "user", adminRoles: [ADMIN_ROLE] }),
     ...(isPolarEnabled && polarClient
       ? [
           polar({
@@ -150,6 +175,16 @@ export const auth = betterAuth({
             .catch((error) => {
               console.error("Error sending user signed up event:", error)
             })
+        },
+      },
+    },
+    session: {
+      create: {
+        // Grants the admin role to verified addresses listed in ADMIN_EMAILS
+        // at sign-in. Checked at sign-in (not sign-up) so an address that is
+        // verified later, e.g. through the email link, still gets promoted.
+        before: async (session) => {
+          await promoteConfiguredAdmin(session.userId)
         },
       },
     },

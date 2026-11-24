@@ -9,6 +9,7 @@ Server-side (Server Components, Server Actions) - `src/lib/auth-utils.ts`:
 | Export | What it does |
 |---|---|
 | `requireAuth()` | Redirects to `/login` if there's no session; otherwise returns the session. |
+| `requireAdmin()` | Like `requireAuth`, plus redirects non-admins to `/dashboard`. Use at the top of every page under `/admin`. |
 | `requireAuthAndPremium(redirectUrl?)` | Like `requireAuth`, plus redirects if the user has no active Polar subscription. Skipped when Polar isn't configured. |
 | `requireUnauth()` | Redirects signed-in users away from auth-only pages (login, signup) back to `/`. |
 | `getSessionOnServer()` | Reads the session without redirecting; `null` when unauthenticated. |

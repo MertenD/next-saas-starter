@@ -2,6 +2,7 @@ import type { Session, User } from "better-auth"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { cache } from "react"
+import { isAdminRole } from "@/config/constants"
 import { auth } from "@/lib/auth"
 import { isPolarEnabled, polarClient } from "@/lib/polar"
 
@@ -77,6 +78,22 @@ export const requireAuthAndPremium = async (nonPremiumRedirectUrl = "/") => {
 
   if (!hasActiveSubscription(customer)) {
     redirect(nonPremiumRedirectUrl)
+  }
+
+  return session
+}
+
+/**
+ * Server Component guard for the admin area: redirects to `/login` without a
+ * session and to `/dashboard` when the user is not an admin. Used by
+ * `src/app/(dashboard)/admin/layout.tsx`; API calls are guarded separately by
+ * `adminProcedure` (`src/trpc/init.ts`).
+ */
+export const requireAdmin = async () => {
+  const session = await requireAuth()
+
+  if (!isAdminRole(session.user.role)) {
+    redirect("/dashboard")
   }
 
   return session

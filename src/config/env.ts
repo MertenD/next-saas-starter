@@ -32,6 +32,9 @@ const envSchema = z
     INNGEST_EVENT_KEY: z.string().optional(),
     INNGEST_SIGNING_KEY: z.string().optional(),
 
+    // Comma-separated emails that become admin once their address is verified
+    ADMIN_EMAILS: z.string().optional(),
+
     // AI (optional)
     OPENROUTER_API_KEY: z.string().optional(),
     AI_MODEL: z.string().default("google/gemini-2.5-flash"),

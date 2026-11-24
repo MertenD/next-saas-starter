@@ -34,6 +34,7 @@ export default async function Layout({
             email: user.email,
             image: user.image ?? null,
             emailVerified: user.emailVerified,
+            role: user.role ?? "user",
           },
           polarEnabled: isPolarEnabled,
         }}

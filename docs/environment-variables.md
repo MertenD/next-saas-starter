@@ -23,6 +23,12 @@ Most variables are validated at startup by a Zod schema in `src/config/env.ts` -
 | `BETTER_AUTH_SECRET` | Yes | - | Session/cookie encryption key. Generate with `openssl rand -base64 32`. |
 | `BETTER_AUTH_URL` | Yes | - | The app's own base URL (e.g. `http://localhost:3000`, or your production domain). Used to build OAuth callback URLs and auth cookies. |
 
+## Admin area (optional)
+
+| Variable | Required | Default | Description |
+|---|---|---|---|
+| `ADMIN_EMAILS` | No | - | Comma-separated emails that get the `admin` role at their next sign-in, once the address is verified (email link or OAuth). Needed once to create the first admin, see [`admin.md`](./admin.md). |
+
 ## OAuth Providers (optional)
 
 | Variable | Required | Default | Description |

@@ -26,6 +26,7 @@
   },
   "sidebar": {
     "demoSection": "Demo",
+    "adminSection": "Admin",
     "nav": {
       "dashboard": "Dashboard",
       "posts": "Posts",
@@ -33,7 +34,9 @@
       "inngest": "Background Jobs",
       "ai": "AI Chat",
       "booking": "Booking",
-      "pagination": "Pagination"
+      "pagination": "Pagination",
+      "adminOverview": "Overview",
+      "adminUsers": "Users"
     }
   },
   "auth": {
@@ -394,6 +397,92 @@
       "triggeredAtLabel": "Triggered at {time}",
       "howItWorksLabel": "How it works:",
       "howItWorksBody": "The \"Trigger Job\" button calls a tRPC mutation that sends an Inngest event. The job publishes a status message over <realtimeLink>Inngest Realtime</realtimeLink> as it enters each step (see the <code1>publish()</code1> calls in <code2>src/inngest/functions.ts</code2>). The badge on each run subscribes to that run's channel via <code3>useInngestSubscription</code3> - no polling, updates stream in as they happen. Open <dashboardLink>localhost:8288</dashboardLink> to see the full run trace. The dev server must be running (<code4>bun run inngest:dev</code4> or via <code5>docker compose up -d</code5>)."
+    }
+  },
+  "admin": {
+    "overview": {
+      "title": "Admin overview",
+      "description": "Users and revenue at a glance."
+    },
+    "stats": {
+      "last30Days": "Last 30 days",
+      "users": {
+        "title": "Users",
+        "total": "Total users",
+        "new": "New users",
+        "verified": "Verified emails"
+      },
+      "billing": {
+        "title": "Revenue and subscriptions",
+        "revenue": "Revenue",
+        "mrr": "Monthly recurring revenue",
+        "active": "Active subscriptions",
+        "new": "New subscriptions",
+        "canceled": "Canceled subscriptions",
+        "disabledTitle": "Billing is not configured",
+        "disabledDescription": "Revenue and subscription numbers come live from Polar. Set the POLAR_* variables to see them here.",
+        "disabledAction": "Open subscription settings",
+        "errorDescription": "The numbers could not be loaded from Polar. Check the connection and try again."
+      }
+    },
+    "users": {
+      "title": "Users",
+      "description": "Search users, change roles, ban or delete accounts.",
+      "searchPlaceholder": "Search by name or email",
+      "emptyTitle": "No users found",
+      "emptyDescription": "No user matches your search.",
+      "clearSearch": "Clear search",
+      "columns": {
+        "name": "Name",
+        "email": "Email",
+        "role": "Role",
+        "status": "Status",
+        "createdAt": "Registered",
+        "actions": "Actions"
+      },
+      "role": { "user": "User", "admin": "Admin" },
+      "status": {
+        "verified": "Verified",
+        "unverified": "Unverified",
+        "banned": "Banned"
+      },
+      "actions": {
+        "label": "Actions for {name}",
+        "makeAdmin": "Make admin",
+        "makeUser": "Remove admin role",
+        "ban": "Ban user",
+        "unban": "Unban user",
+        "delete": "Delete user"
+      },
+      "dialogs": {
+        "role": {
+          "title": "Change role of {name}?",
+          "descriptionAdmin": "{name} gets full access to the admin area, including managing users and roles.",
+          "descriptionUser": "{name} loses access to the admin area with the next request."
+        },
+        "ban": {
+          "title": "Ban {name}?",
+          "description": "{name} can no longer sign in and all sessions end immediately. You can unban the account later."
+        },
+        "delete": {
+          "title": "Delete {name}?",
+          "description": "This permanently deletes the account and all its data (posts, sessions, linked accounts). This cannot be undone."
+        }
+      },
+      "toasts": {
+        "roleChanged": "Role updated",
+        "banned": "User banned",
+        "unbanned": "User unbanned",
+        "deleted": "User deleted",
+        "error": "The action failed"
+      }
+    },
+    "billing": {
+      "checking": "Checking the subscription in Polar...",
+      "error": "The subscription could not be checked in Polar. Look at the customer in the Polar dashboard before you continue.",
+      "noSubscription": "This user has no active subscription.",
+      "activeBan": "{count, plural, one {This user has # active subscription.} other {This user has # active subscriptions.}} Banning does not cancel it in Polar: it keeps renewing, the customer is still charged and nothing is refunded. Cancel it in the Polar dashboard first if that is not what you want.",
+      "activeDelete": "{count, plural, one {This user has # active subscription.} other {This user has # active subscriptions.}} Deleting the user deletes the Polar customer first, which cancels the subscription immediately and revokes the benefits. Polar does not refund automatically: if a refund is due, issue it in the Polar dashboard before you delete."
     }
   },
   "globalError": {

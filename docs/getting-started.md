@@ -71,6 +71,10 @@ Skip this to run without payments - see [`auth-and-billing.md`](./auth-and-billi
 
 See [`auth-and-billing.md`](./auth-and-billing.md#oauth-providers) for the Google Cloud Console / GitHub Developer Settings steps.
 
+## 6b. Create the first admin (optional)
+
+To use the admin area (`/admin`), put your email into `ADMIN_EMAILS` in `.env`, register with it and verify the address (without Resend the verification link is printed to the server log). You become admin at your next sign-in. Details: [`admin.md`](./admin.md).
+
 ## 7. Start development
 
 ```bash

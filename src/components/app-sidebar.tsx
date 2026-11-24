@@ -5,14 +5,17 @@ import {
   CalendarCheckIcon,
   FileTextIcon,
   HomeIcon,
+  LayoutDashboardIcon,
   SettingsIcon,
   TableIcon,
+  UsersIcon,
   ZapIcon,
 } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useTranslations } from "next-intl"
 import type React from "react"
+import { useDashboard } from "@/components/dashboard-context"
 import {
   Sidebar,
   SidebarContent,
@@ -27,6 +30,7 @@ import {
   SidebarRail,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
+import { isAdminRole } from "@/config/constants"
 import UserInfoCard from "@/features/auth/user-info-card"
 import { cn } from "@/lib/utils"
 
@@ -40,6 +44,12 @@ type NavItem = {
 const MAIN_ITEMS: NavItem[] = [
   { titleKey: "nav.dashboard", icon: HomeIcon, url: "/dashboard" },
   { titleKey: "nav.settings", icon: SettingsIcon, url: "/settings" },
+]
+
+/** Only rendered for users with the admin role (see `useDashboard().user.role`). */
+const ADMIN_ITEMS: NavItem[] = [
+  { titleKey: "nav.adminOverview", icon: LayoutDashboardIcon, url: "/admin" },
+  { titleKey: "nav.adminUsers", icon: UsersIcon, url: "/admin/users" },
 ]
 
 /**
@@ -65,8 +75,11 @@ function NavLink({
   title: string
 }) {
   const pathName = usePathname()
+  // "/dashboard" and "/admin" are prefixes of other nav urls, so they match exactly
   const isActive =
-    url === "/dashboard" ? pathName === "/dashboard" : pathName.startsWith(url)
+    url === "/dashboard" || url === "/admin"
+      ? pathName === url
+      : pathName.startsWith(url)
 
   return (
     <SidebarMenuItem>
@@ -95,6 +108,7 @@ function NavLink({
 export default function AppSidebar() {
   const t = useTranslations("sidebar")
   const tBrand = useTranslations("auth.layout")
+  const { user } = useDashboard()
 
   return (
     <Sidebar collapsible="icon">
@@ -121,6 +135,21 @@ export default function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        {isAdminRole(user.role) && (
+          <SidebarGroup>
+            <SidebarGroupLabel className="px-3 text-muted-foreground/60 text-xs uppercase tracking-wider">
+              {t("adminSection")}
+            </SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {ADMIN_ITEMS.map(({ titleKey, ...item }) => (
+                  <NavLink key={item.url} title={t(titleKey)} {...item} />
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
 
         <SidebarGroup>
           <SidebarGroupLabel className="px-3 text-muted-foreground/60 text-xs uppercase tracking-wider">

@@ -83,6 +83,7 @@ src/
 │   ├── markdown-content.tsx          # Markdown renderer with design tokens
 │   └── pwa-register.tsx              # Registers the service worker (production only)
 ├── features/                         # Domain features - see features.md
+│   ├── admin/                        # Roles, overview numbers, user management (/admin)
 │   ├── auth/                         # Login/register/logout, user info card
 │   ├── demo/
 │   │   ├── ai/                       # Streaming AI chat demo
@@ -94,7 +95,7 @@ src/
 │   └── user/                         # Current-user data (user.me)
 ├── lib/                              # See "Key files" below
 ├── trpc/
-│   ├── init.ts                       # baseProcedure, protectedProcedure, premiumProcedure
+│   ├── init.ts                       # baseProcedure, protectedProcedure, adminProcedure, premiumProcedure
 │   ├── client.tsx                    # TRPCReactProvider (IndexedDB persistence, 7-day cache)
 │   ├── server.tsx                    # Server-side caller + HydrateClient
 │   ├── query-client.ts               # TanStack Query config
@@ -120,7 +121,7 @@ src/
 | `src/lib/db.ts` | Prisma singleton (prevents multiple instances in dev under HMR) |
 | `src/lib/auth.ts` | Better Auth server config (email/password + OAuth + Polar plugin) |
 | `src/lib/auth-client.ts` | Better Auth client-side hooks |
-| `src/lib/auth-utils.ts` | `requireAuth()`, `requireAuthAndPremium()`, `requireUnauth()`, `getSessionOnServer()` |
+| `src/lib/auth-utils.ts` | `requireAuth()`, `requireAdmin()`, `requireAuthAndPremium()`, `requireUnauth()`, `getSessionOnServer()` |
 | `src/lib/redis.ts` | Redis client - `getRedis()` for lazy-connect |
 | `src/lib/polar.ts` | `isPolarEnabled` flag + `polarClient` - the central "is billing configured" gate |
 | `src/lib/ai.ts` | OpenRouter provider client + `AI_MODEL` |
@@ -141,6 +142,7 @@ src/
 |---|---|---|
 | `baseProcedure` | No | No |
 | `protectedProcedure` | Yes (Better Auth session) | No |
+| `adminProcedure` | Yes | No (requires the `admin` role, else `FORBIDDEN`) |
 | `premiumProcedure` | Yes | Yes (Polar active subscription, or always when Polar is unconfigured) |
 
 Defined in `src/trpc/init.ts`. `protectedProcedure` throws `UNAUTHORIZED` if there's no session. `premiumProcedure` builds on it and additionally throws `FORBIDDEN` unless the user has an active Polar subscription - except when Polar isn't configured at all (`isPolarEnabled` is false), in which case it grants access to everyone, so premium-gated demos still work with zero Polar setup.

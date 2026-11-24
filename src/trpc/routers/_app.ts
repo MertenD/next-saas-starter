@@ -1,3 +1,4 @@
+import { adminRouter } from "@/features/admin/server/router"
 import { bookingRouter } from "@/features/demo/booking/server/router"
 import { demoRouter } from "@/features/demo/inngest/server/router"
 import { paginationRouter } from "@/features/demo/pagination/server/router"
@@ -12,6 +13,7 @@ import { createTRPCRouter } from "../init"
  * `docs/features.md` for the full feature-module walkthrough.
  */
 export const appRouter = createTRPCRouter({
+  admin: adminRouter,
   posts: postsRouter,
   user: userRouter,
   demo: demoRouter,

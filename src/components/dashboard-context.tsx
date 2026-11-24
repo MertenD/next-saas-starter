@@ -9,6 +9,8 @@ export type DashboardUser = {
   email: string
   image: string | null
   emailVerified: boolean
+  /** Access role, `"admin"` shows the admin section in the sidebar. */
+  role: string
 }
 
 type DashboardContextValue = {

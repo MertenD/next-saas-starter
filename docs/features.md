@@ -14,6 +14,10 @@ Server routers are registered centrally in `src/trpc/routers/_app.ts` (see [`arc
 
 ## Existing features
 
+### `admin/` - roles, overview numbers and user management
+
+The `/admin` area for users with the `admin` role: an overview (user counts from the database, revenue/MRR/subscriptions live from Polar) and a searchable, paginated user table with role change, ban/unban and delete. Server side: `trpc.admin.*` (all `adminProcedure`), pages guarded by `requireAdmin()`. Full guide, including what ban and delete do to Polar subscriptions: [`admin.md`](./admin.md).
+
 ### `auth/`
 
 Login/register/logout UI, forgot/reset-password forms, and a user-info card, backed by Better Auth (`authClient`). No `server/` - Better Auth's own catch-all route (`/api/auth/[...all]`) handles the backend. See [`auth-and-billing.md`](./auth-and-billing.md).

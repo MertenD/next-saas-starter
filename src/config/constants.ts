@@ -25,6 +25,20 @@ export function isSupportedLocale(value: string | undefined): value is Locale {
   return SUPPORTED_LOCALES.some((locale) => locale === value)
 }
 
+/** Access roles of the Better Auth admin plugin; new users get "user". */
+export const USER_ROLES = ["user", "admin"] as const
+
+/** One of {@link USER_ROLES}. */
+export type UserRole = (typeof USER_ROLES)[number]
+
+/** The role that may open `/admin` and call `adminProcedure` endpoints. */
+export const ADMIN_ROLE: UserRole = "admin"
+
+/** Whether a role string (from the session or the DB) is the admin role. */
+export function isAdminRole(role: string | null | undefined) {
+  return role === ADMIN_ROLE
+}
+
 /** App-wide display name/description, used in page titles, metadata, and emails. */
 export const APP_NAME = "SaaS Starter"
 export const APP_DESCRIPTION = "A production-ready Next.js SaaS template"

@@ -45,6 +45,7 @@ export default defineConfig({
           { text: "Data Fetching", link: "/data-fetching" },
           { text: "Database", link: "/database" },
           { text: "Auth & Billing", link: "/auth-and-billing" },
+          { text: "Admin Area", link: "/admin" },
           { text: "Background Jobs", link: "/background-jobs" },
           { text: "Integrations", link: "/integrations" },
           { text: "Service Worker", link: "/service-worker" },

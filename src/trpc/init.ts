@@ -1,6 +1,7 @@
 import { initTRPC, TRPCError } from "@trpc/server"
 import { cache } from "react"
 import superjson from "superjson"
+import { isAdminRole } from "@/config/constants"
 import {
   getPolarCustomerState,
   getSessionOnServer,
@@ -46,6 +47,20 @@ export const protectedProcedure = baseProcedure.use(async ({ ctx, next }) => {
   }
 
   return next({ ctx: { ...ctx, auth: session } })
+})
+
+/**
+ * Procedure builder for the admin area: a {@link protectedProcedure} that also
+ * requires the `admin` role (checked against the session, so a demoted admin
+ * loses access with the next request). Throws `FORBIDDEN` for everyone else.
+ * Every procedure under `trpc.admin.*` must use it.
+ */
+export const adminProcedure = protectedProcedure.use(async ({ ctx, next }) => {
+  if (!isAdminRole(ctx.auth.user.role)) {
+    throw new TRPCError({ code: "FORBIDDEN", message: "Admin role required" })
+  }
+
+  return next()
 })
 
 /**

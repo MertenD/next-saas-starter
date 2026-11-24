@@ -6,13 +6,13 @@ PostgreSQL via Prisma ORM. Schema lives at `prisma/schema.prisma`; the generated
 
 **Better Auth-managed tables** (comment in the schema says "do not modify" - Better Auth owns their shape):
 
-- **`Session`** - `id`, `expiresAt`, `token` (unique), `ipAddress?`, `userAgent?`, timestamps, belongs to `User` (cascade delete).
+- **`Session`** - `id`, `expiresAt`, `token` (unique), `ipAddress?`, `userAgent?`, `impersonatedBy?` (admin plugin), timestamps, belongs to `User` (cascade delete).
 - **`Account`** - `id`, `accountId`, `providerId`, OAuth/credential fields (`accessToken`, `refreshToken`, `idToken`, expiry timestamps, `scope`, `password`), belongs to `User` (cascade delete).
 - **`Verification`** - `id`, `identifier`, `value`, `expiresAt`, timestamps.
 
 **Application user** (also managed by Better Auth, via its Prisma adapter):
 
-- **`User`** - `id`, `name`, `email` (unique), `emailVerified`, `image?`, `locale?` (preferred UI language, registered as a Better Auth additional field and synced with the `ui-locale` cookie by `LocaleSync`), timestamps. Relations: `sessions[]`, `accounts[]`, `posts[]`.
+- **`User`** - `id`, `name`, `email` (unique), `emailVerified`, `image?`, `locale?` (preferred UI language, registered as a Better Auth additional field and synced with the `ui-locale` cookie by `LocaleSync`), `role` (`"user"` | `"admin"`, default `"user"`), `banned` (default `false`), `banReason?`, `banExpires?` (the last four belong to the Better Auth admin plugin, see [`admin.md`](./admin.md)), timestamps. Relations: `sessions[]`, `accounts[]`, `posts[]`.
 
 **Example domain model** (comment says "replace with your own" - this is the one meant to be deleted/extended):
 
