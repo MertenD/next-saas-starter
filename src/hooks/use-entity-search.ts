@@ -41,7 +41,7 @@ export function useEntitySearch<T extends { search: string; page: number }>({
     setParams({ ...params, search, page: PAGINATION.DEFAULT_PAGE })
   })
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: `commit` is a useEffectEvent and must not be listed as a dependency
+  // `commit` is a useEffectEvent and must not be listed as a dependency
   useEffect(() => {
     if (localSearch === params.search) return
 

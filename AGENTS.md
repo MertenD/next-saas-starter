@@ -89,7 +89,7 @@ Docs auto-deploy to GitHub Pages via `.github/workflows/docs.yml` on every push 
 
 `.github/workflows/ci.yml` runs `lint`, `typecheck` and `build` on every push to `main` and every pull request; run the same three locally before committing. There are no automated tests in this project.
 
-Package hygiene: never add platform-specific packages (e.g. `@esbuild/win32-x64`, `@parcel/watcher-win32-*`) to `package.json`; they arrive through their parents' optional dependencies and break `bun install --frozen-lockfile` on Linux/Docker. `mprocs.log` is git-ignored.
+Package hygiene: never add platform-specific packages (e.g. `@esbuild/win32-x64`, `@parcel/watcher-win32-*`) to `package.json`; they arrive through their parents' optional dependencies and break `bun install --frozen-lockfile` on Linux/Docker. `mprocs.log` is git-ignored. Biome checks only code and JSON: `biome.json` excludes `*.md`, `*.svg` and `*.css` (Biome 2.6 would otherwise reformat every doc table and flag the logo SVGs) and turns `organizeImports` off for the shadcn files in `src/components/ui`. If `bun run lint` passes locally but CI fails, check that the Biome binary matches `bun.lock` (on Windows ARM `node_modules/@biomejs/cli-win32-x64` can be stale; run `node_modules/@biomejs/cli-win32-arm64/biome.exe check`).
 
 ## Architecture
 
