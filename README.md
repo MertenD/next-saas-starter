@@ -66,6 +66,18 @@ A production-ready Next.js SaaS template with everything you need to build and s
   </tr>
   <tr>
     <td width="50%" valign="top">
+      <b>Admin overview</b><br>
+      Owner and admin roles with user counts and live revenue, MRR and subscriptions from Polar (shown here without Polar configured).<br>
+      <img src="docs/public/screenshots/admin-overview.png" alt="Admin overview with user counts and a billing placeholder">
+    </td>
+    <td width="50%" valign="top">
+      <b>User management</b><br>
+      Search users, appoint admins, ban or delete accounts; owners come from an environment variable.<br>
+      <img src="docs/public/screenshots/admin-users.png" alt="Admin user table with roles, status and actions">
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
       <b>Profile and security</b><br>
       Edit your profile, verify your email and change your password.<br>
       <img src="docs/public/screenshots/settings.png" alt="Account settings with profile and password forms">
@@ -96,6 +108,7 @@ Full docs live in [`docs/`](./docs/README.md) - readable as plain Markdown, or a
 - [Features](./docs/features.md) - existing demo features, adding a new one
 - [Database](./docs/database.md) - Prisma schema and migrations
 - [Auth & Billing](./docs/auth-and-billing.md) - Better Auth, OAuth, Polar, premium gating
+- [Admin Area](./docs/admin.md) - owners, admins, overview numbers, user management
 - [Background Jobs](./docs/background-jobs.md) - Inngest
 - [Integrations](./docs/integrations.md) - AI, Redis, analytics
 - [Frontend](./docs/frontend.md) - UI components, design system, i18n, state management
