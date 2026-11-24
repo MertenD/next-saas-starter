@@ -9,40 +9,62 @@ import { z } from "zod"
  * `docs/environment-variables.md` for what each variable does and which
  * ones are optional.
  */
-const envSchema = z.object({
-  // Database
-  DATABASE_URL: z.string().min(1),
+const envSchema = z
+  .object({
+    // Database
+    DATABASE_URL: z.string().min(1),
 
-  // Better Auth
-  BETTER_AUTH_SECRET: z.string().min(1),
-  BETTER_AUTH_URL: z.string().min(1),
+    // Better Auth
+    BETTER_AUTH_SECRET: z.string().min(1),
+    BETTER_AUTH_URL: z.string().min(1),
 
-  // OAuth (optional - remove unused providers from src/lib/auth.ts)
-  GOOGLE_CLIENT_ID: z.string().optional(),
-  GOOGLE_CLIENT_SECRET: z.string().optional(),
-  GITHUB_CLIENT_ID: z.string().optional(),
-  GITHUB_CLIENT_SECRET: z.string().optional(),
+    // OAuth (optional - remove unused providers from src/lib/auth.ts)
+    GOOGLE_CLIENT_ID: z.string().optional(),
+    GOOGLE_CLIENT_SECRET: z.string().optional(),
+    GITHUB_CLIENT_ID: z.string().optional(),
+    GITHUB_CLIENT_SECRET: z.string().optional(),
 
-  // Inngest
-  INNGEST_APP_ID: z.string().min(1),
+    // Inngest
+    INNGEST_APP_ID: z.string().min(1),
+    // Required in production (checked below): the self-hosted Inngest server and
+    // this app share them to sign events and function calls. Generate each with
+    // `openssl rand -hex 32`. Unused in development (Inngest dev mode).
+    INNGEST_EVENT_KEY: z.string().optional(),
+    INNGEST_SIGNING_KEY: z.string().optional(),
 
-  // AI (optional)
-  OPENROUTER_API_KEY: z.string().optional(),
-  AI_MODEL: z.string().default("google/gemini-2.5-flash"),
+    // AI (optional)
+    OPENROUTER_API_KEY: z.string().optional(),
+    AI_MODEL: z.string().default("google/gemini-2.5-flash"),
 
-  // Redis
-  REDIS_URL: z.string().default("redis://localhost:6379"),
+    // Redis
+    REDIS_URL: z.string().default("redis://localhost:6379"),
 
-  // Polar (optional - leave all four unset to disable payments and mock premium access locally)
-  POLAR_ACCESS_TOKEN: z.string().optional(),
-  POLAR_SUCCESS_URL: z.string().optional(),
-  POLAR_PRODUCT_ID: z.string().optional(),
-  POLAR_SERVER: z.enum(["sandbox", "production"]).optional(),
+    // Polar (optional - leave all four unset to disable payments and mock premium access locally)
+    POLAR_ACCESS_TOKEN: z.string().optional(),
+    POLAR_SUCCESS_URL: z.string().optional(),
+    POLAR_PRODUCT_ID: z.string().optional(),
+    POLAR_SERVER: z.enum(["sandbox", "production"]).optional(),
 
-  // Resend (optional - leave unset to log emails to the console instead of sending them)
-  RESEND_API_KEY: z.string().optional(),
-  EMAIL_FROM: z.string().optional(),
-})
+    // Resend (optional - leave unset to log emails to the console instead of sending them)
+    RESEND_API_KEY: z.string().optional(),
+    EMAIL_FROM: z.string().optional(),
+  })
+  .superRefine((value, ctx) => {
+    // The Docker build runs with placeholder values and no real secrets
+    if (process.env.NODE_ENV !== "production") return
+    if (process.env.SKIP_ENV_VALIDATION === "1") return
+
+    for (const key of ["INNGEST_EVENT_KEY", "INNGEST_SIGNING_KEY"] as const) {
+      if (!/^([0-9a-fA-F]{2})+$/.test(value[key] ?? "")) {
+        ctx.addIssue({
+          code: "custom",
+          path: [key],
+          message:
+            "required in production as an even-length hex string (openssl rand -hex 32)",
+        })
+      }
+    }
+  })
 
 // Set SKIP_ENV_VALIDATION=1 to bypass validation (e.g. during docker build)
 const parsed =

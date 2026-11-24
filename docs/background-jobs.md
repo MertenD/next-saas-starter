@@ -17,11 +17,10 @@
 export const inngest = new Inngest({
   id: env.INNGEST_APP_ID,
   middleware: [realtimeMiddleware()],
-  isDev: true,
 });
 ```
 
-`isDev: true` is hardcoded intentionally, not a leftover dev setting - the in-code comment explains why: since this app only ever talks to a self-hosted Inngest instance, forcing dev mode regardless of `NODE_ENV` keeps the SDK from assuming Inngest Cloud and demanding an `INNGEST_EVENT_KEY`. It targets whatever `INNGEST_BASE_URL` points at (or `localhost:8288` by default). See [`deployment.md`](./deployment.md) for what this means for production hardening.
+There is deliberately no `isDev` option: the SDK infers the mode from `NODE_ENV`. In development it talks to the unauthenticated dev server (`localhost:8288`, started by `docker compose up -d` or `bun run inngest:dev`) and no keys are needed. In production it runs signed: `INNGEST_EVENT_KEY` signs the events the app sends to your self-hosted Inngest server, and `INNGEST_SIGNING_KEY` lets `/api/inngest` verify that calls really come from that server (everything else is rejected). The server address is `INNGEST_BASE_URL`. Both keys are required in production and validated at startup in `src/config/env.ts`. Setup: [`deployment.md`](./deployment.md#inngest-in-production).
 
 ## Existing jobs
 

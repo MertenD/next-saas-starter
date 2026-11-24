@@ -26,11 +26,26 @@ services:
         condition: service_started
     restart: unless-stopped
 
+  # Self-hosted Inngest in production mode: signed requests (the keys come
+  # from .env, same values as for the app) and durable storage in its own
+  # Postgres database plus Redis db 1. Published on localhost only: expose it
+  # through your reverse proxy deliberately, see docs/deployment.md.
   inngest:
     image: inngest/inngest:v1.53.0 # keep in sync with inngest-cli in package.json
-    command: inngest dev -u http://app:3000/api/inngest
+    command: >
+      inngest start --host 0.0.0.0
+      --event-key ${INNGEST_EVENT_KEY:?Set INNGEST_EVENT_KEY in .env}
+      --signing-key ${INNGEST_SIGNING_KEY:?Set INNGEST_SIGNING_KEY in .env}
+      --postgres-uri postgres://saas:saas@postgres:5432/inngest_db
+      --redis-uri redis://redis:6379/1
+      -u http://app:3000/api/inngest
     ports:
-      - "8288:8288"
+      - "127.0.0.1:8288:8288"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
     restart: unless-stopped
 
   postgres:
@@ -42,6 +57,8 @@ services:
       POSTGRES_DB: saas_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      # Creates the separate Inngest database on the first start of an empty volume
+      - ./docker/inngest-init.sql:/docker-entrypoint-initdb.d/inngest-init.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U saas -d saas_db"]
       interval: 5s

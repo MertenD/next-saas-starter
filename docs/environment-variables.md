@@ -39,7 +39,8 @@ Both providers are wired conditionally in `src/lib/auth.ts` - a provider block i
 | `INNGEST_APP_ID` | Yes | - | Any unique identifier for your app, used by the Inngest client (`src/inngest/client.ts`). |
 | `NEXT_PUBLIC_INNGEST_BASE_URL` | Yes | - | **Browser-facing.** The URL the Inngest Realtime WebSocket connects to from the client (used by `/demo/inngest`'s live status updates). Must be reachable from the user's browser - in a Docker deployment this can **not** be the Docker-internal `http://inngest:8288` hostname; expose the Inngest server through your reverse proxy and point this at that public URL instead. |
 | `INNGEST_BASE_URL` | Production only | - | **Server-side.** Not in `.env.example` - set directly in `docker-compose.prod.yml`, overridden to the Docker-internal `http://inngest:8288` hostname so the Next.js server can reach the Inngest container. Only relevant for Docker deployments. |
-| `INNGEST_SIGNING_KEY` / `INNGEST_EVENT_KEY` | No | - | Not in `.env.example`. Only needed if you switch the `inngest` container from `inngest dev` to `inngest start` for durable job storage - see the Inngest section of [`deployment.md`](./deployment.md) for why `src/inngest/client.ts` hardcodes `isDev: true` and what that means for these keys. |
+| `INNGEST_EVENT_KEY` | Production only | - | Shared secret that signs the events the app sends to the self-hosted Inngest server. Even-length hex string, generate with `openssl rand -hex 32`. Also passed to the `inngest` container (`docker-compose.prod.yml` reads it from `.env`). Startup fails in production without it; unused in development. |
+| `INNGEST_SIGNING_KEY` | Production only | - | Shared secret that lets `/api/inngest` verify that function calls come from your Inngest server. Same format and rules as `INNGEST_EVENT_KEY`; use a different value. |
 
 ## AI (optional)
 

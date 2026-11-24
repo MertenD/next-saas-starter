@@ -52,5 +52,5 @@ Open `/demo/inngest`, click "Trigger Job", and watch the badge move through *run
 
 ## Related docs
 
-- [Background Jobs](../background-jobs.md) - the full Inngest reference: concepts, adding new jobs, and why `isDev: true` is hardcoded in `src/inngest/client.ts`
+- [Background Jobs](../background-jobs.md) - the full Inngest reference: concepts, adding new jobs, and how development (dev server) and production (signed requests) differ in `src/inngest/client.ts`
 - [Environment Variables](../environment-variables.md) - `NEXT_PUBLIC_INNGEST_BASE_URL`, required for the Realtime subscription to reach the Inngest server from the browser
