@@ -18,9 +18,13 @@ type SendEmailParams = {
  */
 export async function sendEmail({ to, subject, html }: SendEmailParams) {
   if (!isResendEnabled || !resendClient) {
+    // The content holds one-time links (verification, password reset, account
+    // deletion) and the address is personal data: only print it while developing.
     console.warn(
-      `[mailer] RESEND_API_KEY/EMAIL_FROM not set - logging email instead of sending:\n` +
-        `  to: ${to}\n  subject: ${subject}\n  html: ${html}`,
+      process.env.NODE_ENV === "production"
+        ? `[mailer] RESEND_API_KEY/EMAIL_FROM not set - email "${subject}" was not sent`
+        : `[mailer] RESEND_API_KEY/EMAIL_FROM not set - logging email instead of sending:\n` +
+            `  to: ${to}\n  subject: ${subject}\n  html: ${html}`,
     )
     return
   }
@@ -55,6 +59,18 @@ export function resetPasswordEmailHtml({ url }: { url: string }) {
     </p>
     <a href="${url}" style="display: inline-block; background: #e00b41; color: #ffffff; padding: 12px 20px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 500;">
       Reset password
+    </a>
+  `)
+}
+
+export function deleteAccountEmailHtml({ url }: { url: string }) {
+  return emailLayout(`
+    <h1 style="font-size: 20px; margin-bottom: 16px;">Confirm account deletion</h1>
+    <p style="font-size: 14px; color: #3f3f3f; margin-bottom: 24px;">
+      You asked to delete your account. Click the button to delete it permanently together with all your data. This cannot be undone. If you did not ask for this, ignore this email, nothing will be deleted.
+    </p>
+    <a href="${url}" style="display: inline-block; background: #e00b41; color: #ffffff; padding: 12px 20px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 500;">
+      Delete my account
     </a>
   `)
 }

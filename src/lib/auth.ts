@@ -1,6 +1,7 @@
 import { checkout, polar, portal } from "@polar-sh/better-auth"
 import { betterAuth } from "better-auth"
 import { prismaAdapter } from "better-auth/adapters/prisma"
+import { APIError } from "better-auth/api"
 import { admin } from "better-auth/plugins"
 import { adminAc, defaultRoles } from "better-auth/plugins/admin/access"
 import { ADMIN_ROLE, isOwnerRole, OWNER_ROLE } from "@/config/constants"
@@ -10,11 +11,13 @@ import { InngestEvents } from "@/inngest/functions"
 import { isOwnerEmail } from "@/lib/admin"
 import prisma from "@/lib/db"
 import {
+  deleteAccountEmailHtml,
   resetPasswordEmailHtml,
   sendEmail,
   verifyEmailHtml,
 } from "@/lib/mailer"
 import { isPolarEnabled, polarClient } from "./polar"
+import { deletePolarCustomer, deleteUserRedisData } from "./user-data"
 
 /**
  * Mirrors a freshly created local user into Polar as a customer. Does nothing
@@ -124,6 +127,36 @@ export const auth = betterAuth({
     },
   },
   user: {
+    // GDPR erasure (Art. 17): users delete their own account from Settings ->
+    // Privacy. The deletion is confirmed through a link sent by email (works for
+    // password and OAuth accounts alike, and protects a hijacked session).
+    deleteUser: {
+      enabled: true,
+      sendDeleteAccountVerification: async ({ user, url }) => {
+        void sendEmail({
+          to: user.email,
+          subject: "Confirm your account deletion",
+          html: deleteAccountEmailHtml({ url }),
+        })
+      },
+      // Runs before anything is deleted: if Polar fails the account stays, so
+      // nobody is left being billed without an account. Cancels the Polar
+      // subscription (no refund), see docs/gdpr.md.
+      beforeDelete: async (user) => {
+        try {
+          await deletePolarCustomer(user.id)
+        } catch (error) {
+          console.error("Error deleting Polar customer:", error)
+          throw new APIError("INTERNAL_SERVER_ERROR", {
+            message:
+              "Your billing data could not be deleted. Your account was not deleted, please try again.",
+          })
+        }
+      },
+      afterDelete: async (user) => {
+        await deleteUserRedisData(user.id)
+      },
+    },
     additionalFields: {
       // Preferred UI language, kept in sync with the ui-locale cookie (see src/components/locale-sync.tsx)
       locale: { type: "string", required: false },
@@ -191,7 +224,7 @@ export const auth = betterAuth({
           inngest
             .send({
               name: InngestEvents.UserSignedUp,
-              data: { userId: user.id, email: user.email },
+              data: { userId: user.id },
             })
             .catch((error) => {
               console.error("Error sending user signed up event:", error)

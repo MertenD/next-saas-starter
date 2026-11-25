@@ -8,7 +8,7 @@ Server-side (Server Components, Server Actions) - `src/lib/auth-utils.ts`:
 
 | Export | What it does |
 |---|---|
-| `requireAuth()` | Redirects to `/login` if there's no session; otherwise returns the session. |
+| `requireAuth()` | Redirects to `/login` if there's no session; otherwise returns the session. First statement of every dashboard page (the layout check does not re-run on navigation). |
 | `requireAdmin()` | Like `requireAuth`, plus redirects non-admins to `/dashboard`. Use at the top of every page under `/admin`. |
 | `requireAuthAndPremium(redirectUrl?)` | Like `requireAuth`, plus redirects if the user has no active Polar subscription. Skipped when Polar isn't configured. |
 | `requireUnauth()` | Redirects signed-in users away from auth-only pages (login, signup) back to `/`. |
@@ -40,6 +40,8 @@ tRPC procedure builders (`src/trpc/init.ts`) - see [Architecture](./architecture
 |---|---|---|
 | `prisma` (default export) | `src/lib/db.ts` | Shared Prisma client. Always import this instead of `new PrismaClient()`. |
 | `getRedis()` | `src/lib/redis.ts` | Shared Redis client, connects lazily on first call. |
+| `deletePolarCustomer(userId)` / `deleteUserRedisData(userId)` | `src/lib/user-data.ts` | Remove a user's data from Polar (cancels subscriptions) and Redis. Used by account deletion and the admin delete action. Add new external services here. |
+| `buildUserDataExport(userId)` | `src/features/privacy/server/export.ts` | Everything stored about a user, for the data export. Add new user data here. |
 | `redis` (default export) | `src/lib/redis.ts` | Raw client instance - may not be connected yet, prefer `getRedis()`. |
 | `isPolarEnabled` / `polarClient` | `src/lib/polar.ts` | Whether billing is configured, and the Polar SDK client (`null` if not). Check the flag before using the client. |
 | `isResendEnabled` / `resendClient` | `src/lib/resend.ts` | Whether transactional email is configured, and the Resend client (`null` if not). |

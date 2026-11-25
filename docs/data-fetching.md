@@ -109,8 +109,10 @@ The page waits for the data. The server HTML already contains the finished conte
 // src/app/(dashboard)/demo/posts/page.tsx (this is the real page)
 import { HydrateClient, prefetch, trpc } from "@/trpc/server"
 import { PostsContainer } from "@/features/demo/posts/components/posts-container"
+import { requireAuth } from "@/lib/auth-utils"
 
 export default async function PostsPage() {
+  await requireAuth()
   await prefetch(trpc.posts.getMany.queryOptions())
 
   return (

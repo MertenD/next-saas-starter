@@ -35,7 +35,7 @@ There are no automated tests and no CI configuration in this repo - it's a start
 5. Redis is available via `getRedis()` from `@/lib/redis` for caching/rate limiting.
 6. Auth endpoints are served by Better Auth at `/api/auth/[...all]`.
 
-There is no `middleware.ts` - route protection happens per-layout via server-side `requireAuth()` / `requireUnauth()` calls (see [`auth-and-billing.md`](./auth-and-billing.md)), not Next.js middleware.
+There is no `middleware.ts` - route protection happens in every page via server-side `requireAuth()` / `requireUnauth()` calls (the dashboard layout calls `requireAuth()` too, but layouts are not re-rendered on client-side navigation) (see [`auth-and-billing.md`](./auth-and-billing.md)), not Next.js middleware.
 
 ## Project structure
 
@@ -84,6 +84,7 @@ src/
 │   └── pwa-register.tsx              # Registers the service worker (production only)
 ├── features/                         # Domain features - see features.md
 │   ├── admin/                        # Roles, overview numbers, user management (/admin)
+│   ├── privacy/                      # Sessions list, data export, account deletion (Settings > Privacy)
 │   ├── auth/                         # Login/register/logout, user info card
 │   ├── demo/
 │   │   ├── ai/                       # Streaming AI chat demo
@@ -123,6 +124,8 @@ src/
 | `src/lib/auth-client.ts` | Better Auth client-side hooks |
 | `src/lib/auth-utils.ts` | `requireAuth()`, `requireAdmin()`, `requireAuthAndPremium()`, `requireUnauth()`, `getSessionOnServer()` |
 | `src/lib/redis.ts` | Redis client - `getRedis()` for lazy-connect |
+| `src/lib/user-data.ts` | Cleanup of a user's external data: `deletePolarCustomer()`, `deleteUserRedisData()` (account deletion, admin delete) |
+| `src/config/legal.ts` | Operator details for the privacy policy and imprint |
 | `src/lib/polar.ts` | `isPolarEnabled` flag + `polarClient` - the central "is billing configured" gate |
 | `src/lib/ai.ts` | OpenRouter provider client + `AI_MODEL` |
 | `src/lib/stream-context.ts` | Resumable-stream context for the AI chat demo |

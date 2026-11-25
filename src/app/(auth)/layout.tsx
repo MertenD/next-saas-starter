@@ -1,6 +1,8 @@
 import Link from "next/link"
 import { getTranslations } from "next-intl/server"
 import type React from "react"
+import { ClearLocalData } from "@/components/clear-local-data"
+import { LegalLinks } from "@/components/legal-links"
 
 export default async function AuthLayout({
   children,
@@ -18,7 +20,9 @@ export default async function AuthLayout({
           {t("brand")}
         </Link>
         {children}
+        <LegalLinks className="justify-center" />
       </div>
+      <ClearLocalData />
     </div>
   )
 }

@@ -1,9 +1,11 @@
 import { getTranslations } from "next-intl/server"
 import { HowItWorksCard } from "@/features/demo/inngest/components/how-it-works-card"
 import { InngestDemoContainer } from "@/features/demo/inngest/components/inngest-demo-container"
+import { requireAuth } from "@/lib/auth-utils"
 import { navTitle } from "@/lib/page-metadata"
 
 export default async function InngestDemoPage() {
+  await requireAuth()
   const t = await getTranslations("demo.inngest")
 
   return (

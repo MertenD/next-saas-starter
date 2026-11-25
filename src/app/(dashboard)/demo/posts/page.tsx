@@ -1,9 +1,11 @@
 import { getTranslations } from "next-intl/server"
 import { PostsContainer } from "@/features/demo/posts/components/posts-container"
+import { requireAuth } from "@/lib/auth-utils"
 import { navTitle } from "@/lib/page-metadata"
 import { HydrateClient, prefetch, trpc } from "@/trpc/server"
 
 export default async function PostsPage() {
+  await requireAuth()
   const t = await getTranslations("posts")
   // Awaited on purpose: with `useQuery` the server HTML must already contain the
   // data. A pending (not awaited) prefetch renders the skeleton on the server

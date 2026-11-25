@@ -28,7 +28,7 @@ Authentication is [Better Auth](https://www.better-auth.com); billing is [Polar]
 
 | Function | Behavior |
 |---|---|
-| `requireAuth()` | Redirects to `/login` if there's no session. Used in `(dashboard)/layout.tsx`. |
+| `requireAuth()` | Redirects to `/login` if there's no session. Used in `(dashboard)/layout.tsx` **and as the first statement of every dashboard page**, see below. |
 | `requireUnauth()` | Redirects to `/` if there *is* a session. Used in `(auth)` pages so logged-in users can't see login/signup. |
 | `requireAuthAndPremium(redirectUrl)` | Like `requireAuth()`, plus checks for an active Polar subscription and redirects if absent - skipped entirely when Polar is unconfigured. |
 | `getSessionOnServer()` | Returns the session (or `null`) without redirecting. Wrapped in `React.cache()`, so all guards above share one lookup per request. |
@@ -39,6 +39,14 @@ There's no `middleware.ts` in this project - all route protection goes through t
 ## Roles and the admin plugin
 
 The Better Auth `admin` plugin adds a `role` (`user` | `admin` | `owner`) and ban fields to the user. `requireAdmin()` and `adminProcedure` gate the admin area (admins and owners alike), `OWNER_EMAILS` defines the owners, admins are appointed in the UI. See [`admin.md`](./admin.md).
+
+## Account deletion and sessions
+
+Users delete their own account in Settings > Privacy (Better Auth `user.deleteUser`, confirmed by an email link) and manage their sessions there. Deleting removes the Polar customer first (this cancels the subscription, no refund) and then the user. Details and limits: [`gdpr.md`](./gdpr.md).
+
+### Why every page checks the session
+
+Next.js does not re-render a layout on client-side navigation, so the check in `(dashboard)/layout.tsx` only runs on the first load. Every page under `(dashboard)` therefore calls `await requireAuth()` (or `requireAdmin()`) itself, before any prefetch. That way a device whose session was revoked (Settings > Privacy, ban, account deletion) or has expired lands on `/login` on its next navigation, where the browser's cached personal data is wiped. Without navigation the open page keeps showing what it already loaded; the server rejects every new request.
 
 ## OAuth providers
 

@@ -13,6 +13,7 @@ Full documentation for this Next.js SaaS starter template. Start with [Getting S
 | [Database](./database.md) | Prisma schema, models, and the migration workflow. |
 | [Auth & Billing](./auth-and-billing.md) | Better Auth configuration, OAuth setup, Polar billing, premium feature gating. |
 | [Admin Area](./admin.md) | Roles, owners (`OWNER_EMAILS`) and admins, the overview with user and revenue numbers, user management, and what ban/delete do to Polar subscriptions. |
+| [GDPR (DSGVO)](./gdpr.md) | What the template does for data protection (privacy policy, data export, account deletion, sessions, retention), the data inventory, processors, and the checklist for going live. |
 | [Background Jobs](./background-jobs.md) | Inngest concepts, existing jobs, adding new jobs, Realtime subscriptions. |
 | [Integrations](./integrations.md) | AI (OpenRouter), Redis, Plausible analytics, Sentry error tracking, and PWA support. |
 | [Service Worker](./service-worker.md) | The hand-written PWA service worker: caching strategies, offline behavior, updates and versions, privacy on sign-out, testing and troubleshooting. |

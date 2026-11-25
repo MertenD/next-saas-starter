@@ -1,8 +1,10 @@
 import { getTranslations } from "next-intl/server"
 import { BookingContainer } from "@/features/demo/booking/components/booking-container"
+import { requireAuth } from "@/lib/auth-utils"
 import { navTitle } from "@/lib/page-metadata"
 
 export default async function BookingPage() {
+  await requireAuth()
   const t = await getTranslations("booking")
 
   return (

@@ -4,6 +4,7 @@ import { EntityContainer, EntityHeader } from "@/components/entity-components"
 import { CustomersContainer } from "@/features/demo/pagination/components/customers-container"
 import { customersParamsLoader } from "@/features/demo/pagination/server/params-loader"
 import { prefetchCustomers } from "@/features/demo/pagination/server/prefetch"
+import { requireAuth } from "@/lib/auth-utils"
 import { navTitle } from "@/lib/page-metadata"
 import { HydrateClient } from "@/trpc/server"
 
@@ -19,6 +20,7 @@ type PaginationDemoPageProps = {
 export default async function PaginationDemoPage({
   searchParams,
 }: PaginationDemoPageProps) {
+  await requireAuth()
   const params = await customersParamsLoader(searchParams)
   // Awaited on purpose: with `useQuery` the server HTML must already contain
   // the data. A pending (not awaited) prefetch renders the skeleton on the

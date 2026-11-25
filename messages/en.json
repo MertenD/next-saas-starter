@@ -183,6 +183,7 @@
     "tabs": {
       "account": "Account",
       "subscription": "Subscription",
+      "privacy": "Privacy",
       "general": "General"
     },
     "account": {
@@ -244,6 +245,44 @@
       "billingDisabled": "Billing is not configured for this deployment, so every account has full access.",
       "error": {
         "title": "Failed to load subscription"
+      }
+    },
+    "privacy": {
+      "policyLink": "Read the privacy policy",
+      "export": {
+        "title": "Download your data",
+        "description": "Get a copy of the personal data stored about you (profile, sign-in methods, sessions, your content and billing data) as a JSON file.",
+        "button": "Download my data"
+      },
+      "sessions": {
+        "title": "Active sessions",
+        "description": "The devices you are signed in on. Sign out devices you do not recognize.",
+        "device": "{browser} on {os}",
+        "unknownDevice": "Unknown device",
+        "thisDevice": "This device",
+        "signedIn": "Signed in {date}",
+        "revoke": "Sign out",
+        "revokeLabel": "Sign out {device}",
+        "revokeOthers": "Sign out all other devices",
+        "revokeOthersTitle": "Sign out all other devices?",
+        "revokeOthersDescription": "Every device except this one is signed out immediately and has to sign in again.",
+        "revokedToast": "Device signed out",
+        "revokedOthersToast": "All other devices signed out",
+        "emptyTitle": "No active sessions",
+        "emptyDescription": "Your sessions could not be found. Reload the list to try again.",
+        "reload": "Reload",
+        "error": "The action failed. Please try again."
+      },
+      "delete": {
+        "title": "Delete your account",
+        "description": "Permanently deletes your account and all your data (profile, sessions, linked sign-in methods and your content). This cannot be undone.",
+        "billingNote": "Your subscription is cancelled immediately and not refunded. The payment provider may keep records it is legally required to keep.",
+        "button": "Delete my account",
+        "dialogTitle": "Delete your account?",
+        "dialogDescription": "We send a confirmation link to your email address. Your account is only deleted once you open it.",
+        "confirm": "Send confirmation email",
+        "emailSent": "Check your inbox: open the link in the email to finish deleting your account.",
+        "error": "The deletion could not be started. Please try again."
       }
     },
     "general": {
@@ -483,6 +522,82 @@
       "noSubscription": "This user has no active subscription.",
       "activeBan": "{count, plural, one {This user has # active subscription.} other {This user has # active subscriptions.}} Banning does not cancel it in Polar: it keeps renewing, the customer is still charged and nothing is refunded. Cancel it in the Polar dashboard first if that is not what you want.",
       "activeDelete": "{count, plural, one {This user has # active subscription.} other {This user has # active subscriptions.}} Deleting the user deletes the Polar customer first, which cancels the subscription immediately and revokes the benefits. Polar does not refund automatically: if a refund is due, issue it in the Polar dashboard before you delete."
+    }
+  },
+  "legal": {
+    "links": {
+      "label": "Legal",
+      "privacy": "Privacy policy",
+      "imprint": "Imprint"
+    },
+    "back": "Back to the app",
+    "notice": "How we process your data is described in the",
+    "noticeLink": "privacy policy",
+    "privacy": {
+      "title": "Privacy policy",
+      "intro": "This page explains which personal data this service processes, why, and what rights you have.",
+      "controller": {
+        "title": "Who is responsible",
+        "text": "The controller under the GDPR is {name}, {address}. For all questions about your data write to {email}."
+      },
+      "data": {
+        "title": "Which data we process and why",
+        "account": "Account data (name, email address, password as a salted hash, optional profile picture, language): to create and run your account. Legal basis: performance of the contract (Art. 6(1)(b) GDPR).",
+        "sessions": "Sign-in sessions (IP address, browser and device information, time): to keep you signed in and to protect your account, for example by letting you see and end your sessions. Legal basis: legitimate interest in the security of the service (Art. 6(1)(f) GDPR).",
+        "content": "Content you create in the service (for example posts): to provide the features you use. Legal basis: performance of the contract (Art. 6(1)(b) GDPR).",
+        "email": "Transactional emails (email verification, password reset, account deletion): to carry out the action you requested. Legal basis: performance of the contract (Art. 6(1)(b) GDPR).",
+        "billing": "Billing data (customer record and subscription status; card details are handled by the payment provider only): to process your subscription and to meet tax and accounting duties. Legal basis: performance of the contract and legal obligation (Art. 6(1)(b) and (c) GDPR).",
+        "logs": "Technical server logs (for example IP address and request time): to operate the service securely and to find faults. Legal basis: legitimate interest (Art. 6(1)(f) GDPR).",
+        "errors": "Error reports (technical details about an error, the page, browser and approximate location): to find and fix errors. Legal basis: legitimate interest in a stable service (Art. 6(1)(f) GDPR).",
+        "analytics": "Anonymous usage statistics without cookies and without personal profiles: to understand how the service is used. Legal basis: legitimate interest (Art. 6(1)(f) GDPR).",
+        "ai": "Messages you write in the AI chat are sent to the AI provider named below to generate the answer. They are not stored on our server beyond a short technical buffer of up to 24 hours. Legal basis: performance of the contract (Art. 6(1)(b) GDPR), you decide whether to use the feature."
+      },
+      "recipients": {
+        "title": "Who receives your data",
+        "intro": "We use the following service providers. They process data on our behalf under a data processing agreement, or as independent controllers where the law requires so.",
+        "hosting": "Hosting: {provider}.",
+        "polar": "Payments and subscription management: Polar (polar.sh).",
+        "resend": "Sending of transactional emails: Resend.",
+        "openrouter": "AI chat: OpenRouter and the AI model provider it forwards your messages to.",
+        "sentry": "Error tracking: Sentry.",
+        "plausible": "Usage statistics without cookies: Plausible.",
+        "google": "Sign-in with Google (only if you choose it): Google.",
+        "github": "Sign-in with GitHub (only if you choose it): GitHub."
+      },
+      "cookies": {
+        "title": "Cookies and local storage",
+        "text": "We only use storage that is strictly necessary to provide the service you asked for, so no consent banner is needed. There are no advertising or tracking cookies.",
+        "session": "Session cookie: keeps you signed in. Removed when the session ends.",
+        "language": "Language cookie (ui-locale): remembers your language.",
+        "sidebar": "Sidebar cookie (sidebar_state): remembers whether the menu is collapsed.",
+        "browser": "Browser storage (IndexedDB, session storage and a service worker cache): speeds up the app and keeps drafts. It is wiped when you sign out."
+      },
+      "retention": {
+        "title": "How long we keep data",
+        "account": "Account data and your content: until you delete your account.",
+        "sessions": "Sessions: until they expire (7 days at most), expired sessions are deleted every day.",
+        "tokens": "Email verification and password reset links: until they expire, then they are deleted every day.",
+        "billing": "Billing records: as long as tax and accounting law requires, at the payment provider.",
+        "logs": "Server logs and error reports: for the period set by the hosting and error tracking providers."
+      },
+      "rights": {
+        "title": "Your rights",
+        "intro": "You have the right to access, rectification, erasure, restriction of processing, data portability and to object to processing based on legitimate interest. Most of this you can do yourself:",
+        "access": "Access and data portability: download all your data as a file under Settings > Privacy.",
+        "rectification": "Rectification: change your profile under Settings > Account.",
+        "erasure": "Erasure: delete your account under Settings > Privacy. Your data is deleted, an active subscription is cancelled.",
+        "other": "For everything else, for example restriction or objection, write to {email}.",
+        "complaint": "You also have the right to lodge a complaint with a data protection supervisory authority, for example in the country where you live."
+      }
+    },
+    "imprint": {
+      "title": "Imprint",
+      "operator": "Provider",
+      "contact": "Contact",
+      "representative": "Represented by",
+      "register": "Register entry",
+      "vatId": "VAT id",
+      "note": "Replace the values in src/config/legal.ts with your own details before you go live."
     }
   },
   "globalError": {

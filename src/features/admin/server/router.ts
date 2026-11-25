@@ -10,17 +10,15 @@ import { getBillingStats } from "@/features/admin/server/billing-stats"
 import { auth } from "@/lib/auth"
 import { getPolarCustomerState } from "@/lib/auth-utils"
 import prisma from "@/lib/db"
-import { isPolarEnabled, polarClient } from "@/lib/polar"
+import { isPolarEnabled } from "@/lib/polar"
+import {
+  deletePolarCustomer,
+  deleteUserRedisData,
+  isPolarNotFound,
+} from "@/lib/user-data"
 import { adminProcedure, createTRPCRouter } from "@/trpc/init"
 
 const DAY_MS = 24 * 60 * 60 * 1000
-
-/** Whether an error from the Polar SDK is an HTTP 404 (e.g. no customer exists for this user). */
-function isPolarNotFound(error: unknown) {
-  return (
-    error instanceof Error && "statusCode" in error && error.statusCode === 404
-  )
-}
 
 /** Throws when `userId` is the caller: admins must not lock themselves out. */
 function assertNotSelf(currentUserId: string, userId: string) {
@@ -52,19 +50,14 @@ async function assertNotOwner(userId: string) {
 }
 
 /**
- * Deletes the user's Polar customer, which cancels their active subscriptions
- * immediately and revokes their benefits (Polar does NOT refund automatically).
- * Done before the local delete: if Polar fails the user stays, so we never
- * leave a customer that is still being charged without a local account.
- * A missing customer (404) is fine.
+ * Deletes the user's Polar customer first (cancels subscriptions, no refund):
+ * if Polar fails the user is kept, so nobody is left being charged without an
+ * account. See `deletePolarCustomer` in `src/lib/user-data.ts`.
  */
-async function deletePolarCustomer(userId: string) {
-  if (!isPolarEnabled || !polarClient) return
-
+async function deletePolarCustomerOrThrow(userId: string) {
   try {
-    await polarClient.customers.deleteExternal({ externalId: userId })
+    await deletePolarCustomer(userId)
   } catch (error) {
-    if (isPolarNotFound(error)) return
     console.error("Error deleting Polar customer:", error)
     throw new TRPCError({
       code: "INTERNAL_SERVER_ERROR",
@@ -197,10 +190,11 @@ export const adminRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       assertNotSelf(ctx.auth.user.id, input.userId)
       await assertNotOwner(input.userId)
-      await deletePolarCustomer(input.userId)
+      await deletePolarCustomerOrThrow(input.userId)
       await auth.api.removeUser({
         body: { userId: input.userId },
         headers: await headers(),
       })
+      await deleteUserRedisData(input.userId)
     }),
 })

@@ -1,3 +1,4 @@
+import prisma from "@/lib/db"
 import { inngest } from "./client"
 import { demoJobChannel, demoJobKey } from "./realtime"
 
@@ -26,7 +27,42 @@ export const onUserSignedUp = inngest.createFunction(
   async ({ event, step }) => {
     await step.sleep("wait-a-moment", "1s")
     // TODO: send welcome email, provision resources, set up initial data, etc.
-    return { message: `Welcome, ${event.data.email}!` }
+    // Events only carry the user id: Inngest stores event payloads, so look up
+    // name or email in the database inside the step instead of sending them.
+    return { message: `Welcome, user ${event.data.userId}!` }
+  },
+)
+
+/**
+ * Daily purge of expired sessions and verification tokens. Better Auth only
+ * ignores expired rows, it never deletes them, so without this job old IP
+ * addresses and user agents (sessions) and one-time tokens (verifications)
+ * would stay in the database for good. See `docs/gdpr.md` (retention).
+ */
+export const cleanupExpiredAuthData = inngest.createFunction(
+  {
+    id: "cleanup-expired-auth-data",
+    name: "Purge expired sessions and verification tokens",
+  },
+  { cron: "0 3 * * *" },
+  async ({ step }) => {
+    const sessions = await step.run("delete-expired-sessions", async () => {
+      const { count } = await prisma.session.deleteMany({
+        where: { expiresAt: { lt: new Date() } },
+      })
+      return count
+    })
+    const verifications = await step.run(
+      "delete-expired-verifications",
+      async () => {
+        const { count } = await prisma.verification.deleteMany({
+          where: { expiresAt: { lt: new Date() } },
+        })
+        return count
+      },
+    )
+
+    return { sessions, verifications }
   },
 )
 

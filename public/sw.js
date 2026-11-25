@@ -16,7 +16,7 @@
  *
  * Bump VERSION to invalidate all caches after changing this file.
  */
-const VERSION = "v2"
+const VERSION = "v3"
 const STATIC_CACHE = `static-${VERSION}`
 const PAGES_CACHE = `pages-${VERSION}`
 

@@ -11,15 +11,14 @@ if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
   Sentry.init({
     dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
 
-    integrations: [Sentry.replayIntegration()],
+    // Session Replay is deliberately not enabled: it records what users see and
+    // do, which needs a legal basis (usually consent) and a privacy policy entry.
+    // To opt in, add `integrations: [Sentry.replayIntegration()]` plus
+    // `replaysSessionSampleRate` / `replaysOnErrorSampleRate`, see docs/gdpr.md.
 
     // Configurable via NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE (inlined at build
     // time), see src/config/sentry.ts
     tracesSampleRate: getTracesSampleRate(),
-
-    // Session replays: 10% of sessions, 100% of sessions with an error.
-    replaysSessionSampleRate: 0.1,
-    replaysOnErrorSampleRate: 1.0,
   })
 }
 

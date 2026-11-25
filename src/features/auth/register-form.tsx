@@ -41,6 +41,7 @@ export default function RegisterForm({ oauthProviders }: RegisterFormProps) {
   const plausible = usePlausible<PlausibleEvents>()
   const [oauthLoading, setOauthLoading] = useState<OAuthProvider | null>(null)
   const t = useTranslations("auth.register")
+  const tLegal = useTranslations("legal")
   const getErrorMessage = useErrorMessage()
 
   const registerSchema = z.object({
@@ -168,6 +169,16 @@ export default function RegisterForm({ oauthProviders }: RegisterFormProps) {
                     {t("submitButton")}
                   </Button>
                 </div>
+                <p className="text-center text-body-sm text-muted-foreground">
+                  {tLegal("notice")}{" "}
+                  <Link
+                    href="/privacy"
+                    className="underline underline-offset-4"
+                  >
+                    {tLegal("noticeLink")}
+                  </Link>
+                  .
+                </p>
                 <div className="text-center text-sm">
                   {t("alreadyHaveAccount")}{" "}
                   <Link href="/login" className="underline underline-offset-4">

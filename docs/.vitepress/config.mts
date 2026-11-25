@@ -46,6 +46,7 @@ export default defineConfig({
           { text: "Database", link: "/database" },
           { text: "Auth & Billing", link: "/auth-and-billing" },
           { text: "Admin Area", link: "/admin" },
+          { text: "GDPR (DSGVO)", link: "/gdpr" },
           { text: "Background Jobs", link: "/background-jobs" },
           { text: "Integrations", link: "/integrations" },
           { text: "Service Worker", link: "/service-worker" },

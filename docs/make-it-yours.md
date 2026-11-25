@@ -49,15 +49,19 @@ Every integration in this template is opt-in and degrades gracefully when unconf
 - `OWNER_EMAILS` lists the real owner addresses (or is empty if nobody should be owner yet), not a test address.
 - `DATABASE_URL` / `REDIS_URL` point at your production instances, not the Docker Compose defaults.
 
-## 5. i18n
+## 5. Privacy and legal pages
+
+Fill `src/config/legal.ts` with your company details, have the privacy policy (`messages/*.json`, `legal.privacy.*`) reviewed and work through the going-live checklist in [GDPR (DSGVO)](./gdpr.md). The template ships a privacy policy, an imprint, data export and account deletion, but the text, your processor contracts and your own processes are yours to finish.
+
+## 6. i18n
 
 The template ships `en` and `de` (see [Frontend](./frontend.md#internationalization-next-intl)). If you only need one locale, remove the other from `messages/`, the `locales` list in the next-intl config, and the language switcher UI - otherwise keep both `messages/*.json` files in sync as you add strings.
 
-## 6. Design system
+## 7. Design system
 
 `DESIGN.md` at the repo root currently encodes an Airbnb-style design language (colors, type scale, spacing, component specs) as a starting point, not a mandate. If you're rebranding visually, rewrite `DESIGN.md` first with your own tokens, then bring the Tailwind theme (`src/app/globals.css`) and shadcn components in line with it - `AGENTS.md` and any AI coding agent working in this repo treat `DESIGN.md` as the source of truth for every UI change, so an out-of-date `DESIGN.md` will actively steer future work in the wrong direction.
 
-## 7. Docs
+## 8. Docs
 
 If you kept `docs/` (see step 1), sweep it for template-specific language that no longer applies once you've trimmed the demos and configured your integrations - this page included, delete it once you're done with it, or leave it for the next person who forks *your* repo. [Quick Reference](./quick-reference.md) is worth keeping current as you add utilities - it's the fastest way for future contributors (human or AI) to avoid reinventing something that already exists.
 

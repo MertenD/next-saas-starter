@@ -89,7 +89,7 @@ Optional. The template ships the [Sentry](https://sentry.io) wiring for Next.js,
 |---|---|
 | `src/instrumentation.ts` | Next.js instrumentation hook: loads the server or edge config, exports `onRequestError` (captures errors from Server Components, Route Handlers and Server Actions) |
 | `sentry.server.config.ts` / `sentry.edge.config.ts` | Server and Edge runtime init (the server config also traces Vercel AI SDK calls) |
-| `src/instrumentation-client.ts` | Browser init (session replay: 10% of sessions, 100% on errors) |
+| `src/instrumentation-client.ts` | Browser init (Session Replay is off by default, see [`gdpr.md`](./gdpr.md#sentry-session-replay-is-off)) |
 | `src/app/global-error.tsx` | Last-resort error page. Reports to Sentry and picks its text (`globalError` in `messages/*.json`) from the browser language, because it renders without the i18n provider |
 | `next.config.ts` | Wraps the config with `withSentryConfig` (source maps, `/monitoring` tunnel route that avoids ad-blockers) when a DSN is set |
 

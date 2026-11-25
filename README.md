@@ -109,6 +109,7 @@ Full docs live in [`docs/`](./docs/README.md) - readable as plain Markdown, or a
 - [Database](./docs/database.md) - Prisma schema and migrations
 - [Auth & Billing](./docs/auth-and-billing.md) - Better Auth, OAuth, Polar, premium gating
 - [Admin Area](./docs/admin.md) - owners, admins, overview numbers, user management
+- [GDPR (DSGVO)](./docs/gdpr.md) - privacy policy, data export, account deletion, going-live checklist
 - [Background Jobs](./docs/background-jobs.md) - Inngest
 - [Integrations](./docs/integrations.md) - AI, Redis, analytics
 - [Frontend](./docs/frontend.md) - UI components, design system, i18n, state management

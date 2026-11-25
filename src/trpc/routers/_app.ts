@@ -3,6 +3,7 @@ import { bookingRouter } from "@/features/demo/booking/server/router"
 import { demoRouter } from "@/features/demo/inngest/server/router"
 import { paginationRouter } from "@/features/demo/pagination/server/router"
 import { postsRouter } from "@/features/demo/posts/server/router"
+import { privacyRouter } from "@/features/privacy/server/router"
 import { userRouter } from "@/features/user/server/router"
 import { createTRPCRouter } from "../init"
 
@@ -15,6 +16,7 @@ import { createTRPCRouter } from "../init"
 export const appRouter = createTRPCRouter({
   admin: adminRouter,
   posts: postsRouter,
+  privacy: privacyRouter,
   user: userRouter,
   demo: demoRouter,
   pagination: paginationRouter,

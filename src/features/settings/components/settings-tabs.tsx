@@ -3,14 +3,20 @@
 import { useTranslations } from "next-intl"
 import { parseAsStringEnum, useQueryState } from "nuqs"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import PrivacySettings from "@/features/privacy/components/privacy-settings"
 import AccountSettings from "@/features/settings/components/account-settings"
 import GeneralSettings from "@/features/settings/components/general-settings"
 import SubscriptionSettings from "@/features/settings/components/subscription-settings"
 
-const TAB_OPTIONS = ["account", "subscription", "general"] as const
+const TAB_OPTIONS = ["account", "subscription", "privacy", "general"] as const
 type SettingsTab = (typeof TAB_OPTIONS)[number]
 
-export default function SettingsTabs() {
+type SettingsTabsProps = {
+  /** The data export card, a Server Component that the page passes through (client components cannot import it). */
+  exportCard: React.ReactNode
+}
+
+export default function SettingsTabs({ exportCard }: SettingsTabsProps) {
   const t = useTranslations("settings.tabs")
   const [tab, setTab] = useQueryState(
     "tab",
@@ -24,6 +30,7 @@ export default function SettingsTabs() {
       <TabsList>
         <TabsTrigger value="account">{t("account")}</TabsTrigger>
         <TabsTrigger value="subscription">{t("subscription")}</TabsTrigger>
+        <TabsTrigger value="privacy">{t("privacy")}</TabsTrigger>
         <TabsTrigger value="general">{t("general")}</TabsTrigger>
       </TabsList>
       <TabsContent value="account">
@@ -31,6 +38,9 @@ export default function SettingsTabs() {
       </TabsContent>
       <TabsContent value="subscription">
         <SubscriptionSettings />
+      </TabsContent>
+      <TabsContent value="privacy">
+        <PrivacySettings>{exportCard}</PrivacySettings>
       </TabsContent>
       <TabsContent value="general">
         <GeneralSettings />

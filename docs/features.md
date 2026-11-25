@@ -18,6 +18,10 @@ Server routers are registered centrally in `src/trpc/routers/_app.ts` (see [`arc
 
 The `/admin` area for users with the `admin` or `owner` role: an overview (user counts from the database, revenue/MRR/subscriptions live from Polar) and a searchable, paginated user table with role change, ban/unban and delete. Server side: `trpc.admin.*` (all `adminProcedure`), pages guarded by `requireAdmin()`. Full guide, including what ban and delete do to Polar subscriptions: [`admin.md`](./admin.md).
 
+### `privacy/` - data subject rights
+
+The "Privacy" tab of the settings page: download all your data (`GET /api/account/export`, `buildUserDataExport()`), the list of active sessions with sign-out per device (`trpc.privacy.*`) and account deletion (Better Auth `deleteUser` with an email confirmation, Polar and Redis cleanup in `src/lib/user-data.ts`). The public privacy policy and imprint live in `src/app/(legal)/`. Full guide: [`gdpr.md`](./gdpr.md).
+
 ### `auth/`
 
 Login/register/logout UI, forgot/reset-password forms, and a user-info card, backed by Better Auth (`authClient`). No `server/` - Better Auth's own catch-all route (`/api/auth/[...all]`) handles the backend. See [`auth-and-billing.md`](./auth-and-billing.md).
@@ -210,18 +214,21 @@ Wire up create/delete the same way `demo/posts` does - a dialog for creating (`p
 **7. Page** - `src/app/(dashboard)/projects/page.tsx`
 
 ```tsx
-import { ProjectsContainer } from "@/features/projects/components/projects-container";
+import { ProjectsContainer } from "@/features/projects/components/projects-container"
+import { requireAuth } from "@/lib/auth-utils"
 
-export default function ProjectsPage() {
+export default async function ProjectsPage() {
+  await requireAuth()
+
   return (
-    <main className="flex flex-col gap-6 p-6">
+    <div className="flex flex-col gap-6 p-6">
       <h1 className="font-bold text-2xl">Projects</h1>
       <ProjectsContainer />
-    </main>
-  );
+    </div>
+  )
 }
 ```
 
-The `(dashboard)` route group's `layout.tsx` already calls `requireAuth()` and wraps every page in `AppShell` - a new page under `src/app/(dashboard)/<feature>/page.tsx` gets auth protection and the sidebar shell for free, no extra wiring needed. Add the page's copy to `messages/en.json` and `messages/de.json` per [Frontend - Internationalization](./frontend.md#internationalization-next-intl) rather than hardcoding English strings.
+**Every page calls `await requireAuth()` first** (before any prefetch). The `(dashboard)` layout checks the session too and wraps the page in `AppShell`, but Next.js does not re-render layouts on client-side navigation, so only the page's own check catches a session that was revoked or expired in the meantime. Add the page's copy to `messages/en.json` and `messages/de.json` per [Frontend - Internationalization](./frontend.md#internationalization-next-intl) rather than hardcoding English strings.
 
 Give every new page a translated browser tab title: add the sidebar label under `sidebar.nav.*` in both message files, extend the key union of `navTitle()` in `src/lib/page-metadata.ts`, and export `export const generateMetadata = () => navTitle("<key>")` from the page. The root layout appends the app name (`Posts | SaaS Starter`). Without it the page falls back to the plain app name. Auth pages use `authTitle()` the same way.

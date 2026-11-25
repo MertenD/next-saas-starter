@@ -183,6 +183,7 @@
     "tabs": {
       "account": "Konto",
       "subscription": "Abo",
+      "privacy": "Datenschutz",
       "general": "Allgemein"
     },
     "account": {
@@ -244,6 +245,44 @@
       "billingDisabled": "Abrechnung ist für diese Installation nicht konfiguriert, daher hat jedes Konto vollen Zugriff.",
       "error": {
         "title": "Abonnement konnte nicht geladen werden"
+      }
+    },
+    "privacy": {
+      "policyLink": "Datenschutzerklärung lesen",
+      "export": {
+        "title": "Deine Daten herunterladen",
+        "description": "Erhalte eine Kopie der über dich gespeicherten personenbezogenen Daten (Profil, Anmeldemethoden, Sitzungen, deine Inhalte und Abrechnungsdaten) als JSON-Datei.",
+        "button": "Meine Daten herunterladen"
+      },
+      "sessions": {
+        "title": "Aktive Sitzungen",
+        "description": "Die Geräte, auf denen du angemeldet bist. Melde Geräte ab, die du nicht kennst.",
+        "device": "{browser} auf {os}",
+        "unknownDevice": "Unbekanntes Gerät",
+        "thisDevice": "Dieses Gerät",
+        "signedIn": "Angemeldet am {date}",
+        "revoke": "Abmelden",
+        "revokeLabel": "{device} abmelden",
+        "revokeOthers": "Alle anderen Geräte abmelden",
+        "revokeOthersTitle": "Alle anderen Geräte abmelden?",
+        "revokeOthersDescription": "Jedes Gerät außer diesem wird sofort abgemeldet und muss sich neu anmelden.",
+        "revokedToast": "Gerät abgemeldet",
+        "revokedOthersToast": "Alle anderen Geräte abgemeldet",
+        "emptyTitle": "Keine aktiven Sitzungen",
+        "emptyDescription": "Deine Sitzungen wurden nicht gefunden. Lade die Liste neu, um es erneut zu versuchen.",
+        "reload": "Neu laden",
+        "error": "Die Aktion ist fehlgeschlagen. Bitte versuche es erneut."
+      },
+      "delete": {
+        "title": "Konto löschen",
+        "description": "Löscht dein Konto und alle deine Daten (Profil, Sitzungen, verknüpfte Anmeldemethoden und deine Inhalte) dauerhaft. Das kann nicht rückgängig gemacht werden.",
+        "billingNote": "Dein Abo wird sofort gekündigt und nicht erstattet. Der Zahlungsanbieter darf Unterlagen behalten, zu deren Aufbewahrung er gesetzlich verpflichtet ist.",
+        "button": "Mein Konto löschen",
+        "dialogTitle": "Konto löschen?",
+        "dialogDescription": "Wir senden einen Bestätigungslink an deine E-Mail-Adresse. Dein Konto wird erst gelöscht, wenn du ihn öffnest.",
+        "confirm": "Bestätigungs-E-Mail senden",
+        "emailSent": "Sieh in dein Postfach: Öffne den Link in der E-Mail, um das Löschen deines Kontos abzuschließen.",
+        "error": "Das Löschen konnte nicht gestartet werden. Bitte versuche es erneut."
       }
     },
     "general": {
@@ -483,6 +522,82 @@
       "noSubscription": "Dieser Nutzer hat kein aktives Abo.",
       "activeBan": "{count, plural, one {Dieser Nutzer hat # aktives Abo.} other {Dieser Nutzer hat # aktive Abos.}} Das Sperren kündigt es bei Polar nicht: Es läuft weiter, der Kunde wird weiter belastet und nichts wird erstattet. Kündige es vorher im Polar-Dashboard, falls das nicht gewollt ist.",
       "activeDelete": "{count, plural, one {Dieser Nutzer hat # aktives Abo.} other {Dieser Nutzer hat # aktive Abos.}} Beim Löschen wird zuerst der Polar-Kunde gelöscht. Das kündigt das Abo sofort und entzieht die Leistungen. Polar erstattet nichts automatisch: Falls eine Erstattung fällig ist, veranlasse sie vor dem Löschen im Polar-Dashboard."
+    }
+  },
+  "legal": {
+    "links": {
+      "label": "Rechtliches",
+      "privacy": "Datenschutzerklärung",
+      "imprint": "Impressum"
+    },
+    "back": "Zurück zur App",
+    "notice": "Wie wir deine Daten verarbeiten, steht in der",
+    "noticeLink": "Datenschutzerklärung",
+    "privacy": {
+      "title": "Datenschutzerklärung",
+      "intro": "Diese Seite erklärt, welche personenbezogenen Daten dieser Dienst verarbeitet, warum, und welche Rechte du hast.",
+      "controller": {
+        "title": "Wer verantwortlich ist",
+        "text": "Verantwortlich im Sinne der DSGVO ist {name}, {address}. Bei allen Fragen zu deinen Daten schreib an {email}."
+      },
+      "data": {
+        "title": "Welche Daten wir verarbeiten und warum",
+        "account": "Kontodaten (Name, E-Mail-Adresse, Passwort als gesalzener Hash, optional Profilbild, Sprache): um dein Konto anzulegen und zu betreiben. Rechtsgrundlage: Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO).",
+        "sessions": "Anmelde-Sitzungen (IP-Adresse, Browser- und Geräteinformationen, Zeitpunkt): um dich angemeldet zu halten und dein Konto zu schützen, zum Beispiel indem du deine Sitzungen einsehen und beenden kannst. Rechtsgrundlage: berechtigtes Interesse an der Sicherheit des Dienstes (Art. 6 Abs. 1 lit. f DSGVO).",
+        "content": "Inhalte, die du im Dienst erstellst (zum Beispiel Beiträge): um die von dir genutzten Funktionen bereitzustellen. Rechtsgrundlage: Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO).",
+        "email": "Transaktions-E-Mails (E-Mail-Bestätigung, Passwort-Zurücksetzen, Konto löschen): um die von dir angeforderte Aktion auszuführen. Rechtsgrundlage: Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO).",
+        "billing": "Abrechnungsdaten (Kundendatensatz und Abo-Status; Zahlungsdaten verarbeitet nur der Zahlungsanbieter): um dein Abo abzuwickeln und steuer- und buchhaltungsrechtliche Pflichten zu erfüllen. Rechtsgrundlage: Vertragserfüllung und rechtliche Verpflichtung (Art. 6 Abs. 1 lit. b und c DSGVO).",
+        "logs": "Technische Server-Protokolle (zum Beispiel IP-Adresse und Zeitpunkt der Anfrage): um den Dienst sicher zu betreiben und Fehler zu finden. Rechtsgrundlage: berechtigtes Interesse (Art. 6 Abs. 1 lit. f DSGVO).",
+        "errors": "Fehlerberichte (technische Angaben zu einem Fehler, zur Seite, zum Browser und ungefährer Standort): um Fehler zu finden und zu beheben. Rechtsgrundlage: berechtigtes Interesse an einem stabilen Dienst (Art. 6 Abs. 1 lit. f DSGVO).",
+        "analytics": "Anonyme Nutzungsstatistik ohne Cookies und ohne personenbezogene Profile: um zu verstehen, wie der Dienst genutzt wird. Rechtsgrundlage: berechtigtes Interesse (Art. 6 Abs. 1 lit. f DSGVO).",
+        "ai": "Nachrichten, die du im KI-Chat schreibst, werden zur Erzeugung der Antwort an den unten genannten KI-Anbieter gesendet. Auf unserem Server werden sie nur in einem kurzen technischen Zwischenspeicher von bis zu 24 Stunden gehalten. Rechtsgrundlage: Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO), du entscheidest, ob du die Funktion nutzt."
+      },
+      "recipients": {
+        "title": "Wer deine Daten erhält",
+        "intro": "Wir setzen die folgenden Dienstleister ein. Sie verarbeiten Daten in unserem Auftrag auf Grundlage eines Auftragsverarbeitungsvertrags oder, wo das Gesetz es verlangt, als eigenständig Verantwortliche.",
+        "hosting": "Hosting: {provider}.",
+        "polar": "Zahlungen und Abo-Verwaltung: Polar (polar.sh).",
+        "resend": "Versand von Transaktions-E-Mails: Resend.",
+        "openrouter": "KI-Chat: OpenRouter und der KI-Modellanbieter, an den OpenRouter deine Nachrichten weiterleitet.",
+        "sentry": "Fehlererfassung: Sentry.",
+        "plausible": "Nutzungsstatistik ohne Cookies: Plausible.",
+        "google": "Anmeldung mit Google (nur wenn du sie wählst): Google.",
+        "github": "Anmeldung mit GitHub (nur wenn du sie wählst): GitHub."
+      },
+      "cookies": {
+        "title": "Cookies und lokaler Speicher",
+        "text": "Wir nutzen nur Speicher, der unbedingt erforderlich ist, um den von dir gewünschten Dienst bereitzustellen, deshalb ist kein Einwilligungsbanner nötig. Es gibt keine Werbe- oder Tracking-Cookies.",
+        "session": "Sitzungs-Cookie: hält dich angemeldet. Wird entfernt, wenn die Sitzung endet.",
+        "language": "Sprach-Cookie (ui-locale): merkt sich deine Sprache.",
+        "sidebar": "Sidebar-Cookie (sidebar_state): merkt sich, ob das Menü eingeklappt ist.",
+        "browser": "Browser-Speicher (IndexedDB, Session Storage und ein Service-Worker-Cache): beschleunigt die App und behält Entwürfe. Er wird beim Abmelden gelöscht."
+      },
+      "retention": {
+        "title": "Wie lange wir Daten speichern",
+        "account": "Kontodaten und deine Inhalte: bis du dein Konto löschst.",
+        "sessions": "Sitzungen: bis sie ablaufen (höchstens 7 Tage), abgelaufene Sitzungen werden täglich gelöscht.",
+        "tokens": "Links zur E-Mail-Bestätigung und zum Zurücksetzen des Passworts: bis sie ablaufen, danach werden sie täglich gelöscht.",
+        "billing": "Abrechnungsunterlagen: so lange, wie Steuer- und Buchhaltungsrecht es verlangen, beim Zahlungsanbieter.",
+        "logs": "Server-Protokolle und Fehlerberichte: für den Zeitraum, den die Hosting- und Fehlererfassungsanbieter festlegen."
+      },
+      "rights": {
+        "title": "Deine Rechte",
+        "intro": "Du hast das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und auf Widerspruch gegen Verarbeitung aufgrund berechtigten Interesses. Vieles davon kannst du selbst erledigen:",
+        "access": "Auskunft und Datenübertragbarkeit: lade alle deine Daten als Datei unter Einstellungen > Datenschutz herunter.",
+        "rectification": "Berichtigung: ändere dein Profil unter Einstellungen > Konto.",
+        "erasure": "Löschung: lösche dein Konto unter Einstellungen > Datenschutz. Deine Daten werden gelöscht, ein aktives Abo wird gekündigt.",
+        "other": "Für alles andere, zum Beispiel Einschränkung oder Widerspruch, schreib an {email}.",
+        "complaint": "Du hast außerdem das Recht, dich bei einer Datenschutz-Aufsichtsbehörde zu beschweren, zum Beispiel in dem Land, in dem du lebst."
+      }
+    },
+    "imprint": {
+      "title": "Impressum",
+      "operator": "Anbieter",
+      "contact": "Kontakt",
+      "representative": "Vertreten durch",
+      "register": "Registereintrag",
+      "vatId": "USt-IdNr.",
+      "note": "Ersetze die Werte in src/config/legal.ts durch deine eigenen Angaben, bevor du live gehst."
     }
   },
   "globalError": {

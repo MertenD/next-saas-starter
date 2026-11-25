@@ -8,9 +8,11 @@ import {
 import { env } from "@/config/env"
 import { AiChat } from "@/features/demo/ai/components/ai-chat"
 import { AI_MODEL } from "@/lib/ai"
+import { requireAuth } from "@/lib/auth-utils"
 import { navTitle } from "@/lib/page-metadata"
 
 export default async function AiDemoPage() {
+  await requireAuth()
   const t = await getTranslations("demo.ai")
 
   return (

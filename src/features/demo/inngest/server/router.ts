@@ -10,7 +10,7 @@ export const demoRouter = createTRPCRouter({
   triggerDemoJob: protectedProcedure.mutation(async ({ ctx }) => {
     const { ids } = await inngest.send({
       name: InngestEvents.DemoTriggered,
-      data: { triggeredBy: ctx.auth.user.email, userId: ctx.auth.user.id },
+      data: { triggeredBy: ctx.auth.user.id, userId: ctx.auth.user.id },
     })
     const eventId = ids[0]
     if (!eventId) {
