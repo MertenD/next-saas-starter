@@ -39,6 +39,10 @@ The `demoJob` pattern for streaming status to the browser without polling:
 
 This requires `NEXT_PUBLIC_INNGEST_BASE_URL` to be set to a URL the *browser* can reach - see [`environment-variables.md`](./environment-variables.md).
 
+## Logging and tracing
+
+A run's log lines share a `runId`, and every sent event is logged with its `eventId`. Inside a function use the `logger` argument, and put only ids and numbers into its fields. Details: [Logging](./logging.md#following-a-background-job).
+
 ## Adding a new job
 
 Add new functions in `src/inngest/functions.ts`:

@@ -1,4 +1,6 @@
 import { z } from "zod"
+import { logLevelSchema } from "@/config/log-level"
+import { logger } from "@/lib/logging/logger"
 
 /**
  * Runtime-validated environment variables. Import `env` from this module
@@ -31,6 +33,9 @@ const envSchema = z
     // `openssl rand -hex 32`. Unused in development (Inngest dev mode).
     INNGEST_EVENT_KEY: z.string().optional(),
     INNGEST_SIGNING_KEY: z.string().optional(),
+
+    // Logging (optional, allowed values and defaults: src/config/log-level.ts)
+    LOG_LEVEL: logLevelSchema,
 
     // Comma-separated emails that become owner once their address is verified
     OWNER_EMAILS: z.string().optional(),
@@ -81,14 +86,13 @@ const parsed =
     : (() => {
         const result = envSchema.safeParse(process.env)
         if (!result.success) {
-          console.error("❌ Invalid environment variables:\n")
-          for (const [key, errors] of Object.entries(
-            result.error.flatten().fieldErrors,
-          )) {
-            console.error(`  ${key}: ${errors?.join(", ")}`)
-          }
+          // Variable names and validation messages only, never their values
+          logger.fatal(
+            { invalid: result.error.flatten().fieldErrors },
+            "Invalid environment variables",
+          )
           throw new Error(
-            "Invalid environment variables - check the output above.",
+            "Invalid environment variables - check the log output above.",
           )
         }
         return result.data

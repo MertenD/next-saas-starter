@@ -79,7 +79,13 @@ All four must be set together - `src/lib/polar.ts` derives `isPolarEnabled = !!(
 | `RESEND_API_KEY` | No | - | From your [Resend](https://resend.com) dashboard. |
 | `EMAIL_FROM` | No | - | The `from` address/name used for outgoing emails (e.g. `Acme <noreply@example.com>`). Must be a verified domain in Resend for production sending. |
 
-Both must be set together - `src/lib/resend.ts` derives `isResendEnabled = !!(RESEND_API_KEY && EMAIL_FROM)`. Leave both unset to disable real sending: `src/lib/mailer.ts`'s `sendEmail()` logs the email (recipient, subject, and body/link) to the console instead, so password-reset and email-verification links can still be copied out of the terminal during local development. See [`auth-and-billing.md`](./auth-and-billing.md).
+Both must be set together - `src/lib/resend.ts` derives `isResendEnabled = !!(RESEND_API_KEY && EMAIL_FROM)`. Leave both unset to disable real sending: `src/lib/mailer.ts`'s `sendEmail()` logs the email (recipient, subject, and body/link, in production only the subject) instead, so password-reset and email-verification links can still be copied out of the terminal during local development. See [`auth-and-billing.md`](./auth-and-billing.md).
+
+## Logging (optional)
+
+| Variable | Required | Default | Description |
+|---|---|---|---|
+| `LOG_LEVEL` | No | `info` in production, `debug` in development | Lowest level that is written: `fatal`, `error`, `warn`, `info`, `debug`, `trace` or `silent`. Allowed values and defaults are defined once, as a Zod schema in `src/config/log-level.ts`, which `src/config/env.ts` uses for validation. An empty value means the default. See [`logging.md`](./logging.md). |
 
 ## Analytics (optional)
 

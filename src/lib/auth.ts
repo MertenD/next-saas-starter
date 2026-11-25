@@ -10,6 +10,8 @@ import { inngest } from "@/inngest/client"
 import { InngestEvents } from "@/inngest/functions"
 import { isOwnerEmail } from "@/lib/admin"
 import prisma from "@/lib/db"
+import { logLibraryCall } from "@/lib/logging/library-calls"
+import { createLogger } from "@/lib/logging/logger"
 import {
   deleteAccountEmailHtml,
   resetPasswordEmailHtml,
@@ -18,6 +20,8 @@ import {
 } from "@/lib/mailer"
 import { isPolarEnabled, polarClient } from "./polar"
 import { deletePolarCustomer, deleteUserRedisData } from "./user-data"
+
+const log = createLogger("auth")
 
 /**
  * Mirrors a freshly created local user into Polar as a customer. Does nothing
@@ -40,13 +44,19 @@ async function mirrorUserToPolar(user: {
       name: user.name,
     })
   } catch (error) {
-    console.error("Error creating Polar customer:", error)
+    log.error(
+      { err: error, userId: user.id },
+      "Could not create Polar customer",
+    )
 
     if (polarCustomer) {
       try {
         await polarClient.customers.delete({ id: polarCustomer.id })
       } catch (polarError) {
-        console.error("Error rolling back Polar customer:", polarError)
+        log.error(
+          { err: polarError, userId: user.id },
+          "Could not roll back Polar customer",
+        )
       }
     }
 
@@ -102,6 +112,13 @@ async function syncOwnerRole(userId: string) {
 export const auth = betterAuth({
   secret: env.BETTER_AUTH_SECRET,
   baseURL: env.BETTER_AUTH_URL,
+  // Better Auth's own messages go through the app logger. Objects it passes
+  // along (which can hold email addresses) are dropped, see `logLibraryCall`.
+  logger: {
+    log: (level, message, ...args) => {
+      logLibraryCall(log, level, [message, ...args])
+    },
+  },
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
@@ -146,7 +163,10 @@ export const auth = betterAuth({
         try {
           await deletePolarCustomer(user.id)
         } catch (error) {
-          console.error("Error deleting Polar customer:", error)
+          log.error(
+            { err: error, userId: user.id },
+            "Could not delete Polar customer, account kept",
+          )
           throw new APIError("INTERNAL_SERVER_ERROR", {
             message:
               "Your billing data could not be deleted. Your account was not deleted, please try again.",
@@ -227,7 +247,10 @@ export const auth = betterAuth({
               data: { userId: user.id },
             })
             .catch((error) => {
-              console.error("Error sending user signed up event:", error)
+              log.error(
+                { err: error, userId: user.id },
+                "Could not send the user signed up event",
+              )
             })
         },
       },

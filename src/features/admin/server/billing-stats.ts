@@ -1,5 +1,8 @@
 import { RFCDate } from "@polar-sh/sdk/types/rfcdate.js"
+import { createLogger } from "@/lib/logging/logger"
 import { isPolarEnabled, polarClient } from "@/lib/polar"
+
+const log = createLogger("admin")
 
 /** How many days of Polar data the overview covers. */
 const STATS_DAYS = 30
@@ -59,7 +62,7 @@ export async function getBillingStats(): Promise<BillingStats> {
       canceledSubscriptions: metrics.totals.canceledSubscriptions,
     }
   } catch (error) {
-    console.error("Error loading Polar metrics:", error)
+    log.error({ err: error }, "Could not load Polar metrics")
     return { status: "error" }
   }
 }

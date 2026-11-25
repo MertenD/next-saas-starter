@@ -1,6 +1,11 @@
 import { realtimeMiddleware } from "@inngest/realtime/middleware"
 import { Inngest } from "inngest"
 import { env } from "@/config/env"
+import { loggingMiddleware } from "@/inngest/logging"
+import { logLibraryCall } from "@/lib/logging/library-calls"
+import { createLogger } from "@/lib/logging/logger"
+
+const log = createLogger("inngest")
 
 /**
  * Shared Inngest client used to define functions (`src/inngest/functions.ts`)
@@ -11,7 +16,16 @@ import { env } from "@/config/env"
  */
 export const inngest = new Inngest({
   id: env.INNGEST_APP_ID,
-  middleware: [realtimeMiddleware()],
+  middleware: [realtimeMiddleware(), loggingMiddleware],
+  // SDK messages and the `logger` argument of functions go through the app
+  // logger. Of object arguments only errors, numbers, booleans and ids are kept
+  // (see `logLibraryCall`).
+  logger: {
+    debug: (...args) => logLibraryCall(log, "debug", args),
+    info: (...args) => logLibraryCall(log, "info", args),
+    warn: (...args) => logLibraryCall(log, "warn", args),
+    error: (...args) => logLibraryCall(log, "error", args),
+  },
   // No explicit `isDev`: the SDK infers the mode from NODE_ENV. Development
   // talks to the unauthenticated dev server on localhost:8288. Production
   // (also `next start`) runs signed: INNGEST_EVENT_KEY signs events sent to

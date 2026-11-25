@@ -16,6 +16,8 @@ Full documentation for this Next.js SaaS starter template. Start with [Getting S
 | [GDPR (DSGVO)](./gdpr.md) | What the template does for data protection (privacy policy, data export, account deletion, sessions, retention), the data inventory, processors, and the checklist for going live. |
 | [Background Jobs](./background-jobs.md) | Inngest concepts, existing jobs, adding new jobs, Realtime subscriptions. |
 | [Integrations](./integrations.md) | AI (OpenRouter), Redis, Plausible analytics, Sentry error tracking, and PWA support. |
+| [Logging](./logging.md) | Structured server logs with pino: how to log, request ids, what is logged automatically, and how personal data is kept out. |
+| [Testing](./testing.md) | Unit tests with Vitest: running and writing them, the configuration, and what is not set up yet. |
 | [Service Worker](./service-worker.md) | The hand-written PWA service worker: caching strategies, offline behavior, updates and versions, privacy on sign-out, testing and troubleshooting. |
 | [Frontend](./frontend.md) | UI components, the design system, required UI states, confirm dialogs, state management, i18n. |
 | [Deployment](./deployment.md) | Docker production setup, making Inngest durable, reverse proxy, pre-deploy checklist. |

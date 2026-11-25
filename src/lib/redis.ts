@@ -1,5 +1,8 @@
 import { createClient } from "redis"
 import { env } from "@/config/env"
+import { createLogger } from "@/lib/logging/logger"
+
+const log = createLogger("redis")
 
 // Same global-caching trick as `src/lib/db.ts`: avoids creating a new Redis
 // client (and TCP connection) on every dev hot reload.
@@ -15,7 +18,7 @@ const globalForRedis = global as unknown as {
 function createRedisClient() {
   const client = createClient({ url: env.REDIS_URL })
   client.on("error", (error) => {
-    console.error("[redis] client error:", error)
+    log.error({ err: error }, "Redis client error")
   })
   return client
 }

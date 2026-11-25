@@ -2,8 +2,11 @@ import { convertToModelMessages, streamText } from "ai"
 import { AI_SYSTEM_PROMPT } from "@/features/demo/ai/model/ai-chat"
 import type { ChatRequestInput } from "@/features/demo/ai/schema/ai-chat-schema"
 import { AI_MODEL, openrouter } from "@/lib/ai"
+import { createLogger } from "@/lib/logging/logger"
 import { getRedis } from "@/lib/redis"
 import { getStreamContext } from "@/lib/stream-context"
+
+const log = createLogger("ai-chat")
 
 /** How long the pointer to a chat's active attempt lives in Redis (same order as the resumable stream's own TTL). */
 const ACTIVE_ATTEMPT_TTL_SECONDS = 60 * 60 * 24
@@ -83,7 +86,11 @@ export async function startChatStream(
     abortSignal: controller.signal,
     onFinish: forget,
     onAbort: forget,
-    onError: forget,
+    // Setting onError replaces the AI SDK's default error output, so log here
+    onError: ({ error }) => {
+      forget()
+      log.error({ err: error, model: AI_MODEL }, "AI generation failed")
+    },
   })
 
   const attemptId = crypto.randomUUID()

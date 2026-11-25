@@ -51,6 +51,12 @@ const nextConfig: NextConfig = {
     ]
   },
   devIndicators: false,
+  // The Inngest dev server syncs with `/api/inngest` every few seconds, keep
+  // those lines out of the dev console. Job runs carry a query string, so they
+  // still show up. The app's own access lines: `src/lib/logging/request-logging.ts`.
+  logging: {
+    incomingRequests: { ignore: [/^\/api\/inngest$/] },
+  },
 }
 
 const config = withNextIntl(nextConfig)

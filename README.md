@@ -23,6 +23,7 @@ A production-ready Next.js SaaS template with everything you need to build and s
 | **Input Validation**          | <img src="docs/public/icons/zod.svg" alt="" width="18" height="18" align="top">&nbsp;Zod |
 | **Forms**                     | <img src="docs/public/icons/reacthookform.svg" alt="" width="18" height="18" align="top">&nbsp;React Hook Form + <img src="docs/public/icons/zod.svg" alt="" width="18" height="18" align="top">&nbsp;Zod |
 | **Linting/Formatting**        | <img src="docs/public/icons/biome.svg" alt="" width="18" height="18" align="top">&nbsp;Biome (not ESLint/Prettier) |
+| **Testing**                   | <img src="docs/public/icons/vitest.svg" alt="" width="18" height="18" align="top">&nbsp;Vitest (unit tests) |
 | **Package manager / runtime** | <img src="docs/public/icons/bun.svg" alt="" width="18" height="18" align="top">&nbsp;Bun |
 
 ## Screenshots
@@ -110,6 +111,8 @@ Full docs live in [`docs/`](./docs/README.md) - readable as plain Markdown, or a
 - [Auth & Billing](./docs/auth-and-billing.md) - Better Auth, OAuth, Polar, premium gating
 - [Admin Area](./docs/admin.md) - owners, admins, overview numbers, user management
 - [GDPR (DSGVO)](./docs/gdpr.md) - privacy policy, data export, account deletion, going-live checklist
+- [Logging](./docs/logging.md) - structured logs, request ids, keeping personal data out
+- [Testing](./docs/testing.md) - unit tests with Vitest
 - [Background Jobs](./docs/background-jobs.md) - Inngest
 - [Integrations](./docs/integrations.md) - AI, Redis, analytics
 - [Frontend](./docs/frontend.md) - UI components, design system, i18n, state management

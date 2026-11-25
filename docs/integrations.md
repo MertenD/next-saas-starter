@@ -87,7 +87,7 @@ Optional. The template ships the [Sentry](https://sentry.io) wiring for Next.js,
 
 | File | Role |
 |---|---|
-| `src/instrumentation.ts` | Next.js instrumentation hook: loads the server or edge config, exports `onRequestError` (captures errors from Server Components, Route Handlers and Server Actions) |
+| `src/instrumentation.ts` | Next.js instrumentation hook: loads the server or edge config, exports `onRequestError` (sends errors from Server Components, Route Handlers and Server Actions to Sentry and to the [logs](./logging.md)) |
 | `sentry.server.config.ts` / `sentry.edge.config.ts` | Server and Edge runtime init (the server config also traces Vercel AI SDK calls) |
 | `src/instrumentation-client.ts` | Browser init (Session Replay is off by default, see [`gdpr.md`](./gdpr.md#sentry-session-replay-is-off)) |
 | `src/app/global-error.tsx` | Last-resort error page. Reports to Sentry and picks its text (`globalError` in `messages/*.json`) from the browser language, because it renders without the i18n provider |
@@ -98,7 +98,7 @@ Optional. The template ships the [Sentry](https://sentry.io) wiring for Next.js,
 - `NEXT_PUBLIC_SENTRY_DSN` is inlined into the browser bundle at **build time**. With Docker it is passed as a build arg - see [Deployment](./deployment.md#error-tracking-sentry-build-args).
 - `tracesSampleRate` comes from one helper, `getTracesSampleRate()` in `src/config/sentry.ts`, used by the browser, server and edge inits. Set `NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE` (`0` to `1`) to change it; without it the default is `1` (every request) in development and `0.1` in production. The value is inlined into the browser bundle at build time, so with Docker it is a build arg (like the DSN). Use `tracesSampler` if you need finer control.
 - `vercelAIIntegration` records AI prompts and model outputs only when `SENTRY_RECORD_AI_DATA=1` is set (off by default, because they can contain personal data). Token counts, timings and errors are traced either way.
-- `sentry.edge.config.ts` is dormant: the template has no Edge code (middleware/proxy or `runtime = "edge"` routes). It is kept so Edge errors get reported as soon as you add some.
+- `sentry.edge.config.ts` is dormant: the template has no Edge code (`runtime = "edge"` routes; `src/proxy.ts` runs on Node). It is kept so Edge errors get reported as soon as you add some.
 - The `@sentry/nextjs` v11 import for the build wrapper is `@sentry/nextjs/config` (see `next.config.ts`).
 
 ## PWA (installable app)

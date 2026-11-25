@@ -1,6 +1,9 @@
 import { getPolarCustomerState } from "@/lib/auth-utils"
 import prisma from "@/lib/db"
+import { createLogger } from "@/lib/logging/logger"
 import { isPolarNotFound } from "@/lib/user-data"
+
+const log = createLogger("privacy")
 
 /** Notes shipped inside every export, so the file explains its own limits. */
 const EXPORT_NOTES = [
@@ -88,7 +91,10 @@ async function loadBillingData(userId: string) {
     return { status: "ok" as const, customer }
   } catch (error) {
     if (isPolarNotFound(error)) return { status: "no-customer" as const }
-    console.error("Error loading Polar data for the export:", error)
+    log.error(
+      { err: error, userId },
+      "Could not load Polar data for the export",
+    )
     return { status: "unavailable" as const }
   }
 }

@@ -1,4 +1,5 @@
 import { initTRPC, TRPCError } from "@trpc/server"
+import { headers } from "next/headers"
 import { cache } from "react"
 import superjson from "superjson"
 import { isAdminRole } from "@/config/constants"
@@ -7,6 +8,15 @@ import {
   getSessionOnServer,
   hasActiveSubscription,
 } from "@/lib/auth-utils"
+import {
+  getLogContext,
+  runWithLogContext,
+  setLogUserId,
+} from "@/lib/logging/context"
+import { createLogger } from "@/lib/logging/logger"
+import { REQUEST_ID_HEADER, resolveRequestId } from "@/lib/logging/request-id"
+
+const log = createLogger("trpc")
 
 /**
  * Builds the per-request tRPC context. Wrapped in React's `cache()` so it's
@@ -26,8 +36,40 @@ const t = initTRPC.create({
 export const createTRPCRouter = t.router
 export const createCallerFactory = t.createCallerFactory
 
-/** Public procedure builder: no auth required. Base for the procedures below. */
-export const baseProcedure = t.procedure
+/**
+ * Logs the outcome of every procedure call, for HTTP requests as well as for
+ * server-side calls during rendering (which get their request context here).
+ * Internal errors are logged with the error, expected ones (unauthorized, not
+ * found, invalid input) as a warning without it. Inputs are never logged.
+ */
+const loggingMiddleware = t.middleware(async ({ path, type, next }) => {
+  const context = getLogContext() ?? {
+    requestId: resolveRequestId((await headers()).get(REQUEST_ID_HEADER)),
+  }
+
+  return runWithLogContext(context, async () => {
+    const startedAt = performance.now()
+    const result = await next()
+    const fields = {
+      procedure: path,
+      type,
+      durationMs: Math.round(performance.now() - startedAt),
+    }
+
+    if (result.ok) {
+      log.debug(fields, "Procedure succeeded")
+    } else if (result.error.code === "INTERNAL_SERVER_ERROR") {
+      log.error({ ...fields, err: result.error }, "Procedure failed")
+    } else {
+      log.warn({ ...fields, code: result.error.code }, "Procedure rejected")
+    }
+
+    return result
+  })
+})
+
+/** Public procedure builder: no auth required, calls are logged. Base for the procedures below. */
+export const baseProcedure = t.procedure.use(loggingMiddleware)
 
 /**
  * Procedure builder that requires a signed-in user. Throws `UNAUTHORIZED`
@@ -45,6 +87,8 @@ export const protectedProcedure = baseProcedure.use(async ({ ctx, next }) => {
       message: "Unauthorized",
     })
   }
+
+  setLogUserId(session.user.id)
 
   return next({ ctx: { ...ctx, auth: session } })
 })
@@ -74,7 +118,13 @@ export const premiumProcedure = protectedProcedure.use(
   async ({ ctx, next }) => {
     // A failing Polar API call is treated like "no subscription".
     const customer = await getPolarCustomerState(ctx.auth.user.id).catch(
-      () => undefined,
+      (error: unknown) => {
+        log.error(
+          { err: error },
+          "Could not load the Polar customer, premium access denied",
+        )
+        return undefined
+      },
     )
 
     // When Polar is not configured (`null`), grant premium access (local dev / mock mode)

@@ -14,7 +14,7 @@ What this template does for data protection, and what is still on you. The techn
 | Erasure (Art. 17) | "Delete my account" (Settings > Privacy), confirmed by an email link. Deletes the account with all data and the external data, see [Account deletion](#account-deletion). | `user.deleteUser` in `src/lib/auth.ts`, `src/lib/user-data.ts` |
 | Restriction and objection (Art. 18, 21) | Handled by contact: the privacy policy names the email address from `LEGAL.privacyEmail`. There is no profiling or automated decision-making. | `src/config/legal.ts` |
 | Control over sessions | Users see their devices (browser, OS, IP, time) and can sign any of them out, or all others. A signed-out device gets no new data, and lands on `/login` (which wipes its cached data) at its next navigation. An idle or offline tab keeps showing what it had already loaded until then. | Settings > Privacy, `trpc.privacy.*` |
-| Data protection by default (Art. 25) | Sentry Session Replay is **off**. Plausible is cookie-free. Inngest events carry user ids, never emails. Emails are not printed to the logs in production. Only strictly necessary cookies are used, so no consent banner is needed. | see below |
+| Data protection by default (Art. 25) | Sentry Session Replay is **off**. Plausible is cookie-free. Inngest events carry user ids, never emails. Logs are structured and keep personal data out: ids only, errors reduced to an allow list, emails and tokens scrubbed from error messages (see [Logging](./logging.md)). Emails are not printed to the logs in production. Only strictly necessary cookies are used, so no consent banner is needed. | see below |
 | Storage limitation (Art. 5(1)(e)) | A daily Inngest job deletes expired sessions and verification tokens. Sessions last 7 days, the AI chat buffer in Redis 24 hours. Cached personal data in the browser is wiped on sign-out and whenever the sign-in page is shown. | `cleanupExpiredAuthData` in `src/inngest/functions.ts`, `src/components/clear-local-data.tsx` |
 | Security (Art. 32) | Passwords stored as salted hashes, secure response headers, role-protected admin area, signed Inngest requests in production, per-user data scoping in every query. | see [Auth & Billing](./auth-and-billing.md), [Deployment](./deployment.md) |
 
@@ -40,7 +40,7 @@ Be aware of these and cover them in your own processes and policy:
 | **Inngest** | Old event payloads. The template only puts user ids in events (no email or name), so a stored event is a pseudonymous id. | Set a retention period on the Inngest server and never add personal data to event payloads. |
 | **Sentry** | Error events and traces that were already sent. | Set a short retention in Sentry, do not call `Sentry.setUser` with an email or name, delete a user's events in Sentry on request. |
 | **Resend** | Delivery logs of sent emails. | Set the shortest log retention in Resend. |
-| **Server and proxy logs** | IP addresses and request times. | Keep log retention short (for example 7 to 30 days). |
+| **Server and proxy logs** | IP addresses and request times (reverse proxy), user ids (application logs, see [Logging](./logging.md)). | Keep log retention short (for example 7 to 30 days). |
 
 ## Data inventory
 
@@ -58,6 +58,7 @@ Keep this in sync with `src/features/privacy/server/export.ts` (what is exported
 | AI chat messages | Browser `sessionStorage` | Chat history of the demo | Until the tab closes or sign-out | Sign-out, `ClearLocalData` |
 | Cached pages and query data | Browser service worker cache, IndexedDB | Offline use and speed | Until sign-out | Sign-out, `ClearLocalData` |
 | Event payloads (user ids only) | Inngest | Background jobs | Per Inngest server settings | Retention setting |
+| Application logs: user ids, request ids, request paths, error messages | Server logs (stdout, your log service) | Operations, finding errors | Set by your hosting or log service | Retention setting |
 | Error reports | Sentry (if enabled) | Fixing errors | Per Sentry settings | Retention setting |
 | Usage statistics (no personal data) | Plausible (if enabled) | Analytics | Per Plausible settings | n/a |
 

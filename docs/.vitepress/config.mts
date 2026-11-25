@@ -49,6 +49,8 @@ export default defineConfig({
           { text: "GDPR (DSGVO)", link: "/gdpr" },
           { text: "Background Jobs", link: "/background-jobs" },
           { text: "Integrations", link: "/integrations" },
+          { text: "Logging", link: "/logging" },
+          { text: "Testing", link: "/testing" },
           { text: "Service Worker", link: "/service-worker" },
           { text: "Frontend", link: "/frontend" },
         ],

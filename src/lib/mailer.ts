@@ -1,5 +1,8 @@
 import { env } from "@/config/env"
+import { createLogger } from "@/lib/logging/logger"
 import { isResendEnabled, resendClient } from "@/lib/resend"
+
+const log = createLogger("mailer")
 
 type SendEmailParams = {
   to: string
@@ -13,32 +16,38 @@ type SendEmailParams = {
  * falls back to logging the email to the console instead of throwing, so
  * flows like password reset and email verification keep working (with the
  * link printed to the server logs) in local/dev setups without Resend.
- * Errors from the Resend API are caught and logged rather than rethrown, so
+ * Errors from the Resend API (returned or thrown) are logged, not rethrown, so
  * callers don't need to handle email delivery failures themselves.
  */
 export async function sendEmail({ to, subject, html }: SendEmailParams) {
   if (!isResendEnabled || !resendClient) {
     // The content holds one-time links (verification, password reset, account
     // deletion) and the address is personal data: only print it while developing.
-    console.warn(
-      process.env.NODE_ENV === "production"
-        ? `[mailer] RESEND_API_KEY/EMAIL_FROM not set - email "${subject}" was not sent`
-        : `[mailer] RESEND_API_KEY/EMAIL_FROM not set - logging email instead of sending:\n` +
-            `  to: ${to}\n  subject: ${subject}\n  html: ${html}`,
-    )
+    if (process.env.NODE_ENV === "production") {
+      log.warn({ subject }, "RESEND_API_KEY/EMAIL_FROM not set, email not sent")
+    } else {
+      log.warn(
+        `RESEND_API_KEY/EMAIL_FROM not set - logging email instead of sending:\n` +
+          `  to: ${to}\n  subject: ${subject}\n  html: ${html}`,
+      )
+    }
     return
   }
 
   try {
-    await resendClient.emails.send({
+    // The SDK reports API errors in the result instead of throwing
+    const { error } = await resendClient.emails.send({
       // biome-ignore lint/style/noNonNullAssertion: guaranteed non-null when isResendEnabled is true
       from: env.EMAIL_FROM!,
       to,
       subject,
       html,
     })
+    if (error) {
+      log.error({ err: error, subject }, "Resend rejected the email")
+    }
   } catch (error) {
-    console.error("Error sending email via Resend:", error)
+    log.error({ err: error, subject }, "Could not send the email via Resend")
   }
 }
 

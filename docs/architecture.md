@@ -22,9 +22,10 @@
 | **Input Validation**          | Zod |
 | **Forms**                     | React Hook Form + Zod |
 | **Linting/Formatting**        | Biome (not ESLint/Prettier) |
+| **Testing**                   | Vitest (unit tests, see [Testing](./testing.md)) |
 | **Package manager / runtime** | Bun |
 
-There are no automated tests and no CI configuration in this repo - it's a starter template, not a production codebase with an established test suite.
+Automated tests (`bun run test`) only cover the log filters so far. CI (`.github/workflows/ci.yml`) runs lint, typecheck, tests and build.
 
 ## Request flow
 
@@ -35,7 +36,7 @@ There are no automated tests and no CI configuration in this repo - it's a start
 5. Redis is available via `getRedis()` from `@/lib/redis` for caching/rate limiting.
 6. Auth endpoints are served by Better Auth at `/api/auth/[...all]`.
 
-There is no `middleware.ts` - route protection happens in every page via server-side `requireAuth()` / `requireUnauth()` calls (the dashboard layout calls `requireAuth()` too, but layouts are not re-rendered on client-side navigation) (see [`auth-and-billing.md`](./auth-and-billing.md)), not Next.js middleware.
+`src/proxy.ts` only assigns a request id to every request (see [`logging.md`](./logging.md)), it does no auth. There is no `middleware.ts` - route protection happens in every page via server-side `requireAuth()` / `requireUnauth()` calls (the dashboard layout calls `requireAuth()` too, but layouts are not re-rendered on client-side navigation) (see [`auth-and-billing.md`](./auth-and-billing.md)), not in the proxy.
 
 ## Project structure
 
@@ -104,10 +105,12 @@ src/
 ├── inngest/
 │   ├── client.ts                     # Inngest client instance
 │   ├── functions.ts                  # Background job definitions
+│   ├── logging.ts                    # Middleware: run and event ids in the logs
 │   └── realtime.ts                   # Realtime channel definitions
 ├── hooks/                            # use-mobile, use-entity-search
-├── instrumentation.ts                # Next.js hook: loads Sentry server/edge config
+├── instrumentation.ts                # Next.js hook: loads Sentry server/edge config, logs unhandled errors
 ├── instrumentation-client.ts         # Sentry browser init
+├── proxy.ts                          # Assigns the x-request-id header (logging)
 ├── i18n/request.ts                   # next-intl config (cookie-based locale, en/de)
 ├── config/
 │   ├── env.ts                        # Zod-validated environment variables
@@ -124,6 +127,10 @@ src/
 | `src/lib/auth-client.ts` | Better Auth client-side hooks |
 | `src/lib/auth-utils.ts` | `requireAuth()`, `requireAdmin()`, `requireAuthAndPremium()`, `requireUnauth()`, `getSessionOnServer()` |
 | `src/lib/redis.ts` | Redis client - `getRedis()` for lazy-connect |
+| `src/lib/logging/logger.ts` | Structured logger (`createLogger()`) |
+| `src/lib/logging/context.ts` | Ids added to every log line of a request |
+| `src/lib/logging/redaction.ts` | Keeps personal data and secrets out of the logs (tested) |
+| `src/lib/logging/request-logging.ts` | `withRequestLogging()` for Route Handlers |
 | `src/lib/user-data.ts` | Cleanup of a user's external data: `deletePolarCustomer()`, `deleteUserRedisData()` (account deletion, admin delete) |
 | `src/config/legal.ts` | Operator details for the privacy policy and imprint |
 | `src/lib/polar.ts` | `isPolarEnabled` flag + `polarClient` - the central "is billing configured" gate |

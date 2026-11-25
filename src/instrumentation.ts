@@ -1,4 +1,6 @@
 import * as Sentry from "@sentry/nextjs"
+import type { Instrumentation } from "next"
+import { REQUEST_ID_HEADER } from "@/lib/logging/request-id"
 
 /**
  * Next.js instrumentation hook: loads the matching Sentry config for the
@@ -20,5 +22,32 @@ export async function register() {
   }
 }
 
-/** Reports errors thrown in Server Components, Route Handlers and Server Actions. */
-export const onRequestError = Sentry.captureRequestError
+/**
+ * Reports errors thrown in Server Components, Route Handlers and Server
+ * Actions: to Sentry (a no-op when it is not configured) and as a structured
+ * log line with the request id. The query string is cut off the path.
+ */
+export const onRequestError: Instrumentation.onRequestError = async (
+  error,
+  request,
+  context,
+) => {
+  Sentry.captureRequestError(error, request, context)
+
+  if (process.env.NEXT_RUNTIME === "nodejs") {
+    const { createLogger } = await import("@/lib/logging/logger")
+    const { scrubText } = await import("@/lib/logging/redaction")
+    const [pathname = ""] = request.path.split("?")
+    createLogger("next").error(
+      {
+        err: error,
+        requestId: request.headers[REQUEST_ID_HEADER],
+        method: request.method,
+        path: scrubText(pathname),
+        route: context.routePath,
+        routeType: context.routeType,
+      },
+      "Unhandled server error",
+    )
+  }
+}

@@ -45,13 +45,17 @@ tRPC procedure builders (`src/trpc/init.ts`) - see [Architecture](./architecture
 | `redis` (default export) | `src/lib/redis.ts` | Raw client instance - may not be connected yet, prefer `getRedis()`. |
 | `isPolarEnabled` / `polarClient` | `src/lib/polar.ts` | Whether billing is configured, and the Polar SDK client (`null` if not). Check the flag before using the client. |
 | `isResendEnabled` / `resendClient` | `src/lib/resend.ts` | Whether transactional email is configured, and the Resend client (`null` if not). |
-| `sendEmail({ to, subject, html })` | `src/lib/mailer.ts` | Sends via Resend, falls back to console-logging the email when Resend isn't configured. |
+| `sendEmail({ to, subject, html })` | `src/lib/mailer.ts` | Sends via Resend, falls back to logging the email when Resend isn't configured (full content only outside production). |
 | `resetPasswordEmailHtml(...)` / `verifyEmailHtml(...)` | `src/lib/mailer.ts` | Pre-built HTML templates for the two auth emails. |
 | `clearPwaPageCache()` | `src/lib/pwa.ts` | Asks the service worker to drop cached pages. Called on sign-out so user-specific pages are not readable offline on shared devices. |
 | `useSignOut()` | `src/features/auth/hooks/use-sign-out.ts` | The one sign-out flow: ends the session, clears the PWA page cache, the React Query cache and its IndexedDB copy, then redirects to `/login`. Never call `authClient.signOut` directly. |
 | `clearPersistedQueryCache()` | `src/trpc/client.tsx` | Removes the IndexedDB-persisted React Query cache. Used by `useSignOut()`. |
 | `openrouter` / `AI_MODEL` | `src/lib/ai.ts` | Shared Vercel AI SDK provider and default chat model id, for `streamText`/`generateText`. |
 | `getStreamContext()` | `src/lib/stream-context.ts` | Shared resumable-stream context for resumable AI chat responses. |
+| `createLogger(component)` | `src/lib/logging/logger.ts` | The logger for server code, instead of `console`. See [Logging](./logging.md). |
+| `setLogUserId(userId)` | `src/lib/logging/context.ts` | Add the user id to the request's log lines. |
+| `scrubText(text)` | `src/lib/logging/redaction.ts` | Strip emails, tokens and credentials from free text. |
+| `withRequestLogging(handler)` | `src/lib/logging/request-logging.ts` | Wrap every Route Handler: request id on all its log lines plus one access line. |
 
 ## tRPC (data fetching)
 

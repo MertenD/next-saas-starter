@@ -10,6 +10,7 @@ import { getBillingStats } from "@/features/admin/server/billing-stats"
 import { auth } from "@/lib/auth"
 import { getPolarCustomerState } from "@/lib/auth-utils"
 import prisma from "@/lib/db"
+import { createLogger } from "@/lib/logging/logger"
 import { isPolarEnabled } from "@/lib/polar"
 import {
   deletePolarCustomer,
@@ -19,6 +20,8 @@ import {
 import { adminProcedure, createTRPCRouter } from "@/trpc/init"
 
 const DAY_MS = 24 * 60 * 60 * 1000
+
+const log = createLogger("admin")
 
 /** Throws when `userId` is the caller: admins must not lock themselves out. */
 function assertNotSelf(currentUserId: string, userId: string) {
@@ -58,7 +61,10 @@ async function deletePolarCustomerOrThrow(userId: string) {
   try {
     await deletePolarCustomer(userId)
   } catch (error) {
-    console.error("Error deleting Polar customer:", error)
+    log.error(
+      { err: error, targetUserId: userId },
+      "Could not delete Polar customer, user kept",
+    )
     throw new TRPCError({
       code: "INTERNAL_SERVER_ERROR",
       message: "Could not delete the Polar customer. The user was not deleted.",

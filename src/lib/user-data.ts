@@ -1,5 +1,8 @@
+import { createLogger } from "@/lib/logging/logger"
 import { isPolarEnabled, polarClient } from "@/lib/polar"
 import { getRedis } from "@/lib/redis"
+
+const log = createLogger("user-data")
 
 /** Whether an error from the Polar SDK is an HTTP 404 (e.g. no customer exists for this user). */
 export function isPolarNotFound(error: unknown) {
@@ -45,7 +48,7 @@ export async function deleteUserRedisData(userId: string) {
   try {
     await Promise.race([removeRedisKeys(userId), timeout])
   } catch (error) {
-    console.error("Error deleting the user's Redis data:", error)
+    log.error({ err: error, userId }, "Could not delete the user's Redis data")
   }
 }
 

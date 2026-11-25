@@ -29,6 +29,23 @@ The container runs as the unprivileged `bun` user (not root) and has a `HEALTHCH
 docker compose -f docker-compose.prod.yml logs -f app
 ```
 
+### Logs
+
+The app writes one JSON object per line to stdout (see [`logging.md`](./logging.md)). Docker's default `json-file` driver never deletes anything, so limit it, either globally in the Docker daemon settings or per service:
+
+```yaml
+# docker-compose.logging.yml (add with a second -f)
+services:
+  app:
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+```
+
+This caps the size, not the age. Logs contain user ids and your reverse proxy logs IP addresses, so set a retention period too (see [`gdpr.md`](./gdpr.md)).
+
 > **Note:** `DATABASE_URL`, `REDIS_URL`, and `INNGEST_BASE_URL` are overridden inside `docker-compose.prod.yml` to Docker-internal hostnames (`postgres`, `redis`, `inngest`). Every other variable is read from your `.env` file. During the image build, `SKIP_ENV_VALIDATION=1` bypasses Zod env validation (there's no real `.env` at build time) - validation runs for real when the container starts.
 
 ### Error tracking (Sentry) build args
@@ -89,6 +106,7 @@ If you expose the Inngest container's Realtime endpoint through the same proxy, 
 
 - [ ] All environment variables set in `.env` - see [`environment-variables.md`](./environment-variables.md)
 - [ ] `POLAR_SERVER=production`
+- [ ] Log rotation and retention configured, `LOG_LEVEL` not left at `debug` (see [Logs](#logs))
 - [ ] `BETTER_AUTH_URL` set to your production domain
 - [ ] OAuth redirect URIs updated in Google / GitHub developer consoles
 - [ ] Polar product ID replaced in `src/lib/auth.ts`

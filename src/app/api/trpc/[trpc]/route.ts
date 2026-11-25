@@ -1,4 +1,5 @@
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch"
+import { withRequestLogging } from "@/lib/logging/request-logging"
 import { createTRPCContext } from "@/trpc/init"
 import { appRouter } from "@/trpc/routers/_app"
 
@@ -15,4 +16,6 @@ const handler = (req: Request) =>
     createContext: createTRPCContext,
   })
 
-export { handler as GET, handler as POST }
+const loggedHandler = withRequestLogging(handler)
+
+export { loggedHandler as GET, loggedHandler as POST }
